@@ -1,9 +1,9 @@
-public class Token {
+public class Token<E> {
     private String type;
-    private String attribute;
+    private E attribute;
 
     // Constructor
-    public Token(String type, String attribute) {
+    public Token(String type, E attribute) {
         this.type = type;
         this.attribute = attribute;
     }
@@ -19,20 +19,17 @@ public class Token {
     }
 
     // Getter para el atributo
-    public String getAttribute() {
+    public E getAttribute() {
         return attribute;
     }
 
     // Setter para el atributo
-    public void setAttribute(String attribute) {
+    public void setAttribute(E attribute) {
         this.attribute = attribute;
     }
 
     @Override
     public String toString() {
-        return "Token{" +
-                "type='" + type + '\'' +
-                ", attribute='" + attribute + '\'' +
-                '}';
+        return "< "+ type +","+ attribute + " >";
     }
 }
