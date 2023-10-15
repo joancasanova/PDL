@@ -1,271 +1,235 @@
 import java.io.*;
+import java.util.*;
+
+// Enumeración para representar los tipos de tokens
+enum TokenType {
+    PalabraReservada,   // Para palabras reservadas (e.g., boolean, function)
+    CteEntera,          // Para constantes enteras (e.g., 123)
+    Cadena,             // Para cadenas de caracteres (e.g., "¡Hola, mundo!")
+    Identificador,      // Para identificadores (e.g., nombreVariable)
+    AsignacionSuma,     // Para la asignación con suma (e.g., +=)
+    Comparador,         // Para comparadores (e.g., ==)
+    Asignacion,         // Para la asignación (e.g., =)
+    Suma,               // Para operadores (e.g., +)
+    Negacion,           // Para operadores (e.g., !)
+    Simbolo             // Para símbolos (e.g., ,, ;, (, ), {, })
+}
 
 public class AnalizadorLexico {
-	
-	FileReader fichero;// puntero al fichero
-	char char_actual;// Siguiente caracter a analizar
-	
-	//@Pre: --
-	//@Post: fichero abierto 
-	public AnalizadorLexico(String ruta) {
-		
-		try(FileReader filereader= new FileReader(ruta)){
-			
-			fichero = filereader;
-			
-			int aux = fichero.read();
-			
-			if(aux == -1) {
-				// Problema con la lectrua del primer caracter
-				System.out.printf("Error con la lectura del primer carácter\n");
-				
-			} else {
-				char_actual = ( char ) aux;
-			}
-			
-		}catch(IOException ex){
-	    	
-	        System.err.println("Erorr al leer el archivo");
-	        ex.printStackTrace();
 
-	    }
-	}
-	
-	//@Pre: caracter incial
-	//@Post: nuevo token del fichero &6 caracter inicial -> nuevo caracter
-	public <E> Token Get_token() throws IOException {
-	
-		//Inicializar las variabbles a devolver o actualizar
-		Token nuevo_token = null;
-		String lexema = null;
-		int valor = 0;
-	        
-		//Analizar el caraceter ya leido
-		
-		int aux = analizarchar(char_actual);
-	
-			// Elegir rama del automata
-	
-		switch(aux) {
-		case -1:
-			System.out.println("Fin de fichero\n");
-			break;
-			
-		case 0://leer delimitador
-			char_actual = (char) fichero.read();// Seguir leyendo
-			break;
-			
-			case 1:// Caracter es l o a
-			
-			// Empezar lexema
-			lexema = String.valueOf(char_actual);//primer valor
-			char_actual = (char) fichero.read();// leer el siguiente caracter
-			//leer caracetres hassta del,s
-			
-			while((int) char_actual != -1 || is_del(char_actual) || is_s(char_actual) || is_op(char_actual) ){
-				
-					lexema.concat(String.valueOf(char_actual));//concateno el caracter nuevo
-					char_actual = (char) fichero.read();	
-				
-			} 
-			
-			if(lexema.length() < 64) {
-			// Tras acabar se crea el token
-			nuevo_token = new Token("Nombredeltoken", lexema);
-			} else {
-				System.err.print("Maxima longitud de la cadena alcanzada");
-			}
-		/* PENDIENTE POR HACER PARA LA TABLA DE SIMBOLOS*/
-			
-			// Comprobar si el lexema pertenece a tabla palabra reservada
-				//Si pertenece genra token palabra reservada y su pos
-				//Si No pertenece 
-					//buscar en tabla de simbolos
-						//Si esta generar token tabla simbolos y su pos
-						//Si NO esta, crear en TS y devolver token
-			break;
-			
-		case 2:// Caracter d
-			
-			valor = (int) char_actual;//Guardo el primer digiton leido
-			char_actual = (char) fichero.read();// leo el siguiente caracter
-			
-			//leer hasta que char_actual != d
-			
-			while((int) char_actual != -1 || is_d(char_actual)) {
-				
-				valor = 10*valor + (int) char_actual;
-				char_actual = (char) fichero.read();
-				
-			}
-			
-			if(valor < 32767) {
-			// Tras acabar se crea el token
-						nuevo_token = new Token("cte_entera", String.valueOf(valor) );
-			} else {
-				System.err.println("Se ha superado el valor maximo de la representacion");
-			}
-			
-			break ;
-			
-		case 3:
-			
-			char_actual = (char) fichero.read();// leo el siguiente caracter
-			
-			if(char_actual == '/') {//se han leido dos \\
-				
-				char_actual = (char) fichero.read();// leo el siguiente caracter
-				
-				while( (int) char_actual != -1 && !is_f(char_actual)) { // Cualquier cosa menos f
-					char_actual = (char) fichero.read();//Continuo leyendo el comentairo hastas fin de linea o fichero
-				}
-				
-				//Deja leido el ultimo caracter para la siguiente lectura, no hay que leer
-			} else {
-				System.err.println("Error lexico, solo se ha leido / en lugar de //(no triene token) ");
-			}
-			
-			break;
-			
-		case 4:
-			
-			char_actual = (char) fichero.read();// leo el siguiente caracter
-			lexema = String.valueOf(char_actual);//primer valor
-			
-			while(char_actual != '"') {// Continua leyendo la cadena hasta encontrar ", pasra acabar
-				
-				if((int) char_actual != -1	||  is_f(char_actual)){// Si se lee fin de linea o fichero antesde acabar la cadena da error
-					System.err.println("Error la cadena nose ha cerrado con \"");
-					break;
-				}
-				
-				lexema.concat(String.valueOf(char_actual));//concateno el caracter nuevo
-				char_actual = (char) fichero.read();
-			}
-			
-			if(lexema.length() < 64) {
-				// Tras acabar se crea el token
-				nuevo_token = new Token("Nombredeltoken", lexema);
-				} else {
-					System.err.print("Maxima longitud de la cadena alcanzada");
-				}
-			
-			break;
-			
-		case 5:
-			
-			if(char_actual == ',') valor = 1;
-			if(char_actual == ';') valor = 2;
-			if(char_actual == '(') valor = 3;
-			if(char_actual == ')') valor = 4;
-			if(char_actual == '{') valor = 5;
-			if(char_actual == '}') valor = 6;
-			
-			nuevo_token = new Token("Simbolo",String.valueOf(valor));
-			char_actual = (char) fichero.read();// leo el siguiente caracter para el siguiente token
-			
-			break;
-			
-		case 6:
-			
-			if(char_actual == '!') {
-				nuevo_token = new Token("operador", "2");
-				char_actual = (char) fichero.read();// leo el siguiente caracter para el siguiente token
-			} else {
-				
-				if(char_actual == '+') {//Primer simbolo es +
-					char_actual = (char) fichero.read();// leo el siguiente caracter para comprobar que op es
-					
-					if(char_actual == '=') {
-						nuevo_token = new Token("asignacion", "1");// Token asignador +=
-						char_actual = (char) fichero.read();// leo el siguiente caracter para el siguiente token
-					} else {
-						//El caracter es unicamente +
-						nuevo_token = new Token("operador", "1");// Token operador +
-					}
-					
-				} else {
-					char_actual = (char) fichero.read();// leo el siguiente caracter para comprobar que op es
-					
-					if(char_actual == '=') {
-						nuevo_token = new Token("operador", "3");// Token asignador +=
-						char_actual = (char) fichero.read();// leo el siguiente caracter para el siguiente token
-					} else {
-						//El caracter es unicamente +
-						nuevo_token = new Token("asignacion", "2");// Token operador +
-					}
-				}
-			}
-			
-			break;
-			
-			default:
-			System.out.println("Caracter no reconocido\n");
-		}
-		// Tras acaabar con el automata se crea el token
-		
-		// Devolcer el token
-		return nuevo_token;
-	}
-	
-	//Métodos privados apra comprobar siu un caracter perteneceo o no a diferentes conjutnos de simbolos
-	private boolean is_del(char caracter) {
-		if((int)caracter == -1) return false; // Si es -1 entonces acaba el fichero
-		return Character.isWhitespace(caracter) || caracter == '\t';
-	}
-	
-	private boolean is_l(char caracter) {
-		if((int)caracter == -1) return false; // Si es -1 entonces acaba el fichero
-		return Character.isLetter(caracter) && Character.isLowerCase(caracter);
-	}
-	
-	private boolean is_a(char caracter) {
-		if((int)caracter == -1) return false; // Si es -1 entonces acaba el fichero
-		return Character.isLetter(caracter) && Character.isUpperCase(caracter);
-	}
-	
-	private boolean is_d(char caracter) {
-		
-		if((int)caracter == -1) return false; // Si es -1 entonces acaba el fichero
-		return Character.isDigit(caracter);
-	}
-	
-	private boolean is_s(char caracter) {
-		if((int)caracter == -1) return false; // Si es -1 entonces acaba el fichero
-		return caracter == ',' || caracter == ';' || caracter == '(' || caracter == ')' || caracter == '{' || caracter == '}';   
-	}
-	
-	private boolean is_f(char caracter) {
-		if((int)caracter == -1) return false; // Si es -1 entonces acaba el fichero
-		return caracter == '\n'; // Fin de linea
-	}
+    private FileReader fichero;
+    private Character charActual;
 
-	private boolean is_op(char caracter) {
-		if((int)caracter == -1) return false; // Si es -1 entonces acaba el fichero
-		return caracter == '+' || caracter == '=' || caracter == '!';
-	}
-	
-	private int analizarchar(char caracter) {
-		if((int) caracter == -1) return -1; // Solo si es el caracter fin de fichero
-		
-		// Todas las ramas del automata cubiertas
-		if(is_del(caracter)) return 0;
-		if(is_l(caracter) || is_a(caracter)) return 1;
-		if(is_d(caracter)) return 2;
-		if(caracter == '/') return 3;
-		if(caracter == '"') return 4;
-		if(is_s(caracter)) return 5;
-		if(is_op(caracter)) return 6;
+    // Máximo número de caracteres en una cadena
+    private static final int MAX_CARACTERES_CADENA = 64;
 
-		return -1;
-	}
-		
+    // Máximo valor para una constante entera
+    private static final int MAX_VALOR_ENTERO = 32767;
 
-	
-	/* ESTE METODO MAIN ES UNICAMENTE PARA PROBAR LA FUNCIONALIDAD DEL AN_LEXICO */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+    // Lista de palabras reservadas en el lenguaje
+    private static final List<String> palabrasReservadas = Arrays.asList("boolean", "function", "if", "int", "let", "put", "return", "string", "void", "while");
 
-	}
+    /**
+     * Constructor de la clase AnalizadorLexico.
+     *
+     * @param ruta Ruta al archivo fuente a analizar.
+     * @throws FileNotFoundException Si el archivo no se encuentra.
+     */
+    public AnalizadorLexico(FileReader fichero) throws FileNotFoundException {
+        this.fichero = fichero;
+        leerSiguienteCaracter();
+    }
 
+    /**
+     * Lee el siguiente carácter del archivo fuente.
+     *
+     * @return El siguiente carácter leído o null si se llegó al final del archivo.
+     * @throws IOException Si ocurre un error al leer el archivo.
+     */
+    private Character leerSiguienteCaracter() {
+        try {
+            int aux = fichero.read();
+            if (aux == -1) { // fin del fichero
+                return null;
+            }
+            return (char) aux;
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Obtiene el siguiente token del archivo fuente.
+     *
+     * @return El token obtenido.
+     * @throws IOException Si ocurre un error al leer el archivo.
+     */
+    public Token obtenerToken() throws IOException, EOFException {
+        Token token = null; 
+        Character charSiguiente = null;
+        boolean leerSiguiente = true;
+        
+        // Ignora los delimitadores como espacios en blanco, tabuladores y saltos de línea.
+        while (Character.isWhitespace(charActual) || charActual == '\t' || charActual == '\n') {
+            charActual = leerSiguienteCaracter();
+        }
+
+        if (charActual == null) {
+            // Detener el analizador léxico ya que se encontró el EOF.
+            return null;
+        }
+    
+        // Analizar el carácter actual y determinar el tipo de token
+        switch (charActual) {
+            case '+':
+                charSiguiente = leerSiguienteCaracter();
+                if (charSiguiente == '=') {
+                    token = new Token(TokenType.AsignacionSuma, ""); // Token de AsignacionSuma (+=)
+                } else {
+                    token = new Token(TokenType.Suma, ""); // Token de Suma (+)
+                    leerSiguiente = false;
+                }
+                break;
+
+            case '=':
+                charSiguiente = leerSiguienteCaracter();
+                if (charSiguiente == '=') {
+                    token = new Token(TokenType.Comparador, ""); // Token de Comparador (==)
+                } else {
+                    token = new Token(TokenType.Asignacion, ""); // Token de Asignacion (=)
+                    leerSiguiente = false;
+                }
+                break;
+
+            case '!':
+                token = new Token(TokenType.Negacion, "");// Token de Negacion (!)
+                break;
+        
+            case ',':
+            case ';':
+            case '(':
+            case ')':
+            case '{':
+            case '}':
+                int valorAscii = (int) charActual; // Se obtieve el valor ASCII del simbolo para el atributo del token
+                token = new Token(TokenType.Simbolo, valorAscii); // Token de Simbolo
+                break;
+
+            case '\"':
+                token = leerCadena(); // Cadenas de caracteres
+                break;
+    
+            default:
+                if (Character.isLetter(charActual) || charActual == '_') {
+                    token = leerLexema(); // Identificadores y palabras reservadas
+                } 
+                else if (Character.isDigit(charActual)) {
+                    token = leerConstanteEntera(); // Constantes enteras
+                } 
+                else {
+                    throw new IllegalArgumentException("Carácter no reconocido: " + charActual);
+                }
+        }
+        
+
+        // Actualizamos el siguiente caracter
+        if (leerSiguiente) {
+            charActual = leerSiguienteCaracter();
+        }
+        else {
+            charActual = charSiguiente;
+        }
+
+        return token;
+    }
+    
+
+    /**
+     * Lee una cadena encerrada entre comillas dobles.
+     *
+     * @return El token representando la cadena.
+     * @throws IOException Si ocurre un error al leer el archivo.
+     */
+    private Token leerCadena() throws IOException {
+        Token token = null;
+        StringBuilder lexema = new StringBuilder();
+    
+        while (true) {
+            charActual = leerSiguienteCaracter();
+    
+            if (charActual == '\"') { // Se detecta comilla de cierre, generamos token de cadena de caracteres
+                token = new Token(TokenType.Cadena, lexema.toString());
+                break;
+            } 
+            else {
+                lexema.append(charActual);
+                
+                if (lexema.length() >= MAX_CARACTERES_CADENA) {
+                    throw new IllegalArgumentException("Error: Cadena demasiado larga.");
+                }
+            }
+        }
+    
+        return token;
+    }
+    
+
+    /**
+     * Lee un identificador o una palabra reservada.
+     *
+     * @return El token representando el identificador o la palabra reservada.
+     * @throws IOException Si ocurre un error al leer el archivo.
+     */
+    private Token leerLexema() throws IOException {
+        Token token = null;
+        StringBuilder lexema = new StringBuilder();
+
+        lexema.append(charActual); // Se añade al lexema el primer caracter
+
+        // Se añade el resto de caracteres
+        while (Character.isLetterOrDigit(charActual) || charActual == '_') {
+            charActual = leerSiguienteCaracter();
+            lexema.append(charActual);
+        }
+        
+        // Se comprueba si es una palabra reservada o un identificador
+        if (palabrasReservadas.contains(lexema.toString())) {
+            token = new Token(TokenType.PalabraReservada, lexema.toString());
+        }
+        else {
+            TablaSimbolos tablaActual = Analizador.getTablaActual();
+            int nuevaPosicion = tablaActual.numeroEntradas();
+            tablaActual.agregarSimbolo(nuevaPosicion, lexema, "identificador", null);
+            token = new Token(TokenType.Identificador, nuevaPosicion);
+        }
+
+        return token;
+    }
+
+    /**
+     * Lee una constante entera.
+     *
+     * @return El token representando la constante entera.
+     * @throws IOException Si ocurre un error al leer el archivo.
+     */
+    private Token leerConstanteEntera() throws IOException {
+        Token token = null;
+		int valorEntero = 0;
+    
+        do {
+            valorEntero = 10 * valorEntero + (charActual - '0');
+            charActual = leerSiguienteCaracter();
+        } while (Character.isDigit(charActual));
+
+
+        if (valorEntero < MAX_VALOR_ENTERO) {
+            token = new Token(TokenType.CteEntera, valorEntero); 
+        }
+        else {
+            throw new IllegalArgumentException("Se ha superado el valor máximo de la representación");
+        }
+
+        return token;
+    }
 }

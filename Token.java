@@ -1,35 +1,34 @@
-public class Token<E> {
-    private String type;
-    private E attribute;
+public class Token {
+    public TokenType tipo;
+    public Object atributo;
 
-    // Constructor
-    public Token(String type, E attribute) {
-        this.type = type;
-        this.attribute = attribute;
+    public Token(TokenType tipo, Object atributo) {
+        this.tipo = tipo;
+        this.atributo = atributo;
     }
-
+    
     // Getter para el tipo
-    public String getType() {
-        return type;
+    public TokenType getTipo() {
+        return tipo;
     }
 
     // Setter para el tipo
-    public void setType(String type) {
-        this.type = type;
+    public void setTipo(TokenType tipo) {
+        this.tipo = tipo;
     }
 
     // Getter para el atributo
-    public E getAttribute() {
-        return attribute;
+    public Object getAtributo() {
+        return atributo;
     }
 
     // Setter para el atributo
-    public void setAttribute(E attribute) {
-        this.attribute = attribute;
+    public void setAtributo(Object atributo) {
+        this.atributo = atributo;
     }
 
     @Override
     public String toString() {
-        return "< "+ type +","+ attribute + " >";
+        return "< " + tipo + "," + atributo + " >";
     }
 }
