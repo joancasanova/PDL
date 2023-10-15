@@ -2,9 +2,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TablaSimbolos {
-
-    // Numero de registros que tiene la tabla de simbolos
-    private int filas;
     
     // Estructura para almacenar los símbolos
     private final Map<Integer, Simbolo> tabla;
@@ -15,20 +12,20 @@ public class TablaSimbolos {
 
     // Clase interna para representar un símbolo
     private static class Simbolo {
-        String identificador;
-        TokenType tipo;
+        StringBuilder identificador;
+        String tipo;
         Object valor;
 
-        Simbolo(String identificador, TokenType tipo, Object valor) {
-            this.identificador = identificador;
-            this.tipo = tipo;
+        Simbolo(StringBuilder lexema, String string, Object valor) {
+            this.identificador = lexema;
+            this.tipo = string;
             this.valor = valor;
         }
     }
 
     // Método para agregar un nuevo símbolo a la tabla
-    public void agregarSimbolo(Integer posicion, String identificador, TokenType tipo, Object valor) {
-        Simbolo nuevoSimbolo = new Simbolo(identificador, tipo, valor);
+    public void agregarSimbolo(Integer posicion, StringBuilder lexema, String string, Object valor) {
+        Simbolo nuevoSimbolo = new Simbolo(lexema, string, valor);
         tabla.put(posicion, nuevoSimbolo);
     }
 

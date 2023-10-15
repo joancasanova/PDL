@@ -1,18 +1,11 @@
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
 public class Analizador {
 
-    public static Stack<TablaSimbolos> tablas = new Stack<>();
-
-    public Analizador () {
-        tablas.push(new TablaSimbolos());
-    }
-
-    public TablaSimbolos getTablaActual() {
-        return tablas.peek();
-    }
+    static Stack<TablaSimbolos> tablas = new Stack<>();
 
     public static void main(String[] args) {
 
@@ -24,8 +17,8 @@ public class Analizador {
         String rutaArchivo = args[0];
 
         try (FileReader fichero = new FileReader(rutaArchivo)) {
+            tablas.push(new TablaSimbolos());
             AnalizadorLexico analizadorLexico = new AnalizadorLexico(fichero);
-
             Token token;
             do {
                 token = analizadorLexico.obtenerToken();
@@ -37,8 +30,6 @@ public class Analizador {
             System.err.println("Archivo no encontrado: " + e.getMessage());
         } catch (IOException e) {
             System.err.println("Error de entrada/salida: " + e.getMessage());
-        } catch (EOFException e) {
-            System.out.println("Se ha alcanzado el final del archivo.");
         } catch (IllegalArgumentException e) {
             System.err.println("Error en el análisis léxico: " + e.getMessage());
         }

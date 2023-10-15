@@ -198,7 +198,7 @@ public class AnalizadorLexico {
             token = new Token(TokenType.PalabraReservada, lexema.toString());
         }
         else {
-            TablaSimbolos tablaActual = Analizador.getTablaActual();
+            TablaSimbolos tablaActual = Analizador.tablas.peek();
             int nuevaPosicion = tablaActual.numeroEntradas();
             tablaActual.agregarSimbolo(nuevaPosicion, lexema, "identificador", null);
             token = new Token(TokenType.Identificador, nuevaPosicion);
