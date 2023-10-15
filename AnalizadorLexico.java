@@ -70,16 +70,16 @@ public class AnalizadorLexico {
         Character charSiguiente = null;
         boolean leerSiguiente = true;
         
-        // Ignora los delimitadores como espacios en blanco, tabuladores y saltos de línea.
-        while (Character.isWhitespace(charActual) || charActual == '\t' || charActual == '\n') {
-            charActual = leerSiguienteCaracter();
-        }
-
         if (charActual == null) {
             // Detener el analizador léxico ya que se encontró el EOF.
             return null;
         }
     
+        // Ignora los delimitadores como espacios en blanco, tabuladores y saltos de línea.
+        while (Character.isWhitespace(charActual) || charActual == '\t' || charActual == '\n') {
+            charActual = leerSiguienteCaracter();
+        }
+
         // Analizar el carácter actual y determinar el tipo de token
         switch (charActual) {
             case '+':

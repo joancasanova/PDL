@@ -6,6 +6,14 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Analizador",
+            "request": "launch",
+            "mainClass": "Analizador",
+            "args": ["prueba.txt"],  // Add your arguments here
+            "projectName": "PDL_d324486f"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
