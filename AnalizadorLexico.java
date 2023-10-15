@@ -37,7 +37,7 @@ public class AnalizadorLexico {
      */
     public AnalizadorLexico(FileReader fichero) throws FileNotFoundException {
         this.fichero = fichero;
-        leerSiguienteCaracter();
+        charActual = leerSiguienteCaracter();
     }
 
     /**
