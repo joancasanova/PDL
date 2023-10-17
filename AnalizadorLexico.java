@@ -29,7 +29,7 @@ public class AnalizadorLexico {
     private static final int MAX_VALOR_ENTERO = 32767;
 
     // Lista de palabras reservadas en el lenguaje
-    private static final List<String> palabrasReservadas = Arrays.asList("boolean", "function", "if", "int", "let", "put", "return", "string", "void", "while");
+    private static final List<String> palabrasReservadas = Arrays.asList("boolean", "function", "if", "int", "let", "put", "return", "string", "void", "while", "get");
 
     /**
      * Constructor de la clase AnalizadorLexico.
@@ -52,7 +52,7 @@ public class AnalizadorLexico {
         try {
             int aux = fichero.read();
             if (aux == -1) { // fin del fichero
-                return null;
+                return '\0';
             }
             return (char) aux;
         } catch (IOException e) {
@@ -70,13 +70,13 @@ public class AnalizadorLexico {
     public Token obtenerToken() throws IOException, EOFException {
         Token token = null; 
         
-        if (charActual == null) {
+        if (charActual == '\0') {
             // Detener el analizador léxico ya que se encontró el EOF.
             return null;
         }
     
         // Ignora los delimitadores como espacios en blanco, tabuladores y saltos de línea.
-        while (Character.isWhitespace(charActual) || charActual == '\t' || charActual == '\n') {
+        while (Character.isWhitespace(charActual) || charActual == '\t' || charActual == '\n' || charActual == '\u0000') {
             charActual = leerSiguienteCaracter();
         }
 
@@ -225,7 +225,7 @@ public class AnalizadorLexico {
         leerSiguiente = false;
     
         valorEntero = 10 * valorEntero + (charActual - '0');
-        
+
         while (true) {
             charActual = leerSiguienteCaracter();
             if (!Character.isDigit(charActual)) {

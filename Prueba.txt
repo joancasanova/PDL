@@ -1,4 +1,19 @@
-let id = 50;
-while (100=1530){
-	x = 505;
+let texto string;
+function pideTexto void 
+                  (void)
+{
+	put "Introduce un texto";
+	get texto;
 }
+function print void (string msg1)
+{
+	put "Texto introducido:";
+	put msg1;
+}
+pideTexto();
+let  textoAux  string;textoAux = texto;
+print
+ (
+ textoAux                                                    
+ )
+ ;
