@@ -1,0 +1,9 @@
+CONTENIDOS DE LA TABLA #0:
+*	LEXEMA	:	'id'
+ATRIBUTOS	:
++	tipo:	'null'
++	despl:	null
+*	LEXEMA	:	'x'
+ATRIBUTOS	:
++	tipo:	'null'
++	despl:	null

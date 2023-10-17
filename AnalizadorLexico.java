@@ -19,6 +19,8 @@ public class AnalizadorLexico {
 
     private FileReader fichero;
     private Character charActual;
+    Character charSiguiente = null;
+    private boolean leerSiguiente = true;
 
     // Máximo número de caracteres en una cadena
     private static final int MAX_CARACTERES_CADENA = 64;
@@ -67,8 +69,6 @@ public class AnalizadorLexico {
      */
     public Token obtenerToken() throws IOException, EOFException {
         Token token = null; 
-        Character charSiguiente = null;
-        boolean leerSiguiente = true;
         
         if (charActual == null) {
             // Detener el analizador léxico ya que se encontró el EOF.
@@ -131,7 +131,6 @@ public class AnalizadorLexico {
                     throw new IllegalArgumentException("Carácter no reconocido: " + charActual);
                 }
         }
-        
 
         // Actualizamos el siguiente caracter
         if (leerSiguiente) {
@@ -140,6 +139,8 @@ public class AnalizadorLexico {
         else {
             charActual = charSiguiente;
         }
+
+        leerSiguiente = true;
 
         return token;
     }
@@ -184,14 +185,19 @@ public class AnalizadorLexico {
     private Token leerLexema() throws IOException {
         Token token = null;
         StringBuilder lexema = new StringBuilder();
+        leerSiguiente = false;
 
         lexema.append(charActual); // Se añade al lexema el primer caracter
 
-        // Se añade el resto de caracteres
-        while (Character.isLetterOrDigit(charActual) || charActual == '_') {
+        while (true) {
             charActual = leerSiguienteCaracter();
+            if (!(Character.isLetterOrDigit(charActual) || charActual == '_')) {
+                break;
+            }
             lexema.append(charActual);
         }
+        
+        charSiguiente = charActual;
         
         // Se comprueba si es una palabra reservada o un identificador
         if (palabrasReservadas.contains(lexema.toString())) {
@@ -216,12 +222,19 @@ public class AnalizadorLexico {
     private Token leerConstanteEntera() throws IOException {
         Token token = null;
 		int valorEntero = 0;
+        leerSiguiente = false;
     
-        do {
-            valorEntero = 10 * valorEntero + (charActual - '0');
+        valorEntero = 10 * valorEntero + (charActual - '0');
+        
+        while (true) {
             charActual = leerSiguienteCaracter();
-        } while (Character.isDigit(charActual));
+            if (!Character.isDigit(charActual)) {
+                break;
+            }
+            valorEntero = 10 * valorEntero + (charActual - '0');
+        }
 
+        charSiguiente = charActual;
 
         if (valorEntero < MAX_VALOR_ENTERO) {
             token = new Token(TokenType.CteEntera, valorEntero); 

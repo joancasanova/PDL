@@ -43,11 +43,11 @@ public class Analizador {
             Token token;
             do {
                 token = analizadorLexico.obtenerToken();
-                listaTokens.add(token);
+                if (token != null) {listaTokens.add(token);}
             } while (token != null);
 
             writeToFile(listaTokens, "archivoTokens.txt");
-            writeStringToFile(tablas.peek().toString(), "archivoTablaSimbolos.txt");
+            writeStringToFile(tablas.peek().imprimirTabla(), "archivoTablaSimbolos.txt");
             
 
         } catch (FileNotFoundException e) {

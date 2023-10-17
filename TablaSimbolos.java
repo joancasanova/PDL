@@ -55,9 +55,12 @@ public class TablaSimbolos {
         return tabla.size();
     }    
 
-    public void imprimirTabla() {
-        System.out.println("CONTENIDOS DE LA TABLA #: " + numeroTabla);
+    public String imprimirTabla() {
     
+        StringBuilder sb = new StringBuilder();
+        
+        sb.append("CONTENIDOS DE LA TABLA #" + numeroTabla + ":");
+
         for (Map.Entry<Integer, Simbolo> entrada : tabla.entrySet()) {
 
             // Obtenemos parametros de la entrada
@@ -69,20 +72,22 @@ public class TablaSimbolos {
 
 
             // Imprimimos la entrada
-            System.out.print("*\t");
-            System.out.print("LEXEMA\t:\t");
-            System.out.print("'" + nombre + "' ");
+            sb.append("\n*\t");
+            sb.append("LEXEMA\t:\t");
+            sb.append("'" + nombre + "'\n");
 
-            System.out.println("ATRIBUTOS\t:\t");
+            sb.append("ATRIBUTOS\t:\n");
 
-            System.out.print("+\t");
-            System.out.print("tipo:\t");
-            System.out.print("'" + tipo + "' ");
+            sb.append("+\t");
+            sb.append("tipo:\t");
+            sb.append("'" + tipo + "'\n");
 
-            System.out.println("+\t");
-            System.out.print("despl:\t");
-            System.out.print(desplazamiento);
+            sb.append("+\t");
+            sb.append("despl:\t");
+            sb.append(desplazamiento);
         }
+
+        return sb.toString();
     }
     
 }

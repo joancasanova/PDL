@@ -1,0 +1,17 @@
+<PalabraReservada, let>
+<Identificador, 0>
+<Asignacion, >
+<CteEntera, 50>
+<Simbolo, 59>
+<PalabraReservada, while>
+<Simbolo, 40>
+<CteEntera, 100>
+<Asignacion, >
+<CteEntera, 1530>
+<Simbolo, 41>
+<Simbolo, 123>
+<Identificador, 1>
+<Asignacion, >
+<CteEntera, 505>
+<Simbolo, 59>
+<Simbolo, 125>
