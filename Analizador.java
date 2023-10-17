@@ -1,11 +1,30 @@
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
 public class Analizador {
 
     static Stack<TablaSimbolos> tablas = new Stack<>();
+
+    public static void writeToFile(List<Token> listaTokens, String fileName) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+
+        for (Token item : listaTokens) {
+            writer.write(item.toString());
+            writer.newLine(); // Añade un salto de línea después de cada elemento
+        }
+
+        writer.close();
+    }
+
+    public static void writeStringToFile(String content, String fileName) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+        writer.write(content);
+        writer.close();
+    }
 
     public static void main(String[] args) {
 
@@ -17,14 +36,19 @@ public class Analizador {
         String rutaArchivo = args[0];
 
         try (FileReader fichero = new FileReader(rutaArchivo)) {
-            tablas.push(new TablaSimbolos());
+            List<Token> listaTokens = new ArrayList<Token>();
+
+            tablas.push(new TablaSimbolos(0));
             AnalizadorLexico analizadorLexico = new AnalizadorLexico(fichero);
             Token token;
             do {
                 token = analizadorLexico.obtenerToken();
+                listaTokens.add(token);
             } while (token != null);
 
-            tablas.peek().imprimirTabla();
+            writeToFile(listaTokens, "archivoTokens.txt");
+            writeStringToFile(tablas.peek().toString(), "archivoTablaSimbolos.txt");
+            
 
         } catch (FileNotFoundException e) {
             System.err.println("Archivo no encontrado: " + e.getMessage());

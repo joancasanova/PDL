@@ -200,7 +200,7 @@ public class AnalizadorLexico {
         else {
             TablaSimbolos tablaActual = Analizador.tablas.peek();
             int nuevaPosicion = tablaActual.numeroEntradas();
-            tablaActual.agregarSimbolo(nuevaPosicion, lexema, "identificador", null);
+            tablaActual.agregarSimbolo(nuevaPosicion, lexema, null, null, null);
             token = new Token(TokenType.Identificador, nuevaPosicion);
         }
 

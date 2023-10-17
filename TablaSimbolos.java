@@ -6,26 +6,32 @@ public class TablaSimbolos {
     // Estructura para almacenar los símbolos
     private final Map<Integer, Simbolo> tabla;
 
-    public TablaSimbolos() {
-        tabla = new HashMap<>();
-    }
+    // Numero identificador para la tabla de simbolos
+    private Integer numeroTabla;
 
+    public TablaSimbolos(Integer numeroTabla) {
+        tabla = new HashMap<>();
+        this.numeroTabla = numeroTabla;
+    }
+    
     // Clase interna para representar un símbolo
     private static class Simbolo {
-        StringBuilder identificador;
+        StringBuilder nombre;
         String tipo;
+        Integer desplazamiento;
         Object valor;
 
-        Simbolo(StringBuilder lexema, String string, Object valor) {
-            this.identificador = lexema;
-            this.tipo = string;
+        Simbolo(StringBuilder nombre, String tipo, Object valor, Integer desplazamiento) {
+            this.nombre = nombre;
+            this.tipo = tipo;
+            this.desplazamiento = desplazamiento;
             this.valor = valor;
         }
     }
 
     // Método para agregar un nuevo símbolo a la tabla
-    public void agregarSimbolo(Integer posicion, StringBuilder lexema, String string, Object valor) {
-        Simbolo nuevoSimbolo = new Simbolo(lexema, string, valor);
+    public void agregarSimbolo(Integer posicion, StringBuilder lexema, String tipo, Object valor, Integer desplazamiento) {
+        Simbolo nuevoSimbolo = new Simbolo(lexema, tipo, valor, desplazamiento);
         tabla.put(posicion, nuevoSimbolo);
     }
 
@@ -50,13 +56,32 @@ public class TablaSimbolos {
     }    
 
     public void imprimirTabla() {
-        System.out.println("Tabla de Símbolos:");
-        System.out.println("Posición\tIdentificador\tTipo\t\tValor");
+        System.out.println("CONTENIDOS DE LA TABLA #: " + numeroTabla);
     
         for (Map.Entry<Integer, Simbolo> entrada : tabla.entrySet()) {
-            Integer posicion = entrada.getKey();
+
+            // Obtenemos parametros de la entrada
             Simbolo simbolo = entrada.getValue();
-            System.out.println(posicion + "\t\t" + simbolo.identificador + "\t\t" + simbolo.tipo + "\t\t" + simbolo.valor);
+            String nombre = simbolo.nombre.toString();
+            String tipo = simbolo.tipo;
+            Object valor = simbolo.valor;
+            Integer desplazamiento = simbolo.desplazamiento;
+
+
+            // Imprimimos la entrada
+            System.out.print("*\t");
+            System.out.print("LEXEMA\t:\t");
+            System.out.print("'" + nombre + "' ");
+
+            System.out.println("ATRIBUTOS\t:\t");
+
+            System.out.print("+\t");
+            System.out.print("tipo:\t");
+            System.out.print("'" + tipo + "' ");
+
+            System.out.println("+\t");
+            System.out.print("despl:\t");
+            System.out.print(desplazamiento);
         }
     }
     
