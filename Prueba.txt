@@ -1,19 +1,9 @@
-let texto string;
-function pideTexto void 
-                  (void)
-{
-	put "Introduce un texto";
-	get texto;
-}
-function print void (string msg1)
-{
-	put "Texto introducido:";
-	put msg1;
-}
-pideTexto();
-let  textoAux  string;textoAux = texto;
-print
- (
- textoAux                                                    
- )
- ;
+let x int = "";let num int = 1;
+continue;
+alert(num,n1);get{num};function string hola (hola){}
+let aaaaa99999 integer
+if _bb_ then 
+aaaaa99999 = aaaaa999999+9876;
+let uu int;
+call hola();
+

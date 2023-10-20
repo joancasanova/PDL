@@ -1,6 +1,5 @@
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap.KeySetView;
 
 public class TablaSimbolos {
     
@@ -94,15 +93,13 @@ public class TablaSimbolos {
             sb.append("LEXEMA\t:\t");
             sb.append("'" + nombre + "'\n");
 
-            sb.append("ATRIBUTOS\t:\n");
+            //sb.append("+\t");
+            //sb.append("tipo\\t:\t");
+            //sb.append("'" + tipo + "'\n");
 
-            sb.append("+\t");
-            sb.append("tipo:\t");
-            sb.append("'" + tipo + "'\n");
-
-            sb.append("+\t");
-            sb.append("despl:\t");
-            sb.append(desplazamiento);
+            //sb.append("+\t");
+            //sb.append("despl\t:\t");
+            //sb.append(desplazamiento);
         }
 
         return sb.toString();

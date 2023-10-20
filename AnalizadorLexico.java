@@ -21,6 +21,7 @@ public class AnalizadorLexico {
     private Character charActual;
     Character charSiguiente = null;
     private boolean leerSiguiente = true;
+    private int lineaActual = 1;
 
     // Máximo número de caracteres en una cadena
     private static final int MAX_CARACTERES_CADENA = 64;
@@ -51,7 +52,10 @@ public class AnalizadorLexico {
     private Character leerSiguienteCaracter() {
         try {
             int aux = fichero.read();
-            if (aux == -1) { // fin del fichero
+            if ((char) aux == '\n') { // Si se encuentra con salto de linea, se aumenta la lineaActual en 1
+                lineaActual++;
+            }
+            if (aux == -1) { // Fin del fichero
                 return (char) aux;
             }
             return (char) aux;
@@ -129,7 +133,9 @@ public class AnalizadorLexico {
                     token = leerConstanteEntera(); // Constantes enteras
                 } 
                 else {
-                    System.err.print("Carácter no reconocido: " + charActual);
+                    System.err.print("Carácter no reconocido: " +
+                    "\n Linea: " + lineaActual +
+                    "\n Caracter: " + charActual);
                 }
         }
 
@@ -166,11 +172,13 @@ public class AnalizadorLexico {
             } 
             else {
                 lexema.append(charActual);
-                
-                if (lexema.length() >= MAX_CARACTERES_CADENA) {
-                    throw new IllegalArgumentException("Error: Cadena demasiado larga.");
-                }
             }
+        }
+            
+        if (lexema.length() >= MAX_CARACTERES_CADENA) {
+            throw new IllegalArgumentException("Error: Cadena demasiado larga." +
+            "\n Linea: " + lineaActual +
+            "\n Cadena: " + lexema.toString());
         }
     
         return token;
@@ -249,7 +257,9 @@ public class AnalizadorLexico {
             token = new Token(TokenType.CteEntera, valorEntero); 
         }
         else {
-            throw new IllegalArgumentException("Se ha superado el valor máximo de la representación");
+            throw new IllegalArgumentException("Se ha superado el valor máximo de la representación. " +
+            "\n Linea: " + lineaActual +
+            "\n Valor: " + valorEntero);
         }
 
         return token;

@@ -1,21 +1,53 @@
 CONTENIDOS DE LA TABLA #0:
-*	LEXEMA	:	'texto'
+*	LEXEMA	:	'x'
 ATRIBUTOS	:
 +	tipo:	'null'
 +	despl:	null
-*	LEXEMA	:	'pideTexto'
+*	LEXEMA	:	'num'
 ATRIBUTOS	:
 +	tipo:	'null'
 +	despl:	null
-*	LEXEMA	:	'print'
+*	LEXEMA	:	'continue'
 ATRIBUTOS	:
 +	tipo:	'null'
 +	despl:	null
-*	LEXEMA	:	'msg1'
+*	LEXEMA	:	'alert'
 ATRIBUTOS	:
 +	tipo:	'null'
 +	despl:	null
-*	LEXEMA	:	'textoAux'
+*	LEXEMA	:	'n1'
+ATRIBUTOS	:
++	tipo:	'null'
++	despl:	null
+*	LEXEMA	:	'hola'
+ATRIBUTOS	:
++	tipo:	'null'
++	despl:	null
+*	LEXEMA	:	'aaaaa99999'
+ATRIBUTOS	:
++	tipo:	'null'
++	despl:	null
+*	LEXEMA	:	'integer'
+ATRIBUTOS	:
++	tipo:	'null'
++	despl:	null
+*	LEXEMA	:	'_bb_'
+ATRIBUTOS	:
++	tipo:	'null'
++	despl:	null
+*	LEXEMA	:	'then'
+ATRIBUTOS	:
++	tipo:	'null'
++	despl:	null
+*	LEXEMA	:	'aaaaa999999'
+ATRIBUTOS	:
++	tipo:	'null'
++	despl:	null
+*	LEXEMA	:	'uu'
+ATRIBUTOS	:
++	tipo:	'null'
++	despl:	null
+*	LEXEMA	:	'call'
 ATRIBUTOS	:
 +	tipo:	'null'
 +	despl:	null
