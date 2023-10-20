@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap.KeySetView;
 
 public class TablaSimbolos {
     
@@ -16,12 +17,12 @@ public class TablaSimbolos {
     
     // Clase interna para representar un símbolo
     private static class Simbolo {
-        StringBuilder nombre;
+        String nombre;
         String tipo;
         Integer desplazamiento;
         Object valor;
 
-        Simbolo(StringBuilder nombre, String tipo, Object valor, Integer desplazamiento) {
+        Simbolo(String nombre, String tipo, Object valor, Integer desplazamiento) {
             this.nombre = nombre;
             this.tipo = tipo;
             this.desplazamiento = desplazamiento;
@@ -30,7 +31,7 @@ public class TablaSimbolos {
     }
 
     // Método para agregar un nuevo símbolo a la tabla
-    public void agregarSimbolo(Integer posicion, StringBuilder lexema, String tipo, Object valor, Integer desplazamiento) {
+    public void agregarSimbolo(Integer posicion, String lexema, String tipo, Object valor, Integer desplazamiento) {
         Simbolo nuevoSimbolo = new Simbolo(lexema, tipo, valor, desplazamiento);
         tabla.put(posicion, nuevoSimbolo);
     }
@@ -40,14 +41,31 @@ public class TablaSimbolos {
         return tabla.get(posicion);
     }
 
+    // Método para obtener posicion un símbolo existente de la tabla
+    public Integer obtenerPosicionSimbolo(String nombre) {
+        Integer posicion = null;
+        for (Map.Entry<Integer, Simbolo> entry : tabla.entrySet()) {
+            if (entry.getValue().nombre.equals(nombre)) {
+                posicion = entry.getKey();
+            }
+        }
+        return posicion;
+    }
+
     // Método para eliminar un símbolo existente de la tabla
     public void eliminarSimbolo(Integer posicion) {
         tabla.remove(posicion);
     }
 
     // Método para verificar si un símbolo ya existe en la tabla
-    public boolean simboloExiste(Integer posicion) {
-        return tabla.containsKey(posicion);
+    public boolean simboloExiste(String nombre) {
+
+        for (Simbolo simbolo : tabla.values()) {
+            if (simbolo.nombre.equals(nombre)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Método para obtener un símbolo existente de la tabla

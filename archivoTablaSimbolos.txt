@@ -1,0 +1,21 @@
+CONTENIDOS DE LA TABLA #0:
+*	LEXEMA	:	'texto'
+ATRIBUTOS	:
++	tipo:	'null'
++	despl:	null
+*	LEXEMA	:	'pideTexto'
+ATRIBUTOS	:
++	tipo:	'null'
++	despl:	null
+*	LEXEMA	:	'print'
+ATRIBUTOS	:
++	tipo:	'null'
++	despl:	null
+*	LEXEMA	:	'msg1'
+ATRIBUTOS	:
++	tipo:	'null'
++	despl:	null
+*	LEXEMA	:	'textoAux'
+ATRIBUTOS	:
++	tipo:	'null'
++	despl:	null

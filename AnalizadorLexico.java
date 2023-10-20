@@ -52,7 +52,7 @@ public class AnalizadorLexico {
         try {
             int aux = fichero.read();
             if (aux == -1) { // fin del fichero
-                return '\0';
+                return (char) aux;
             }
             return (char) aux;
         } catch (IOException e) {
@@ -69,14 +69,15 @@ public class AnalizadorLexico {
      */
     public Token obtenerToken() throws IOException, EOFException {
         Token token = null; 
+    
         
-        if (charActual == '\0') {
+        if ((int) charActual == -1) {
             // Detener el analizador léxico ya que se encontró el EOF.
             return null;
         }
-    
+
         // Ignora los delimitadores como espacios en blanco, tabuladores y saltos de línea.
-        while (Character.isWhitespace(charActual) || charActual == '\t' || charActual == '\n' || charActual == '\u0000') {
+        while (Character.isWhitespace(charActual) || charActual == '\t' || charActual == '\n') {
             charActual = leerSiguienteCaracter();
         }
 
@@ -128,7 +129,7 @@ public class AnalizadorLexico {
                     token = leerConstanteEntera(); // Constantes enteras
                 } 
                 else {
-                    throw new IllegalArgumentException("Carácter no reconocido: " + charActual);
+                    System.err.print("Carácter no reconocido: " + charActual);
                 }
         }
 
@@ -198,16 +199,24 @@ public class AnalizadorLexico {
         }
         
         charSiguiente = charActual;
+
+        String nombre = lexema.toString();
         
         // Se comprueba si es una palabra reservada o un identificador
-        if (palabrasReservadas.contains(lexema.toString())) {
-            token = new Token(TokenType.PalabraReservada, lexema.toString());
+        if (palabrasReservadas.contains(nombre)) {
+            token = new Token(TokenType.PalabraReservada, nombre);
         }
         else {
             TablaSimbolos tablaActual = Analizador.tablas.peek();
-            int nuevaPosicion = tablaActual.numeroEntradas();
-            tablaActual.agregarSimbolo(nuevaPosicion, lexema, null, null, null);
-            token = new Token(TokenType.Identificador, nuevaPosicion);
+
+            if (tablaActual.simboloExiste(nombre)) {
+                token = new Token(TokenType.Identificador, tablaActual.obtenerPosicionSimbolo(nombre));
+            }
+            else {
+                int nuevaPosicion = tablaActual.numeroEntradas();
+                tablaActual.agregarSimbolo(nuevaPosicion, nombre, null, null, null);
+                token = new Token(TokenType.Identificador, nuevaPosicion);
+            }
         }
 
         return token;

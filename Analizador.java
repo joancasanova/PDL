@@ -46,6 +46,8 @@ public class Analizador {
                 if (token != null) {listaTokens.add(token);}
             } while (token != null);
 
+            fichero.close();
+
             writeToFile(listaTokens, "archivoTokens.txt");
             writeStringToFile(tablas.peek().imprimirTabla(), "archivoTablaSimbolos.txt");
             
