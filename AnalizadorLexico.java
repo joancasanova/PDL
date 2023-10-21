@@ -153,7 +153,7 @@ public class AnalizadorLexico {
     }
     
 
-    /**
+  /**
      * Lee una cadena encerrada entre comillas dobles.
      *
      * @return El token representando la cadena.
@@ -163,10 +163,12 @@ public class AnalizadorLexico {
         Token token = null;
         StringBuilder lexema = new StringBuilder();
     
+        lexema.append(charActual);// Concatenar primeras "
         while (true) {
             charActual = leerSiguienteCaracter();
     
             if (charActual == '\"') { // Se detecta comilla de cierre, generamos token de cadena de caracteres
+                lexema.append(charActual);// Concatenar ultima "
                 token = new Token(TokenType.Cadena, lexema.toString());
                 break;
             } 
@@ -175,7 +177,7 @@ public class AnalizadorLexico {
             }
         }
             
-        if (lexema.length() >= MAX_CARACTERES_CADENA) {
+        if (lexema.length()-2 >= MAX_CARACTERES_CADENA) {
             throw new IllegalArgumentException("Error: Cadena demasiado larga." +
             "\n Linea: " + lineaActual +
             "\n Cadena: " + lexema.toString());
@@ -183,6 +185,7 @@ public class AnalizadorLexico {
     
         return token;
     }
+    
     
 
     /**
