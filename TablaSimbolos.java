@@ -76,7 +76,7 @@ public class TablaSimbolos {
     
         StringBuilder sb = new StringBuilder();
         
-        sb.append("CONTENIDOS DE LA TABLA #" + numeroTabla + ":");
+        sb.append("CONTENIDOS DE LA TABLA #" + numeroTabla + ":\n");
 
         for (Map.Entry<Integer, Simbolo> entrada : tabla.entrySet()) {
 
