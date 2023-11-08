@@ -74,13 +74,28 @@ public class AnalizadorLexico {
     public Token obtenerToken() throws IOException, EOFException {
         Token token = null; 
     
-        
         if ((int) charActual == -1) {
             // Detener el analizador léxico ya que se encontró el EOF.
             return null;
         }
 
-        // Ignora los delimitadores como espacios en blanco, tabuladores y saltos de línea.
+        if(charActual == '/'){
+
+            charSiguiente = leerSiguienteCaracter();
+                if (charSiguiente == '/') {
+                    while (charActual != '\n') {
+                        charActual = leerSiguienteCaracter();
+                        System.out.println(charActual);
+                    }
+                } else {
+                    System.err.print("Carácter no esperado: " +
+                    "\n Linea: " + lineaActual +
+                    "\n Caracter: " + charActual);
+                }
+
+        }
+
+          // Ignora los delimitadores como espacios en blanco, tabuladores y saltos de línea.
         while (Character.isWhitespace(charActual) || charActual == '\t' || charActual == '\n') {
             charActual = leerSiguienteCaracter();
         }
@@ -121,30 +136,6 @@ public class AnalizadorLexico {
                 token = new Token(TokenType.Simbolo, valorAscii); // Token de Simbolo
                 break;
 
-
-            case '/':
-            charActual= (char) fichero.read();
-            //lee elsiguiente caracter inmediato
-            if(charActual == '/') {
-
-                while(charActual != '\n' || (int) charActual != -1) {
-
-                    charActual= (char) fichero.read();
-                }
-
-                lineaActual++;
-
-            } else {
-                 System.err.print("Formato de comentario incorrecto" + lineaActual);
-                 return null;
-            }
-            if((int) charActual != -1) {
-                charActual = (char) fichero.read();//Dejo leido el siguietne caracter par ala siguente ejecucion
-            } else {
-                System.out.println("Fin de fichero\n");
-            }
-            
-           break;
             case '\"':
                 token = leerCadena(); // Cadenas de caracteres
                 break;
