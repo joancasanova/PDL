@@ -121,6 +121,30 @@ public class AnalizadorLexico {
                 token = new Token(TokenType.Simbolo, valorAscii); // Token de Simbolo
                 break;
 
+
+            case '/':
+            charActual= (char) fichero.read();
+            //lee elsiguiente caracter inmediato
+            if(charActual == '/') {
+
+                while(charActual != '\n' || (int) charActual != -1) {
+
+                    charActual= (char) fichero.read();
+                }
+
+                lineaActual++;
+
+            } else {
+                 System.err.print("Formato de comentario incorrecto" + lineaActual);
+                 return null;
+            }
+            if((int) charActual != -1) {
+                charActual = (char) fichero.read();//Dejo leido el siguietne caracter par ala siguente ejecucion
+            } else {
+                System.out.println("Fin de fichero\n");
+            }
+            
+           break;
             case '\"':
                 token = leerCadena(); // Cadenas de caracteres
                 break;
@@ -151,6 +175,8 @@ public class AnalizadorLexico {
 
         return token;
     }
+    
+
     
 
   /**
