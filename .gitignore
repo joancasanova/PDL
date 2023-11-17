@@ -1,6 +1,1 @@
-/Analizador.class
-/AnalizadorLexico.class
-/TablaSimbolos$Simbolo.class
-/TablaSimbolos.class
-/Token.class
-/TokenType.class
+*.class

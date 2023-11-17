@@ -6,10 +6,19 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TablaAnalisis",
+            "request": "launch",
+            "mainClass": "TablaAnalisis",
+            "projectName": "PDL"
+        },
+        {
+            "type": "java",
             "name": "Analizador",
             "request": "launch",
             "mainClass": "Analizador",
-            "args": ["prueba.txt"],  // Add your arguments here
+            "args": [
+                "prueba.txt"
+            ],
             "projectName": "PDL_d324486f"
         },
         {
