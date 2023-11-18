@@ -8,18 +8,18 @@
             "type": "java",
             "name": "TablaAnalisis",
             "request": "launch",
-            "mainClass": "TablaAnalisis",
+            "mainClass": "sintactico.TablaAnalisis",
             "projectName": "PDL"
         },
         {
             "type": "java",
             "name": "Analizador",
             "request": "launch",
-            "mainClass": "Analizador",
+            "mainClass": "main.Analizador",
             "args": [
-                "prueba.txt"
+                "main/prueba.txt"
             ],
-            "projectName": "PDL_d324486f"
+            "projectName": "PDL"
         },
         {
             "type": "java",

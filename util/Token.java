@@ -1,3 +1,5 @@
+package util;
+
 public class Token {
     public TokenType tipo;
     public Object atributo;

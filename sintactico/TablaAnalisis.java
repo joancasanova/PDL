@@ -1,7 +1,6 @@
+package sintactico;
 import java.io.*;
 import java.util.*;
-
-import AnalizadorSintactico.*;
 
 public class TablaAnalisis {
     private Map<Integer, Map<String, Accion>> actionTable;
@@ -16,9 +15,12 @@ public class TablaAnalisis {
         reglas = new HashMap<>();
         terminals = new HashSet<>();
         nonTerminals = new HashSet<>();
+
+        String filePath = "sintactico/gramatica.txt";
+        generateTable(filePath);
     }
 
-    public void generateTable(String filePath) {
+    private void generateTable(String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -61,7 +63,7 @@ public class TablaAnalisis {
                     if (string.equals("|")) {
                         string = reglas.get(numeroRegla - 1).get(0);
                     }
-                    contenidoRegla.add(string.replaceAll(":", ""));
+                    contenidoRegla.add(processTerminal(string.replaceAll(":", "")));
                 }
             }
 
@@ -78,7 +80,41 @@ public class TablaAnalisis {
                 contador_lineas_vacias++;
                 continue;
             }
-            terminals.add(line.split("\\s+")[1]);
+
+            String terminal = line.split("\\s+")[1];
+
+            terminals.add(processTerminal(terminal));
+        }
+    }
+
+    private String processTerminal(String terminal) {
+        switch (terminal) {
+            case "'+'":
+                return "SUMA";
+            case "'!'":
+                return "NEGACION";
+            case "','":
+                return "COMA";
+            case "';'":
+                return "PUNTOCOMA";
+            case "'('":
+                return "ABREPARENTESIS";
+            case "')'":
+                return "CIERRAPARENTESIS";
+            case "'{'":
+                return "ABRECORCHETE";
+            case "'}'":
+                return "CIERRACORCHETE";
+            case "'='":
+                return "ASIGNACION";
+            case "EQ_OP":
+                return "COMPARADOR";
+            case "ADD_OP":
+                return "ASIGNACIONSUMA";
+            case "$end":
+                return "FINDEFICHERO";
+            default:
+                return terminal.toUpperCase();
         }
     }
 
@@ -105,7 +141,7 @@ public class TablaAnalisis {
 
         String line;
         Integer contador_lineas_vacias = 0;
-        while (contador_lineas_vacias < 5) {
+        while (contador_lineas_vacias < 2) {
             line = reader.readLine();
             if (line == null) {
                 break;
@@ -113,6 +149,8 @@ public class TablaAnalisis {
             if (line.isEmpty()) {
                 contador_lineas_vacias++;
                 continue;
+            } else {
+                contador_lineas_vacias = 0;
             }
             
             String[] parts = line.trim().split("\\s+");
@@ -121,15 +159,15 @@ public class TablaAnalisis {
                 if (parts[1].equals("shift,")) {
                     int estado = Integer.parseInt(parts[6]);
                     AccionDesplazar accionDesplazar = new AccionDesplazar(estado);
-                    actionMap.put(simbolo, accionDesplazar);
+                    actionMap.put(processTerminal(simbolo), accionDesplazar);
                 } else if (parts[1].equals("reduce")) {
                     int regla = Integer.parseInt(parts[4].replaceAll("[^0-9]", ""));
                     String noTerminal = parts[5].replaceAll("\\(|\\)", "");
                     AccionReducir accionReducir = new AccionReducir(regla, noTerminal);
-                    actionMap.put(simbolo, accionReducir);
+                    actionMap.put(processTerminal(simbolo), accionReducir);
                 } else if (parts[1].equals("accept")) {
                     AccionAceptar accionAceptar = new AccionAceptar();
-                    actionMap.put(simbolo, accionAceptar);
+                    actionMap.put(processTerminal(simbolo), accionAceptar);
                 } else if (parts[1].equals("go")) {
                     int goToState = Integer.parseInt(parts[4]);
                     gotoMap.put(simbolo, goToState);
@@ -206,9 +244,30 @@ public class TablaAnalisis {
         }
     }
 
+    public Map<Integer,Map<String,Accion>> getActionTable() {
+        return this.actionTable;
+    }
+
+    public Map<Integer,Map<String,Integer>> getGotoTable() {
+        return this.gotoTable;
+    }
+
+    public Map<Integer,List<String>> getReglas() {
+        return this.reglas;
+    }
+
+    public Set<String> getTerminals() {
+        return this.terminals;
+    }
+
+    public Set<String> getNonTerminals() {
+        return this.nonTerminals;
+    }
+
+
     public static void main(String[] args) {
         TablaAnalisis generator = new TablaAnalisis();
-        String filePath = "gramatica.txt";
+        String filePath = "sintactico/gramatica.txt";
         generator.generateTable(filePath);
         generator.printActionTable();
         generator.printGotoTable();

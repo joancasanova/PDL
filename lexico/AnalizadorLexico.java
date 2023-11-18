@@ -1,19 +1,11 @@
+package lexico;
 import java.io.*;
 import java.util.*;
 
-// Enumeración para representar los tipos de tokens
-enum TokenType {
-    PalabraReservada,   // Para palabras reservadas (e.g., boolean, function)
-    CteEntera,          // Para constantes enteras (e.g., 123)
-    Cadena,             // Para cadenas de caracteres (e.g., "¡Hola, mundo!")
-    Identificador,      // Para identificadores (e.g., nombreVariable)
-    AsignacionSuma,     // Para la asignación con suma (e.g., +=)
-    Comparador,         // Para comparadores (e.g., ==)
-    Asignacion,         // Para la asignación (e.g., =)
-    Suma,               // Para operadores (e.g., +)
-    Negacion,           // Para operadores (e.g., !)
-    Simbolo             // Para símbolos (e.g., ,, ;, (, ), {, })
-}
+import main.Analizador;
+import util.TablaSimbolos;
+import util.Token;
+import util.TokenType;
 
 public class AnalizadorLexico {
 
@@ -55,9 +47,6 @@ public class AnalizadorLexico {
             if ((char) aux == '\n') { // Si se encuentra con salto de linea, se aumenta la lineaActual en 1
                 lineaActual++;
             }
-            if (aux == -1) { // Fin del fichero
-                return (char) aux;
-            }
             return (char) aux;
         } catch (IOException e) {
             System.err.println("Error al leer el archivo: " + e.getMessage());
@@ -73,11 +62,6 @@ public class AnalizadorLexico {
      */
     public Token obtenerToken() throws IOException, EOFException {
         Token token = null; 
-    
-        if ((int) charActual == -1) {
-            // Detener el analizador léxico ya que se encontró el EOF.
-            return null;
-        }
 
         if(charActual == '/'){
 
@@ -105,9 +89,9 @@ public class AnalizadorLexico {
             case '+':
                 charSiguiente = leerSiguienteCaracter();
                 if (charSiguiente == '=') {
-                    token = new Token(TokenType.AsignacionSuma, ""); // Token de AsignacionSuma (+=)
+                    token = new Token(TokenType.ASIGNACIONSUMA, ""); // Token de AsignacionSuma (+=)
                 } else {
-                    token = new Token(TokenType.Suma, ""); // Token de Suma (+)
+                    token = new Token(TokenType.SUMA, ""); // Token de Suma (+)
                     leerSiguiente = false;
                 }
                 break;
@@ -115,43 +99,62 @@ public class AnalizadorLexico {
             case '=':
                 charSiguiente = leerSiguienteCaracter();
                 if (charSiguiente == '=') {
-                    token = new Token(TokenType.Comparador, ""); // Token de Comparador (==)
+                    token = new Token(TokenType.COMPARADOR, ""); // Token de Comparador (==)
                 } else {
-                    token = new Token(TokenType.Asignacion, ""); // Token de Asignacion (=)
+                    token = new Token(TokenType.ASIGNACION, ""); // Token de Asignacion (=)
                     leerSiguiente = false;
                 }
                 break;
 
             case '!':
-                token = new Token(TokenType.Negacion, "");// Token de Negacion (!)
+                token = new Token(TokenType.NEGACION, "");// Token de Negacion (!)
                 break;
         
             case ',':
+                token = new Token(TokenType.COMA, ""); // Token de Simbolo
+                break;
+
             case ';':
+                token = new Token(TokenType.PUNTOCOMA, ""); // Token de Simbolo
+                break;
+
             case '(':
+                token = new Token(TokenType.ABREPARENTESIS, ""); // Token de Simbolo
+                break;
+
             case ')':
+                token = new Token(TokenType.CIERRAPARENTESIS, ""); // Token de Simbolo
+                break;
+
             case '{':
+                token = new Token(TokenType.ABRECORCHETE, ""); // Token de Simbolo
+                break;
+
             case '}':
-                int valorAscii = (int) charActual; // Se obtieve el valor ASCII del simbolo para el atributo del token
-                token = new Token(TokenType.Simbolo, valorAscii); // Token de Simbolo
+                token = new Token(TokenType.CIERRACORCHETE, ""); // Token de Simbolo
                 break;
 
             case '\"':
                 token = leerCadena(); // Cadenas de caracteres
                 break;
     
-            default:
-                if (Character.isLetter(charActual) || charActual == '_') {
+            default:        
+                int charInt = (int) charActual;
+   
+                if (charInt == 65535 || charActual == '?') {
+                    token = new Token(TokenType.FINDEFICHERO, "");
+                } 
+                else if (Character.isLetter(charActual) || charActual == '_') {
                     token = leerLexema(); // Identificadores y palabras reservadas
                 } 
                 else if (Character.isDigit(charActual)) {
                     token = leerConstanteEntera(); // Constantes enteras
                 } 
                 else {
-                    System.err.print("Carácter no reconocido: " +
+                    System.err.println("Carácter no reconocido: " +
                     "\n Linea: " + lineaActual +
                     "\n Caracter: " + charActual);
-                }
+                }    
         }
 
         // Actualizamos el siguiente caracter
@@ -186,7 +189,7 @@ public class AnalizadorLexico {
     
             if (charActual == '\"') { // Se detecta comilla de cierre, generamos token de cadena de caracteres
                 lexema.append(charActual);// Concatenar ultima "
-                token = new Token(TokenType.Cadena, lexema.toString());
+                token = new Token(TokenType.CADENA, lexema.toString());
                 break;
             } 
             else {
@@ -232,18 +235,18 @@ public class AnalizadorLexico {
         
         // Se comprueba si es una palabra reservada o un identificador
         if (palabrasReservadas.contains(nombre)) {
-            token = new Token(TokenType.PalabraReservada, nombre);
+            token = new Token(TokenType.PALABRARESERVADA, nombre.toUpperCase());
         }
         else {
             TablaSimbolos tablaActual = Analizador.tablas.peek();
 
             if (tablaActual.simboloExiste(nombre)) {
-                token = new Token(TokenType.Identificador, tablaActual.obtenerPosicionSimbolo(nombre));
+                token = new Token(TokenType.ID, tablaActual.obtenerPosicionSimbolo(nombre));
             }
             else {
                 int nuevaPosicion = tablaActual.numeroEntradas();
                 tablaActual.agregarSimbolo(nuevaPosicion, nombre, null, null, null);
-                token = new Token(TokenType.Identificador, nuevaPosicion);
+                token = new Token(TokenType.ID, nuevaPosicion);
             }
         }
 
@@ -274,7 +277,7 @@ public class AnalizadorLexico {
         charSiguiente = charActual;
 
         if (valorEntero < MAX_VALOR_ENTERO) {
-            token = new Token(TokenType.CteEntera, valorEntero); 
+            token = new Token(TokenType.ENTERO, valorEntero); 
         }
         else {
             throw new IllegalArgumentException("Se ha superado el valor máximo de la representación. " +

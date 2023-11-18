@@ -1,7 +1,7 @@
-package AnalizadorSintactico;
+package sintactico;
 
 public class AccionDesplazar extends Accion {
-    Integer estado;
+    private Integer estado;
 
     public AccionDesplazar(Integer estado) {
         super.setTipo("desplazar");

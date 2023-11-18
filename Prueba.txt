@@ -1,9 +1,0 @@
-let x int = "";let num int = 1;
-continue;
-alert(num,n1);get{num};function string hola (hola){}
-let aaaaa99999 integer
-if _bb_ then 
-aaaaa99999 = aaaaa999999+9876;
-let uu int;
-call hola();
-

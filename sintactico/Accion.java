@@ -1,7 +1,7 @@
-package AnalizadorSintactico;
+package sintactico;
 
 public abstract class Accion {
-    String tipo;
+    private String tipo;
 
     public void setTipo(String tipo) {
         this.tipo = tipo;

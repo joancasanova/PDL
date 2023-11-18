@@ -1,8 +1,8 @@
-package AnalizadorSintactico;
+package sintactico;
 
 public class AccionReducir extends Accion {
-    Integer regla;
-    String noTerminal;
+    private Integer regla;
+    private String noTerminal;
 
     public AccionReducir(Integer regla, String noTerminal) {
         super.setTipo("reducir");
