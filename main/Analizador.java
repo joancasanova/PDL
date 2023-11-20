@@ -29,9 +29,10 @@ public class Analizador {
         writer.close();
     }
     
-    public static void writeListToFile(List lista, String fileName) throws IOException {
+    public static void escribirReglasAplicadas(List lista, String fileName) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
 
+        writer.write("A\n");
         for (Object item : lista) {
             writer.write(item.toString());
             writer.newLine(); // Añade un salto de línea después de cada elemento
@@ -61,6 +62,8 @@ public class Analizador {
             tablas.push(new TablaSimbolos(0));
 
             // Analizador Lexico
+            // TODO: Hacer el analizador lexico y el sintactico que funcionen en paralelo para ver en que linea se da un error.
+
             AnalizadorLexico analizadorLexico = new AnalizadorLexico(fichero);
             Token token;
             do {
@@ -75,7 +78,7 @@ public class Analizador {
             // Analizador Sintactico
             AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico( new TablaAnalisis(), listaTokens);
             analizadorSintactico.getReglasAplicadas();
-            writeListToFile(analizadorSintactico.getReglasAplicadas(), "output/reglasAplicadas.txt");
+            escribirReglasAplicadas(analizadorSintactico.getReglasAplicadas(), "output/reglasAplicadas.txt");
 
         } catch (FileNotFoundException e) {
             System.err.println("Archivo no encontrado: " + e.getMessage());

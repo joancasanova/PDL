@@ -63,7 +63,9 @@ public class TablaAnalisis {
                     if (string.equals("|")) {
                         string = reglas.get(numeroRegla - 1).get(0);
                     }
-                    contenidoRegla.add(processTerminal(string.replaceAll(":", "")));
+                    String terminalProcesado = processTerminal(string.replaceAll(":", ""));
+                    terminalProcesado.replaceAll("\\?", "");
+                    contenidoRegla.add(terminalProcesado);
                 }
             }
 

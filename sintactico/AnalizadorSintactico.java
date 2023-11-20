@@ -66,7 +66,18 @@ public class AnalizadorSintactico {
             } else {
                 System.err.println("Error de análisis sintáctico en el token " + tokenActualProcesado + " en el estado " + pilaEstados.peek());
                 break;
-            }            
+            }    
+            System.out.print("\tPila Estados: ");
+            for (Integer integer : pilaEstados) {
+                System.out.print(integer + ", ");
+            }
+            System.out.println();
+
+            System.out.print("\tPila Simbolos: ");
+            for (String string : pilaSimbolos) {
+                System.out.print(string + ", ");
+            }
+            System.out.println();
         }
     }
 
@@ -85,7 +96,7 @@ public class AnalizadorSintactico {
         List<String> regla = tablaAnalisis.getReglas().get(accion.getRegla());
 
         // La cantidad de elementos a desapilar es igual a la longitud de la regla menos uno (excluyendo el lado izquierdo)
-        int cantidadDesapilar = regla.size() - 1;    
+        int cantidadDesapilar = regla.size() - 1;
         // Desapila la cantidad calculada de estados de una sola vez
         while (cantidadDesapilar > 0) {
             pilaEstados.pop();
@@ -94,11 +105,14 @@ public class AnalizadorSintactico {
         }
     
         // Agrega el estado correspondiente al no terminal de la regla
-        String noTerminal = regla.get(0);
+        String noTerminal = accion.getNoTerminal();
         pilaSimbolos.push(noTerminal); // Apilar el simbolo no terminal
-        int estado = tablaAnalisis.getGotoTable().get(pilaEstados.peek()).get(noTerminal);
-        pilaEstados.push(estado);
-    
+        try {
+            int estado = tablaAnalisis.getGotoTable().get(pilaEstados.peek()).get(noTerminal);
+            pilaEstados.push(estado);            
+        } catch (NullPointerException e) {
+                System.err.println("Error de análisis sintáctico. No existe el no terminal: " + noTerminal + " en el estado " + pilaEstados.peek() + " para la tabla de goto");
+        }
         // Registro de la regla aplicada
         reglasAplicadas.add(accion.getRegla());
     }    

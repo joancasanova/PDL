@@ -69,7 +69,6 @@ public class AnalizadorLexico {
                 if (charSiguiente == '/') {
                     while (charActual != '\n') {
                         charActual = leerSiguienteCaracter();
-                        System.out.println(charActual);
                     }
                 } else {
                     System.err.print("Carácter no esperado: " +

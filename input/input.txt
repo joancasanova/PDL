@@ -1,0 +1,38 @@
+let texto string;
+function print void(string m_s_g)
+{
+	put "Mensaje introducido:";
+	put m_s_g;
+}
+function pideTexto void ( void )
+{
+	put "Introduce un texto corto";
+	get texto;
+}
+let aa_aa int;
+let iiii int;
+let s64 string;
+let bo boolean;
+
+function ffff int (void)
+{
+aa_aa=11  ; 
+
+aa_aa= iiii  +  33;
+
+return aa_aa;
+}	
+
+put  iiii ;
+
+
+
+	
+put s64;
+pideTexto();
+let  textoAux  string;textoAux = texto;
+print
+ (
+ textoAux                                                    
+ )
+ ;

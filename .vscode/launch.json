@@ -17,7 +17,7 @@
             "request": "launch",
             "mainClass": "main.Analizador",
             "args": [
-                "main/prueba.txt"
+                "input/input.txt"
             ],
             "projectName": "PDL"
         },

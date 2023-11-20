@@ -1,5 +1,21 @@
 CONTENIDOS DE LA TABLA #0:
 
-*	LEXEMA	:	'x'
+*	LEXEMA	:	'texto'
 
-*	LEXEMA	:	'id'
+*	LEXEMA	:	'print'
+
+*	LEXEMA	:	'm_s_g'
+
+*	LEXEMA	:	'pideTexto'
+
+*	LEXEMA	:	'aa_aa'
+
+*	LEXEMA	:	'iiii'
+
+*	LEXEMA	:	's64'
+
+*	LEXEMA	:	'bo'
+
+*	LEXEMA	:	'ffff'
+
+*	LEXEMA	:	'textoAux'
