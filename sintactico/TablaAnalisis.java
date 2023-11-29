@@ -2,13 +2,29 @@ package sintactico;
 import java.io.*;
 import java.util.*;
 
+import util.TokenType;
+
+/**
+ * Clase TablaAnalisis que se encarga de parsear un archivo de texto generado por Bison.
+ * Crea estructuras de datos para ser utilizadas por un analizador sintáctico LR(1).
+ */
 public class TablaAnalisis {
+    private static final String GRAMMAR_SECTION = "Grammar";
+    private static final String TERMINALS_SECTION = "Terminals";
+    private static final String NONTERMINALS_SECTION = "Nonterminals";
+    private static final String STATE_SECTION = "State";
+    private static final String FILE_PATH = "sintactico/gramatica.txt";
+
     private Map<Integer, Map<String, Accion>> actionTable;
     private Map<Integer, Map<String, Integer>> gotoTable;
     private Map<Integer, List<String>> reglas;
     private Set<String> terminals;
     private Set<String> nonTerminals;
 
+    /**
+     * Constructor de TablaAnalisis.
+     * Inicializa las estructuras de datos y genera la tabla a partir de un archivo.
+     */
     public TablaAnalisis() {
         actionTable = new HashMap<>();
         gotoTable = new HashMap<>();
@@ -16,10 +32,16 @@ public class TablaAnalisis {
         terminals = new HashSet<>();
         nonTerminals = new HashSet<>();
 
-        String filePath = "sintactico/gramatica.txt";
+        String filePath = FILE_PATH;
         generateTable(filePath);
     }
 
+    /**
+     * Genera las tablas de análisis sintáctico a partir de un archivo de gramática dado.
+     * Lee y procesa el archivo para construir las tablas de acción y salto (goto).
+     *
+     * @param filePath Ruta del archivo de gramática a procesar.
+     */
     private void generateTable(String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -29,13 +51,13 @@ public class TablaAnalisis {
                     continue;
                 }
 
-                if (line.startsWith("Grammar")) {
+                if (line.startsWith(GRAMMAR_SECTION)) {
                     processGrammar(reader);
-                } else if (line.startsWith("Terminals")) {
+                } else if (line.startsWith(TERMINALS_SECTION)) {
                     processTerminals(reader);
-                } else if (line.startsWith("Nonterminals")) {
+                } else if (line.startsWith(NONTERMINALS_SECTION)) {
                     processNonTerminals(reader);
-                } else if (line.startsWith("State")) {
+                } else if (line.startsWith(STATE_SECTION)) {
                     processState(reader, line);
                 }
             }
@@ -44,16 +66,23 @@ public class TablaAnalisis {
         }
     }
 
+    /**
+     * Procesa la sección de gramática del archivo.
+     * Lee y analiza las reglas gramaticales definidas en el archivo.
+     *
+     * @param reader BufferedReader para leer el archivo.
+     * @throws IOException Si ocurre un error de lectura.
+     */
     private void processGrammar(BufferedReader reader) throws IOException  {
         String line;
-        Integer contador_lineas_vacias = 0;
-        while (contador_lineas_vacias < 2) {
+        Integer contadorLineasVacias = 0;
+        while (contadorLineasVacias < 2) {
             line = reader.readLine();
             if (line.isEmpty()) {
-                contador_lineas_vacias++;
+                contadorLineasVacias++;
                 continue;
             } else {
-                contador_lineas_vacias = 0;
+                contadorLineasVacias = 0;
             }
 
             int numeroRegla = Integer.parseInt(line.split("\\s+")[1]);
@@ -75,58 +104,41 @@ public class TablaAnalisis {
 
     private void processTerminals(BufferedReader reader) throws IOException {
         String line;
-        Integer contador_lineas_vacias = 0;
-        while (contador_lineas_vacias < 2) {
+        Integer contadorLineasVacias = 0;
+        while (contadorLineasVacias < 2) {
             line = reader.readLine();
             if (line.isEmpty()) {
-                contador_lineas_vacias++;
+                contadorLineasVacias++;
                 continue;
             }
 
             String terminal = line.split("\\s+")[1];
-
             terminals.add(processTerminal(terminal));
         }
     }
 
-    private String processTerminal(String terminal) {
-        switch (terminal) {
-            case "'+'":
-                return "SUMA";
-            case "'!'":
-                return "NEGACION";
-            case "','":
-                return "COMA";
-            case "';'":
-                return "PUNTOCOMA";
-            case "'('":
-                return "ABREPARENTESIS";
-            case "')'":
-                return "CIERRAPARENTESIS";
-            case "'{'":
-                return "ABRECORCHETE";
-            case "'}'":
-                return "CIERRACORCHETE";
-            case "'='":
-                return "ASIGNACION";
-            case "EQ_OP":
-                return "COMPARADOR";
-            case "ADD_OP":
-                return "ASIGNACIONSUMA";
-            case "$end":
-                return "FINDEFICHERO";
-            default:
-                return terminal.toUpperCase();
+    private String processTerminal(String terminalSinProcesar) {
+        Terminal terminal = Terminal.procesarTerminal(terminalSinProcesar);
+
+        String terminalProcesado = "";
+
+        if (terminal != null) {
+            terminalProcesado = terminal.name();
+        } else {
+            terminalProcesado = terminalSinProcesar.toUpperCase();
         }
+
+        return terminalProcesado;
     }
+    
 
     private void processNonTerminals(BufferedReader reader) throws IOException {
         String line;
-        Integer contador_lineas_vacias = 0;
-        while (contador_lineas_vacias < 2) {
+        Integer contadorLineasVacias = 0;
+        while (contadorLineasVacias < 2) {
             line = reader.readLine();
             if (line.isEmpty()) {
-                contador_lineas_vacias++;
+                contadorLineasVacias++;
                 continue;
             } else if (line.contains("left") || line.contains("right")) {
                 continue;
@@ -142,17 +154,17 @@ public class TablaAnalisis {
         Map<String, Integer> gotoMap = new HashMap<>();
 
         String line;
-        Integer contador_lineas_vacias = 0;
-        while (contador_lineas_vacias < 2) {
+        Integer contadorLineasVacias = 0;
+        while (contadorLineasVacias < 2) {
             line = reader.readLine();
             if (line == null) {
                 break;
             }
             if (line.isEmpty()) {
-                contador_lineas_vacias++;
+                contadorLineasVacias++;
                 continue;
             } else {
-                contador_lineas_vacias = 0;
+                contadorLineasVacias = 0;
             }
             
             String[] parts = line.trim().split("\\s+");
@@ -203,7 +215,7 @@ public class TablaAnalisis {
             }
         }
     }
-
+    
     private void printGotoTable() {
         System.out.println("-----------");
         System.out.println("-----------");
@@ -266,10 +278,13 @@ public class TablaAnalisis {
         return this.nonTerminals;
     }
 
-
+    /**
+     * Método principal para probar la clase TablaAnalisis.
+     * @param args Argumentos de la línea de comandos.
+     */
     public static void main(String[] args) {
         TablaAnalisis generator = new TablaAnalisis();
-        String filePath = "sintactico/gramatica.txt";
+        String filePath = FILE_PATH;
         generator.generateTable(filePath);
         generator.printActionTable();
         generator.printGotoTable();

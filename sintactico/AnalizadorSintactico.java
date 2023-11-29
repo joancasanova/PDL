@@ -7,13 +7,24 @@ import java.util.Stack;
 import util.Token;
 import util.TokenType;
 
+/**
+ * Clase AnalizadorSintactico para procesar tokens y aplicar reglas de análisis sintáctico LR(1).
+ */
 public class AnalizadorSintactico {
+    private static final String FIN_DE_FICHERO = "FINDEFICHERO";
+
     private TablaAnalisis tablaAnalisis;
     private Stack<Integer> pilaEstados;
     private Stack<String> pilaSimbolos;
     private List<Token> tokens;
     private List<Integer> reglasAplicadas;
 
+    /**
+     * Constructor del analizador sintáctico.
+     * 
+     * @param tablaAnalisis Tabla de análisis sintáctico.
+     * @param tokens Lista de tokens a analizar.
+     */
     public AnalizadorSintactico(TablaAnalisis tablaAnalisis, List<Token> tokens) {
         this.tablaAnalisis = tablaAnalisis;
         this.tokens = tokens;
@@ -21,66 +32,134 @@ public class AnalizadorSintactico {
         this.pilaSimbolos = new Stack<>();
         this.reglasAplicadas = new ArrayList<>();
 
-        // Inicializar la pila con el estado inicial 0
-        pilaEstados.push(0);
-        pilaSimbolos.push("FINDEFICHERO");
-
+        inicializarPilas();
         procesarTokens();
+    }    
+    
+    /**
+     * Inicializa las pilas de estados y símbolos con los valores iniciales.
+     */
+    private void inicializarPilas() {
+        pilaEstados.push(0);
+        pilaSimbolos.push(FIN_DE_FICHERO);
     }
-
+    
+    /**
+     * Procesa la lista de tokens aplicando las acciones correspondientes.
+     * Utiliza un bucle para iterar sobre los tokens y determinar las acciones
+     * de desplazamiento, reducción o aceptación.
+     */
     private void procesarTokens() {
-        // Variables para almacenar el token actual
-        Token tokenActual;
-        String tokenActualProcesado;
-
-        // Variable para almacenar la acción actual
-        Accion accionActual = null;
-
-        // Iterar sobre los tokens
         int indiceTokenActual = 0;
-        while (indiceTokenActual < tokens.size()) {
+        boolean aceptado = false;
 
-            tokenActual = tokens.get(indiceTokenActual);
-            if (tokenActual.tipo.equals(TokenType.PALABRARESERVADA)) {
-                tokenActualProcesado = String.valueOf(tokenActual.atributo).toUpperCase();
-            } else {
-                tokenActualProcesado = String.valueOf(tokenActual.getTipo()).toUpperCase();
+        while (!aceptado && indiceTokenActual <= tokens.size()) {
+            String tokenActualProcesado = obtenerTokenProcesado(indiceTokenActual);
+            Accion accionActual = obtenerAccion(tokenActualProcesado);
+
+            ejecutarAccion(accionActual, tokenActualProcesado);
+
+            if (accionActual instanceof AccionAceptar) {
+                aceptado = true;
+            } else if (!(accionActual instanceof AccionReducir)) {
+                indiceTokenActual++;
             }
 
-            Integer estadoCima = pilaEstados.peek();
-            Map<String, Accion> accionesEstado = tablaAnalisis.getActionTable().get(estadoCima);
-            accionActual = accionesEstado.get(tokenActualProcesado);
-            if (accionActual == null) {
-                accionActual = accionesEstado.get("$DEFAULT");
-            }    
-
-            if (accionActual instanceof AccionDesplazar) {
-                desplazar((AccionDesplazar) accionActual, tokenActualProcesado);
-                indiceTokenActual++; // Avanzar al siguiente token
-            } else if (accionActual instanceof AccionReducir) {
-                reducir((AccionReducir) accionActual);
-                // No avanzar al siguiente token en caso de reducción, ya que el token actual necesita ser reevaluado
-            } else if (accionActual instanceof AccionAceptar) {
-                aceptar();
-                break; // Finalizar el procesamiento en caso de aceptar
-            } else {
-                System.err.println("Error de análisis sintáctico en el token " + tokenActualProcesado + " en el estado " + pilaEstados.peek());
-                break;
-            }    
-            System.out.print("\tPila Estados: ");
-            for (Integer integer : pilaEstados) {
-                System.out.print(integer + ", ");
-            }
-            System.out.println();
-
-            System.out.print("\tPila Simbolos: ");
-            for (String string : pilaSimbolos) {
-                System.out.print(string + ", ");
-            }
-            System.out.println();
+            imprimirEstadoDePilas();
         }
     }
 
+    /**
+     * Obtiene el token procesado en la posición actual del análisis.
+     * Si se alcanza el final de la lista de tokens, devuelve el token especial FIN_DE_FICHERO.
+     *
+     * @param indiceTokenActual Índice del token actual en la lista de tokens.
+     * @return El token procesado en forma de cadena.
+     */
+    private String obtenerTokenProcesado(int indiceTokenActual) {
+
+        // Si se han procesado todos los tokens, el token actual es FINDEFICHERO
+        if (indiceTokenActual >= tokens.size()) {
+            return FIN_DE_FICHERO;
+        }
+
+        // Dependiendo de si es palabra reservada o no, se obtiene el atributo del token o su tipo
+        Token tokenActual = tokens.get(indiceTokenActual);
+        return tokenActual.tipo.equals(TokenType.PALABRARESERVADA) ?
+                String.valueOf(tokenActual.atributo).toUpperCase() :
+                String.valueOf(tokenActual.getTipo()).toUpperCase();
+    }
+
+    /**
+     * Obtiene la acción a realizar basándose en el token actual y el estado actual de la pila.
+     * Si no hay una acción definida para el token actual, se utiliza una acción por defecto.
+     *
+     * @param tokenActualProcesado El token actual procesado.
+     * @return La acción a realizar para el token y estado actual.
+     */
+    private Accion obtenerAccion(String tokenActualProcesado) {
+        Integer estadoCima = pilaEstados.peek();
+        Map<String, Accion> accionesEstado = tablaAnalisis.getActionTable().get(estadoCima);
+        Accion accion = accionesEstado.getOrDefault(tokenActualProcesado, accionesEstado.get("$DEFAULT"));
+
+        if (accion == null) {
+            reportarErrorSintactico(tokenActualProcesado);
+        }
+
+        return accion;
+    }
+
+    /**
+     * Ejecuta la acción determinada, ya sea desplazar, reducir o aceptar.
+     *
+     * @param accion La acción a ejecutar.
+     * @param token El token actual que se está procesando.
+     */
+    private void ejecutarAccion(Accion accion, String token) {
+        if (accion instanceof AccionDesplazar) {
+            desplazar((AccionDesplazar) accion, token);
+        } else if (accion instanceof AccionReducir) {
+            reducir((AccionReducir) accion);
+        } else if (accion instanceof AccionAceptar) {
+            aceptar();
+        }
+    }
+
+    /**
+     * Reporta un error de análisis sintáctico y termina la ejecución.
+     * TODO: Esto se debe gestionar desde el analizador con la linea y token correspondiente que se esté analizando 
+     * @param tokenActualProcesado El token en el que se encontró el error.
+     */
+    private void reportarErrorSintactico(String tokenActualProcesado) {
+        System.err.println("Error de análisis sintáctico en el token " + tokenActualProcesado);
+        throw new RuntimeException("Error de análisis sintáctico");
+    }
+
+    /**
+     * Imprime el estado actual de las pilas de estados y símbolos.
+     * Útil para depuración y seguimiento del proceso de análisis.
+     */
+    private void imprimirEstadoDePilas() {
+        System.out.print("\tPila Estados: ");
+        for (Integer integer : pilaEstados) {
+            System.out.print(integer + ", ");
+        }
+        System.out.println();
+
+        System.out.print("\tPila Simbolos: ");
+        for (String string : pilaSimbolos) {
+            System.out.print(string + ", ");
+        }
+        System.out.println();
+    }
+
+    /**
+     * Realiza la acción de desplazamiento en la pila de estados y símbolos.
+     * Agrega el nuevo estado y el token actual a las pilas.
+     *
+     * @param accion La acción de desplazamiento a realizar.
+     * @param token El token actual que se está procesando.
+     */
     private void desplazar(AccionDesplazar accion, String token) {
         System.out.println("Desplazar: " + accion.getEstado() + ", Token: " + token);
 
@@ -88,6 +167,13 @@ public class AnalizadorSintactico {
         pilaSimbolos.push(token); // Apilar el simbolo terminal
     }
 
+    /**
+     * Realiza la acción de reducción según la regla especificada.
+     * Desapila los elementos correspondientes de las pilas y agrega
+     * el símbolo no terminal resultante de la reducción.
+     *
+     * @param accion La acción de reducción a realizar.
+     */
     private void reducir(AccionReducir accion) {
         System.out.println("Reducir: ");
         System.out.println("\tRegla: " + accion.getRegla());
@@ -113,15 +199,26 @@ public class AnalizadorSintactico {
         } catch (NullPointerException e) {
                 System.err.println("Error de análisis sintáctico. No existe el no terminal: " + noTerminal + " en el estado " + pilaEstados.peek() + " para la tabla de goto");
         }
-        // Registro de la regla aplicada
-        reglasAplicadas.add(accion.getRegla());
+        // Registro de la regla aplicada en la numeracion del formato para vAST
+        reglasAplicadas.add(accion.getRegla() + 1);
     }    
 
+    /**
+     * Maneja la acción de aceptación, indicando que el análisis
+     * sintáctico ha sido completado exitosamente.
+     */
     private void aceptar() {
         System.out.println("Aceptar");
+        reglasAplicadas.add(1);
         // Implementar la lógica de aceptación
     }
 
+    /**
+     * Obtiene la lista de reglas aplicadas durante el análisis sintáctico.
+     * Útil para depuración y verificación del proceso de análisis.
+     *
+     * @return Lista de números de reglas aplicadas.
+     */
     public List<Integer> getReglasAplicadas() {
         return reglasAplicadas;
     }
