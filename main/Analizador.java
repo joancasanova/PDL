@@ -63,18 +63,15 @@ public class Analizador {
             tablas.push(new TablaSimbolos(0));
 
             // Analizador Lexico
-            // TODO: Hacer el analizador lexico y el sintactico que funcionen en paralelo
             // para ver en que linea se da un error.
 
             AnalizadorLexico analizadorLexico = new AnalizadorLexico();
             Boolean finDeFichero = false;
             do {
                 for (Token token : analizadorLexico.procesarCaracter((char) fichero.read())) {
-                    if (token != null) {
-                        listaTokens.add(token);
-                        if (token.getTipo().equals(TokenType.FINDEFICHERO)) {
-                            finDeFichero = true;
-                        }
+                    listaTokens.add(token);
+                    if (token.getTipo().equals(TokenType.FINDEFICHERO)) {
+                        finDeFichero = true;
                     }
                 }
             } while (!finDeFichero);
