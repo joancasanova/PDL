@@ -2,8 +2,6 @@ package sintactico;
 import java.io.*;
 import java.util.*;
 
-import util.TokenType;
-
 /**
  * Clase TablaAnalisis que se encarga de parsear un archivo de texto generado por Bison.
  * Crea estructuras de datos para ser utilizadas por un analizador sintáctico LR(1).

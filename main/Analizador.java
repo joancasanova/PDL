@@ -16,7 +16,8 @@ import util.TokenType;
 
 public class Analizador {
 
-    public static Stack<TablaSimbolos> tablas = new Stack<>(); //TODO: Llevar esto a una clase de gestion de tablas en util
+    public static Stack<TablaSimbolos> tablas = new Stack<>(); // TODO: Llevar esto a una clase de gestion de tablas en
+                                                               // util
 
     public static void writeToFile(List<Token> listaTokens, String fileName) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
@@ -28,7 +29,7 @@ public class Analizador {
 
         writer.close();
     }
-    
+
     public static void escribirReglasAplicadas(List lista, String fileName) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
 
@@ -62,21 +63,29 @@ public class Analizador {
             tablas.push(new TablaSimbolos(0));
 
             // Analizador Lexico
-            // TODO: Hacer el analizador lexico y el sintactico que funcionen en paralelo para ver en que linea se da un error.
+            // TODO: Hacer el analizador lexico y el sintactico que funcionen en paralelo
+            // para ver en que linea se da un error.
 
-            AnalizadorLexico analizadorLexico = new AnalizadorLexico(fichero);
-            Token token;
+            AnalizadorLexico analizadorLexico = new AnalizadorLexico();
+            Boolean finDeFichero = false;
             do {
-                token = analizadorLexico.obtenerToken();
-                if (token != null) {listaTokens.add(token);}
-            } while (token != null && !token.getTipo().equals(TokenType.FINDEFICHERO));
+                for (Token token : analizadorLexico.procesarCaracter((char) fichero.read())) {
+                    if (token != null) {
+                        listaTokens.add(token);
+                        if (token.getTipo().equals(TokenType.FINDEFICHERO)) {
+                            finDeFichero = true;
+                        }
+                    }
+                }
+            } while (!finDeFichero);
+
             fichero.close();
 
             writeToFile(listaTokens, "output/archivoTokens.txt");
             writeStringToFile(tablas.peek().imprimirTabla(), "output/archivoTablaSimbolos.txt");
-            
+
             // Analizador Sintactico
-            AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico( new TablaAnalisis(), listaTokens);
+            AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico(new TablaAnalisis(), listaTokens);
             analizadorSintactico.getReglasAplicadas();
             escribirReglasAplicadas(analizadorSintactico.getReglasAplicadas(), "output/reglasAplicadas.txt");
 

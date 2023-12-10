@@ -1,1 +1,1 @@
-let x string = lexema;
+let x string = "hola";
