@@ -66,25 +66,27 @@ public class Analizador {
             // para ver en que linea se da un error.
 
             AnalizadorLexico analizadorLexico = new AnalizadorLexico();
+            AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico();
+
             Boolean finDeFichero = false;
+            
             do {
                 for (Token token : analizadorLexico.procesarCaracter((char) fichero.read())) {
                     listaTokens.add(token);
                     if (token.getTipo().equals(TokenType.FINDEFICHERO)) {
                         finDeFichero = true;
                     }
+
+                    // Analizador Sintactico
+                    analizadorSintactico.procesarToken(token);
                 }
             } while (!finDeFichero);
 
             fichero.close();
-
+            
+            escribirReglasAplicadas(analizadorSintactico.getReglasAplicadas(), "output/reglasAplicadas.txt");
             writeToFile(listaTokens, "output/archivoTokens.txt");
             writeStringToFile(tablas.peek().imprimirTabla(), "output/archivoTablaSimbolos.txt");
-
-            // Analizador Sintactico
-            AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico(new TablaAnalisis(), listaTokens);
-            analizadorSintactico.getReglasAplicadas();
-            escribirReglasAplicadas(analizadorSintactico.getReglasAplicadas(), "output/reglasAplicadas.txt");
 
         } catch (FileNotFoundException e) {
             System.err.println("Archivo no encontrado: " + e.getMessage());

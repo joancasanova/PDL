@@ -1,4 +1,5 @@
 package sintactico;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,8 @@ import util.Token;
 import util.TokenType;
 
 /**
- * Clase AnalizadorSintactico para procesar tokens y aplicar reglas de análisis sintáctico LR(1).
+ * Clase AnalizadorSintactico para procesar tokens y aplicar reglas de análisis
+ * sintáctico LR(1).
  */
 public class AnalizadorSintactico {
     private static final String FIN_DE_FICHERO = "FINDEFICHERO";
@@ -16,26 +18,54 @@ public class AnalizadorSintactico {
     private TablaAnalisis tablaAnalisis;
     private Stack<Integer> pilaEstados;
     private Stack<String> pilaSimbolos;
-    private List<Token> tokens;
     private List<Integer> reglasAplicadas;
+
+    private Boolean aceptado;
 
     /**
      * Constructor del analizador sintáctico.
      * 
      * @param tablaAnalisis Tabla de análisis sintáctico.
-     * @param tokens Lista de tokens a analizar.
+     * @param tokens        Lista de tokens a analizar.
      */
-    public AnalizadorSintactico(TablaAnalisis tablaAnalisis, List<Token> tokens) {
-        this.tablaAnalisis = tablaAnalisis;
-        this.tokens = tokens;
+    public AnalizadorSintactico() {
+        this.tablaAnalisis = new TablaAnalisis();
         this.pilaEstados = new Stack<>();
         this.pilaSimbolos = new Stack<>();
         this.reglasAplicadas = new ArrayList<>();
+        this.aceptado = false;
 
         inicializarPilas();
-        procesarTokens();
-    }    
-    
+    }
+
+    public void procesarToken(Token token) {
+        while (true) {
+            String contenidoDeToken = obtenerContenidoToken(token);
+            Accion accion = obtenerAccion(contenidoDeToken);
+            ejecutarAccion(accion, contenidoDeToken);
+
+
+            // Si la acción es de aceptación, finalizar el procesamiento
+            if (accion instanceof AccionAceptar) {
+                aceptado = true;
+                break; // Salir del bucle
+            }
+            
+            // Caso especial para el fin de fichero sin aceptación
+            if (contenidoDeToken.equals("FINDEFICHERO") && !aceptado) {
+                continue;
+            }
+
+            // En caso de una acción de reducción, continuar con el siguiente token
+            else if (!(accion instanceof AccionReducir)) {
+                break; // Salir del bucle
+            }
+
+
+            imprimirEstadoDePilas();
+        }
+    }
+
     /**
      * Inicializa las pilas de estados y símbolos con los valores iniciales.
      */
@@ -43,56 +73,27 @@ public class AnalizadorSintactico {
         pilaEstados.push(0);
         pilaSimbolos.push(FIN_DE_FICHERO);
     }
-    
-    /**
-     * Procesa la lista de tokens aplicando las acciones correspondientes.
-     * Utiliza un bucle para iterar sobre los tokens y determinar las acciones
-     * de desplazamiento, reducción o aceptación.
-     */
-    private void procesarTokens() {
-        int indiceTokenActual = 0;
-        boolean aceptado = false;
-
-        while (!aceptado && indiceTokenActual <= tokens.size()) {
-            String tokenActualProcesado = obtenerTokenProcesado(indiceTokenActual);
-            Accion accionActual = obtenerAccion(tokenActualProcesado);
-
-            ejecutarAccion(accionActual, tokenActualProcesado);
-
-            if (accionActual instanceof AccionAceptar) {
-                aceptado = true;
-            } else if (!(accionActual instanceof AccionReducir)) {
-                indiceTokenActual++;
-            }
-
-            imprimirEstadoDePilas();
-        }
-    }
 
     /**
      * Obtiene el token procesado en la posición actual del análisis.
-     * Si se alcanza el final de la lista de tokens, devuelve el token especial FIN_DE_FICHERO.
+     * Si se alcanza el final de la lista de tokens, devuelve el token especial
+     * FIN_DE_FICHERO.
      *
      * @param indiceTokenActual Índice del token actual en la lista de tokens.
      * @return El token procesado en forma de cadena.
      */
-    private String obtenerTokenProcesado(int indiceTokenActual) {
+    private String obtenerContenidoToken(Token token) {
 
-        // Si se han procesado todos los tokens, el token actual es FINDEFICHERO
-        if (indiceTokenActual >= tokens.size()) {
-            return FIN_DE_FICHERO;
-        }
-
-        // Dependiendo de si es palabra reservada o no, se obtiene el atributo del token o su tipo
-        Token tokenActual = tokens.get(indiceTokenActual);
-        return tokenActual.tipo.equals(TokenType.PALABRARESERVADA) ?
-                String.valueOf(tokenActual.atributo).toUpperCase() :
-                String.valueOf(tokenActual.getTipo()).toUpperCase();
+        // Se devuelve el tipo o el atributo dependiendo de si es palabra reservada
+        return token.tipo.equals(TokenType.PALABRARESERVADA) ? String.valueOf(token.atributo).toUpperCase()
+                : String.valueOf(token.getTipo()).toUpperCase();
     }
 
     /**
-     * Obtiene la acción a realizar basándose en el token actual y el estado actual de la pila.
-     * Si no hay una acción definida para el token actual, se utiliza una acción por defecto.
+     * Obtiene la acción a realizar basándose en el token actual y el estado actual
+     * de la pila.
+     * Si no hay una acción definida para el token actual, se utiliza una acción por
+     * defecto.
      *
      * @param tokenActualProcesado El token actual procesado.
      * @return La acción a realizar para el token y estado actual.
@@ -113,7 +114,7 @@ public class AnalizadorSintactico {
      * Ejecuta la acción determinada, ya sea desplazar, reducir o aceptar.
      *
      * @param accion La acción a ejecutar.
-     * @param token El token actual que se está procesando.
+     * @param token  El token actual que se está procesando.
      */
     private void ejecutarAccion(Accion accion, String token) {
         if (accion instanceof AccionDesplazar) {
@@ -127,7 +128,9 @@ public class AnalizadorSintactico {
 
     /**
      * Reporta un error de análisis sintáctico y termina la ejecución.
-     * TODO: Esto se debe gestionar desde el analizador con la linea y token correspondiente que se esté analizando 
+     * TODO: Esto se debe gestionar desde el analizador con la linea y token
+     * correspondiente que se esté analizando
+     * 
      * @param tokenActualProcesado El token en el que se encontró el error.
      */
     private void reportarErrorSintactico(String tokenActualProcesado) {
@@ -158,7 +161,7 @@ public class AnalizadorSintactico {
      * Agrega el nuevo estado y el token actual a las pilas.
      *
      * @param accion La acción de desplazamiento a realizar.
-     * @param token El token actual que se está procesando.
+     * @param token  El token actual que se está procesando.
      */
     private void desplazar(AccionDesplazar accion, String token) {
         System.out.println("Desplazar: " + accion.getEstado() + ", Token: " + token);
@@ -178,10 +181,11 @@ public class AnalizadorSintactico {
         System.out.println("Reducir: ");
         System.out.println("\tRegla: " + accion.getRegla());
         System.out.println("\tNo Terminal: " + accion.getNoTerminal());
-    
+
         List<String> regla = tablaAnalisis.getReglas().get(accion.getRegla());
 
-        // La cantidad de elementos a desapilar es igual a la longitud de la regla menos uno (excluyendo el lado izquierdo)
+        // La cantidad de elementos a desapilar es igual a la longitud de la regla menos
+        // uno (excluyendo el lado izquierdo)
         int cantidadDesapilar = regla.size() - 1;
         // Desapila la cantidad calculada de estados de una sola vez
         while (cantidadDesapilar > 0) {
@@ -189,19 +193,20 @@ public class AnalizadorSintactico {
             pilaSimbolos.pop(); // Desapilar los simbolos correspondientes a la regla
             cantidadDesapilar--;
         }
-    
+
         // Agrega el estado correspondiente al no terminal de la regla
         String noTerminal = accion.getNoTerminal();
         pilaSimbolos.push(noTerminal); // Apilar el simbolo no terminal
         try {
             int estado = tablaAnalisis.getGotoTable().get(pilaEstados.peek()).get(noTerminal);
-            pilaEstados.push(estado);            
+            pilaEstados.push(estado);
         } catch (NullPointerException e) {
-                System.err.println("Error de análisis sintáctico. No existe el no terminal: " + noTerminal + " en el estado " + pilaEstados.peek() + " para la tabla de goto");
+            System.err.println("Error de análisis sintáctico. No existe el no terminal: " + noTerminal
+                    + " en el estado " + pilaEstados.peek() + " para la tabla de goto");
         }
         // Registro de la regla aplicada en la numeracion del formato para vAST
         reglasAplicadas.add(accion.getRegla() + 1);
-    }    
+    }
 
     /**
      * Maneja la acción de aceptación, indicando que el análisis
