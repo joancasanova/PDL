@@ -9,7 +9,6 @@ import java.util.*;
 
 import lexico.AnalizadorLexico;
 import sintactico.AnalizadorSintactico;
-import sintactico.TablaAnalisis;
 import util.TablaSimbolos;
 import util.Token;
 import util.TokenType;

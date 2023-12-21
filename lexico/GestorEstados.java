@@ -1,7 +1,6 @@
 package lexico;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import util.PalabraReservada;
 
 /**
  * Clase GestorEstados que maneja los estados de transición y los estados finales
@@ -14,11 +13,6 @@ public class GestorEstados {
 
     // Estado final alcanzado tras el análisis de una serie de caracteres.
     private EstadoFinal estadoFinal;
-    
-    // Conjunto de palabras reservadas del lenguaje.
-    private static final HashSet<String> palabrasReservadas = new HashSet<>(Arrays.asList(
-            "boolean", "function", "if", "int", "let",
-            "put", "return", "string", "void", "while", "get"));
 
     /**
      * Constructor de GestorEstados. Inicializa el estado de transición y el estado final.
@@ -95,7 +89,7 @@ public class GestorEstados {
 
             case LEXEMA:
                 if (!(Character.isLetterOrDigit(charActual) || charActual == '_')) {
-                    if (palabrasReservadas.contains(lexema)) {
+                    if (PalabraReservada.contiene(lexema)) {
                         estadoFinal = EstadoFinal.PALABRARESERVADA;
                     } else {
                         estadoFinal = EstadoFinal.IDENTIFICADOR;

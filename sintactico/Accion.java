@@ -10,4 +10,6 @@ public abstract class Accion {
     public String getTipo() {
         return tipo;
     }
+
+    public abstract Integer ejecutar(GestorPilas gestorPilas);
 }

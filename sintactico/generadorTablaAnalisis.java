@@ -1,45 +1,44 @@
 package sintactico;
+
 import java.io.*;
 import java.util.*;
 
+import util.TokenType;
+
 /**
- * Clase TablaAnalisis que se encarga de parsear un archivo de texto generado por Bison.
- * Crea estructuras de datos para ser utilizadas por un analizador sintáctico LR(1).
+ * Clase TablaAnalisis que se encarga de parsear un archivo de texto generado
+ * por Bison.
+ * Crea estructuras de datos para ser utilizadas por un analizador sintáctico
+ * LR(1).
  */
-public class TablaAnalisis {
+public class generadorTablaAnalisis {
     private static final String GRAMMAR_SECTION = "Grammar";
     private static final String TERMINALS_SECTION = "Terminals";
     private static final String NONTERMINALS_SECTION = "Nonterminals";
     private static final String STATE_SECTION = "State";
     private static final String FILE_PATH = "sintactico/gramatica.txt";
 
-    private Map<Integer, Map<String, Accion>> actionTable;
-    private Map<Integer, Map<String, Integer>> gotoTable;
+    private Map<Integer, Map<String, Accion>> tablaAccion;
+    private Map<Integer, Map<String, Integer>> tablaGoTo;
     private Map<Integer, List<String>> reglas;
-    private Set<String> terminals;
-    private Set<String> nonTerminals;
+    private Set<String> terminales;
+    private Set<String> noTerminales;
 
     /**
      * Constructor de TablaAnalisis.
      * Inicializa las estructuras de datos y genera la tabla a partir de un archivo.
      */
-    public TablaAnalisis() {
-        actionTable = new HashMap<>();
-        gotoTable = new HashMap<>();
+    public generadorTablaAnalisis() {
+        tablaAccion = new HashMap<>();
+        tablaGoTo = new HashMap<>();
         reglas = new HashMap<>();
-        terminals = new HashSet<>();
-        nonTerminals = new HashSet<>();
+        terminales = new HashSet<>();
+        noTerminales = new HashSet<>();
 
         String filePath = FILE_PATH;
         generateTable(filePath);
     }
 
-    /**
-     * Genera las tablas de análisis sintáctico a partir de un archivo de gramática dado.
-     * Lee y procesa el archivo para construir las tablas de acción y salto (goto).
-     *
-     * @param filePath Ruta del archivo de gramática a procesar.
-     */
     private void generateTable(String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -50,13 +49,13 @@ public class TablaAnalisis {
                 }
 
                 if (line.startsWith(GRAMMAR_SECTION)) {
-                    processGrammar(reader);
+                    procesarReglas(reader);
                 } else if (line.startsWith(TERMINALS_SECTION)) {
-                    processTerminals(reader);
+                    procesarTerminales(reader);
                 } else if (line.startsWith(NONTERMINALS_SECTION)) {
-                    processNonTerminals(reader);
+                    procesarNoTerminales(reader);
                 } else if (line.startsWith(STATE_SECTION)) {
-                    processState(reader, line);
+                    procesarEstado(reader, line);
                 }
             }
         } catch (IOException e) {
@@ -64,14 +63,7 @@ public class TablaAnalisis {
         }
     }
 
-    /**
-     * Procesa la sección de gramática del archivo.
-     * Lee y analiza las reglas gramaticales definidas en el archivo.
-     *
-     * @param reader BufferedReader para leer el archivo.
-     * @throws IOException Si ocurre un error de lectura.
-     */
-    private void processGrammar(BufferedReader reader) throws IOException  {
+    private void procesarReglas(BufferedReader reader) throws IOException {
         String line;
         Integer contadorLineasVacias = 0;
         while (contadorLineasVacias < 2) {
@@ -90,7 +82,7 @@ public class TablaAnalisis {
                     if (string.equals("|")) {
                         string = reglas.get(numeroRegla - 1).get(0);
                     }
-                    String terminalProcesado = processTerminal(string.replaceAll(":", ""));
+                    String terminalProcesado = procesarTerminal(string.replaceAll(":", ""));
                     terminalProcesado.replaceAll("\\?", "");
                     contenidoRegla.add(terminalProcesado);
                 }
@@ -100,7 +92,7 @@ public class TablaAnalisis {
         }
     }
 
-    private void processTerminals(BufferedReader reader) throws IOException {
+    private void procesarTerminales(BufferedReader reader) throws IOException {
         String line;
         Integer contadorLineasVacias = 0;
         while (contadorLineasVacias < 2) {
@@ -110,27 +102,29 @@ public class TablaAnalisis {
                 continue;
             }
 
-            String terminal = line.split("\\s+")[1];
-            terminals.add(processTerminal(terminal));
+            String terminalSinProcesar = line.split("\\s+")[1];
+            terminales.add(procesarTerminal(terminalSinProcesar));
+
+            // Añadir los terminales sin las comillas simples
         }
     }
 
-    private String processTerminal(String terminalSinProcesar) {
-        Terminal terminal = Terminal.procesarTerminal(terminalSinProcesar);
+    private String procesarTerminal(String terminalSinProcesar) {
+        TokenType tipoToken = TokenType.procesarTipoToken(terminalSinProcesar);
 
         String terminalProcesado = "";
 
-        if (terminal != null) {
-            terminalProcesado = terminal.name();
-        } else {
+        if (tipoToken != null) {
+            terminalProcesado = tipoToken.name();
+        } else { 
+            // Caso para palabra reservada
             terminalProcesado = terminalSinProcesar.toUpperCase();
         }
 
         return terminalProcesado;
     }
-    
 
-    private void processNonTerminals(BufferedReader reader) throws IOException {
+    private void procesarNoTerminales(BufferedReader reader) throws IOException {
         String line;
         Integer contadorLineasVacias = 0;
         while (contadorLineasVacias < 2) {
@@ -142,11 +136,11 @@ public class TablaAnalisis {
                 continue;
             }
 
-            nonTerminals.add(line.split("\\s+")[1]);
+            noTerminales.add(line.split("\\s+")[1]);
         }
     }
 
-    private void processState(BufferedReader reader, String firstLine) throws IOException {
+    private void procesarEstado(BufferedReader reader, String firstLine) throws IOException {
         int stateNumber = Integer.parseInt(firstLine.split("\\s+")[1]);
         Map<String, Accion> actionMap = new HashMap<>();
         Map<String, Integer> gotoMap = new HashMap<>();
@@ -164,22 +158,24 @@ public class TablaAnalisis {
             } else {
                 contadorLineasVacias = 0;
             }
-            
+
             String[] parts = line.trim().split("\\s+");
             String simbolo = parts[0];
             try {
                 if (parts[1].equals("shift,")) {
                     int estado = Integer.parseInt(parts[6]);
-                    AccionDesplazar accionDesplazar = new AccionDesplazar(estado);
-                    actionMap.put(processTerminal(simbolo), accionDesplazar);
+                    String token = procesarTerminal(parts[0]);
+                    AccionDesplazar accionDesplazar = new AccionDesplazar(estado, token);
+                    actionMap.put(procesarTerminal(simbolo), accionDesplazar);
                 } else if (parts[1].equals("reduce")) {
                     int regla = Integer.parseInt(parts[4].replaceAll("[^0-9]", ""));
                     String noTerminal = parts[5].replaceAll("\\(|\\)", "");
-                    AccionReducir accionReducir = new AccionReducir(regla, noTerminal);
-                    actionMap.put(processTerminal(simbolo), accionReducir);
+                    Integer numeroDesapilar = reglas.get(regla).size() - 1;
+                    AccionReducir accionReducir = new AccionReducir(regla, noTerminal, numeroDesapilar);
+                    actionMap.put(procesarTerminal(simbolo), accionReducir);
                 } else if (parts[1].equals("accept")) {
                     AccionAceptar accionAceptar = new AccionAceptar();
-                    actionMap.put(processTerminal(simbolo), accionAceptar);
+                    actionMap.put(procesarTerminal(simbolo), accionAceptar);
                 } else if (parts[1].equals("go")) {
                     int goToState = Integer.parseInt(parts[4]);
                     gotoMap.put(simbolo, goToState);
@@ -189,15 +185,13 @@ public class TablaAnalisis {
             }
         }
 
-        actionTable.put(stateNumber, actionMap);
-        gotoTable.put(stateNumber, gotoMap);
+        tablaAccion.put(stateNumber, actionMap);
+        tablaGoTo.put(stateNumber, gotoMap);
     }
 
     private void printActionTable() {
-        System.out.println("-------------");
-        System.out.println("-------------");
-        System.out.println("Action Table:");
-        for (Map.Entry<Integer, Map<String, Accion>> entry : actionTable.entrySet()) {
+        System.out.println("\nAction Table:");
+        for (Map.Entry<Integer, Map<String, Accion>> entry : tablaAccion.entrySet()) {
             System.out.println("Estado " + entry.getKey() + ":");
             for (Map.Entry<String, Accion> action : entry.getValue().entrySet()) {
                 System.out.println("  " + action.getKey() + " -> " + action.getValue().getTipo());
@@ -213,12 +207,10 @@ public class TablaAnalisis {
             }
         }
     }
-    
+
     private void printGotoTable() {
-        System.out.println("-----------");
-        System.out.println("-----------");
-        System.out.println("Goto Table:");
-        for (Map.Entry<Integer, Map<String, Integer>> entry : gotoTable.entrySet()) {
+        System.out.println("\nGoto Table:");
+        for (Map.Entry<Integer, Map<String, Integer>> entry : tablaGoTo.entrySet()) {
             System.out.println("State " + entry.getKey() + ":");
             for (Map.Entry<String, Integer> goTo : entry.getValue().entrySet()) {
                 System.out.println("  " + goTo.getKey() + " -> " + goTo.getValue());
@@ -227,67 +219,68 @@ public class TablaAnalisis {
     }
 
     private void printReglas() {
-        System.out.println("--------------");
-        System.out.println("--------------");
         for (Map.Entry<Integer, List<String>> entry : reglas.entrySet()) {
-            System.out.println("Regla " + entry.getKey() + ":");
+            System.out.println("\nRegla " + entry.getKey() + ":");
             for (String contenidoRegla : entry.getValue()) {
                 System.out.print(contenidoRegla + " ");
             }
-                System.out.println();
+            System.out.println();
         }
     }
 
     private void printTerminals() {
-        System.out.println("----------");
-        System.out.println("----------");
-        System.out.println("Terminals:");
-        for (String terminal : terminals) {
+        System.out.println("\nTerminals:");
+        for (String terminal : terminales) {
             System.out.println("  " + terminal);
         }
     }
 
     private void printNonTerminals() {
-        System.out.println("--------------");
-        System.out.println("--------------");
-        System.out.println("Non-Terminals:");
-        for (String nonTerminal : nonTerminals) {
+        System.out.println("\nNon-Terminals:");
+        for (String nonTerminal : noTerminales) {
             System.out.println("  " + nonTerminal);
         }
     }
 
-    public Map<Integer,Map<String,Accion>> getActionTable() {
-        return this.actionTable;
+    public Map<Integer, Map<String, Accion>> getTablaAccion() {
+        return this.tablaAccion;
     }
 
-    public Map<Integer,Map<String,Integer>> getGotoTable() {
-        return this.gotoTable;
+    public Map<Integer, Map<String, Integer>> getTablaGoTo() {
+        return this.tablaGoTo;
     }
 
-    public Map<Integer,List<String>> getReglas() {
+    public Map<Integer, List<String>> getReglas() {
         return this.reglas;
     }
 
-    public Set<String> getTerminals() {
-        return this.terminals;
+    public Set<String> getTerminales() {
+        return this.terminales;
     }
 
-    public Set<String> getNonTerminals() {
-        return this.nonTerminals;
+    public Set<String> getNoTerminales() {
+        return this.noTerminales;
     }
 
     /**
-     * Método principal para probar la clase TablaAnalisis.
+     * Muestra el contenido de la tabla de analisis.
+     * 
      * @param args Argumentos de la línea de comandos.
      */
     public static void main(String[] args) {
-        TablaAnalisis generator = new TablaAnalisis();
+        generadorTablaAnalisis generator = new generadorTablaAnalisis();
         String filePath = FILE_PATH;
         generator.generateTable(filePath);
+
+        System.out.println("------------");
         generator.printActionTable();
+        System.out.println("------------");
         generator.printGotoTable();
+        System.out.println("------------");
         generator.printTerminals();
+        System.out.println("------------");
         generator.printNonTerminals();
+        System.out.println("------------");
         generator.printReglas();
     }
 }
