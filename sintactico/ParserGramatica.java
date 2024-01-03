@@ -3,15 +3,13 @@ package sintactico;
 import java.io.*;
 import java.util.*;
 
-import util.TokenType;
+import estructuras.TokenType;
 
 /**
- * Clase TablaAnalisis que se encarga de parsear un archivo de texto generado
- * por Bison.
- * Crea estructuras de datos para ser utilizadas por un analizador sintáctico
- * LR(1).
+ * Clase que se encarga de parsear un archivo de texto generado por Bison.
+ * Crea estructuras de datos para ser utilizadas por un analizador sintáctico LR(1).
  */
-public class generadorTablaAnalisis {
+public class ParserGramatica {
     private static final String GRAMMAR_SECTION = "Grammar";
     private static final String TERMINALS_SECTION = "Terminals";
     private static final String NONTERMINALS_SECTION = "Nonterminals";
@@ -24,11 +22,7 @@ public class generadorTablaAnalisis {
     private Set<String> terminales;
     private Set<String> noTerminales;
 
-    /**
-     * Constructor de TablaAnalisis.
-     * Inicializa las estructuras de datos y genera la tabla a partir de un archivo.
-     */
-    public generadorTablaAnalisis() {
+    public ParserGramatica() {
         tablaAccion = new HashMap<>();
         tablaGoTo = new HashMap<>();
         reglas = new HashMap<>();
@@ -102,7 +96,8 @@ public class generadorTablaAnalisis {
                 continue;
             }
 
-            String terminalSinProcesar = line.split("\\s+")[1];
+            String terminalSinProcesar = line.split("\\s+")[1].replace("'", "");
+
             terminales.add(procesarTerminal(terminalSinProcesar));
 
             // Añadir los terminales sin las comillas simples
@@ -268,19 +263,19 @@ public class generadorTablaAnalisis {
      * @param args Argumentos de la línea de comandos.
      */
     public static void main(String[] args) {
-        generadorTablaAnalisis generator = new generadorTablaAnalisis();
+        ParserGramatica parserGramatica = new ParserGramatica();
         String filePath = FILE_PATH;
-        generator.generateTable(filePath);
+        parserGramatica.generateTable(filePath);
 
         System.out.println("------------");
-        generator.printActionTable();
+        parserGramatica.printActionTable();
         System.out.println("------------");
-        generator.printGotoTable();
+        parserGramatica.printGotoTable();
         System.out.println("------------");
-        generator.printTerminals();
+        parserGramatica.printTerminals();
         System.out.println("------------");
-        generator.printNonTerminals();
+        parserGramatica.printNonTerminals();
         System.out.println("------------");
-        generator.printReglas();
+        parserGramatica.printReglas();
     }
 }

@@ -1,4 +1,4 @@
-package util;
+package estructuras;
 
 public enum PalabraReservada {
     BOOLEAN,

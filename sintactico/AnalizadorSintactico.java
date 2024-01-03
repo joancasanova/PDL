@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import util.Token;
-import util.TokenType;
+import estructuras.Token;
+import estructuras.TokenType;
 
 /**
  * Clase AnalizadorSintactico para procesar tokens y aplicar reglas de análisis
@@ -13,7 +13,7 @@ import util.TokenType;
  */
 public class AnalizadorSintactico {
 
-    private static generadorTablaAnalisis tablaAnalisis = new generadorTablaAnalisis();
+    private static ParserGramatica gramatica = new ParserGramatica();
     private static GestorPilas gestorPilas = new GestorPilas();
 
     private List<Integer> reglasAplicadas;
@@ -28,7 +28,7 @@ public class AnalizadorSintactico {
         this.aceptado = false;
     }
 
-    public void procesarToken(Token token) {
+    public void procesarToken(Token token) throws IllegalStateException {
         while (true) {
             String contenidoDeToken = obtenerContenidoToken(token);
             Accion accion = obtenerAccion(contenidoDeToken, gestorPilas.getPilaEstados().peek());
@@ -55,13 +55,13 @@ public class AnalizadorSintactico {
         }
     }
 
-    public Accion obtenerAccion(String textoToken, Integer estadoCima) throws IllegalStateException {
-        Map<String, Accion> accionesEstado = tablaAnalisis.getTablaAccion().get(estadoCima);
+    private Accion obtenerAccion(String textoToken, Integer estadoCima) throws IllegalStateException {
+        Map<String, Accion> accionesEstado = gramatica.getTablaAccion().get(estadoCima);
         Accion accion = accionesEstado.getOrDefault(textoToken, accionesEstado.get("$DEFAULT"));
 
         if (accion == null) {
             throw new IllegalStateException(
-                    "Error de análisis sintáctico: Error de análisis sintáctico en el token " + textoToken);
+                    "sintáctico: Error de análisis sintáctico en el token " + textoToken);
         }
 
         return accion;

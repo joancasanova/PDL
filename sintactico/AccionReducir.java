@@ -7,7 +7,7 @@ public class AccionReducir extends Accion {
     private String noTerminal;
     private Integer numeroDesapilar;
 
-    private static Map<Integer,Map<String,Integer>> gotoTable = new generadorTablaAnalisis().getTablaGoTo();
+    private static Map<Integer,Map<String,Integer>> gotoTable = new ParserGramatica().getTablaGoTo();
 
     public AccionReducir(Integer regla, String noTerminal, Integer numeroDesapilar) {
         super.setTipo("reducir");

@@ -1,9 +1,9 @@
 package lexico;
 
+import estructuras.TablaSimbolos;
+import estructuras.Token;
+import estructuras.TokenType;
 import main.Analizador;
-import util.TablaSimbolos;
-import util.Token;
-import util.TokenType;
 
 /**
  * Clase GeneradorToken que se encarga de generar tokens en base a los estados finales
@@ -111,7 +111,7 @@ public class GeneradorToken {
 
             case CADENA:
                 if (lexema.length() - 2 >= MAX_CARACTERES_CADENA) {
-                    throw new IllegalStateException("Error: Cadena demasiado larga: " + lexema);
+                    throw new IllegalStateException("léxico: Cadena demasiado larga: " + lexema);
                 }
                 token = new Token(TokenType.CADENA, lexema);
                 break;
@@ -123,8 +123,8 @@ public class GeneradorToken {
                 if (valorEntero < MAX_VALOR_ENTERO) {
                     token = new Token(TokenType.ENTERO, valorEntero);
                 } else {
-                    throw new IllegalArgumentException(
-                            "Se ha superado el valor máximo de la representación.\n Valor: " + valorEntero);
+                    throw new IllegalStateException(
+                            "léxico: Se ha superado el valor máximo de la representación.\n Valor: " + valorEntero);
                 }
                 break;
         }

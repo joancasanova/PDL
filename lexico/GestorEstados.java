@@ -1,6 +1,6 @@
 package lexico;
 
-import util.PalabraReservada;
+import estructuras.PalabraReservada;
 
 /**
  * Clase GestorEstados que maneja los estados de transición y los estados finales
@@ -61,7 +61,7 @@ public class GestorEstados {
                 if (charActual == '/') {
                     estadoTransito = EstadoTransito.TEXTOCOMENTARIO;
                 } else {
-                    throw new IllegalStateException("Caracter no esperado. Se esperaba /.");
+                    throw new IllegalStateException("léxico: Caracter no esperado. Se esperaba /.");
                 }
                 break;
 
@@ -183,7 +183,7 @@ public class GestorEstados {
                 } else if (Character.isWhitespace(charActual) || charActual == '\t' || charActual == '\n') {
                     // Permanecer en el estado inicial
                 } else {
-                    throw new IllegalStateException("Error al procesar el caracter actual: " + charActual);
+                    throw new IllegalStateException("léxico: Error al procesar el caracter actual: " + charActual);
                 }
                 break;
         }
