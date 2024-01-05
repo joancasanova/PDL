@@ -1,1 +1,2 @@
-let x string = "hola";
+let id string = "hola";
+x = 5;

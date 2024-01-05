@@ -16,22 +16,26 @@ public class AnalizadorSintactico {
     private static ParserGramatica gramatica = new ParserGramatica();
     private static GestorPilas gestorPilas = new GestorPilas();
 
-    private List<Integer> reglasAplicadas;
-
     private Boolean aceptado;
 
     /**
      * Constructor del analizador sintáctico.
      */
     public AnalizadorSintactico() {
-        this.reglasAplicadas = new ArrayList<>();
         this.aceptado = false;
     }
 
-    public void procesarToken(Token token) throws IllegalStateException {
+    public List<Integer> procesarToken(Token token) throws IllegalStateException {
+        List<Integer> reglasAplicadas = new ArrayList<>();
         while (true) {
             String contenidoDeToken = obtenerContenidoToken(token);
             Accion accion = obtenerAccion(contenidoDeToken, gestorPilas.getPilaEstados().peek());
+
+            System.out.println("---");
+            System.out.println("Cima pila: "+ gestorPilas.getPilaEstados().peek());
+            System.out.println("Token: "+ contenidoDeToken);
+            System.out.println("Accion: "+ accion.getTipo());
+
             Integer reglaAplicada = accion.ejecutar(gestorPilas);
             if (reglaAplicada != null) {
                 reglasAplicadas.add(reglaAplicada);
@@ -53,6 +57,8 @@ public class AnalizadorSintactico {
                 break;
             }
         }
+
+        return reglasAplicadas;
     }
 
     private Accion obtenerAccion(String textoToken, Integer estadoCima) throws IllegalStateException {
@@ -80,15 +86,5 @@ public class AnalizadorSintactico {
         // Se devuelve el tipo o el atributo dependiendo de si es palabra reservada
         return token.tipo.equals(TokenType.PALABRARESERVADA) ? String.valueOf(token.atributo).toUpperCase()
                 : String.valueOf(token.getTipo()).toUpperCase();
-    }
-
-    /**
-     * Obtiene la lista de reglas aplicadas durante el análisis sintáctico.
-     * Útil para depuración y verificación del proceso de análisis.
-     *
-     * @return Lista de números de reglas aplicadas.
-     */
-    public List<Integer> getReglasAplicadas() {
-        return reglasAplicadas;
     }
 }

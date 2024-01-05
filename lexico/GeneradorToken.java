@@ -1,5 +1,6 @@
 package lexico;
 
+import estructuras.SimboloNormal;
 import estructuras.TablaSimbolos;
 import estructuras.Token;
 import estructuras.TokenType;
@@ -97,16 +98,18 @@ public class GeneradorToken {
                 break;
 
             case IDENTIFICADOR:
-                TablaSimbolos tablaActual = Analizador.tablas.peek();
+                TablaSimbolos tablaActual = Analizador.gestorTablas.obtenerTablaActual();
 
                 String nombre = lexema;
                 if (tablaActual.simboloExiste(nombre)) {
                     token = new Token(TokenType.ID, tablaActual.obtenerPosicionSimbolo(nombre));
                 } else {
                     int nuevaPosicion = tablaActual.numeroEntradas();
-                    tablaActual.agregarSimbolo(nuevaPosicion, nombre, null, null, null);
+                    SimboloNormal simboloNormal = new SimboloNormal(null, nombre, null, null);
+                    tablaActual.agregarSimboloNormal(nuevaPosicion, simboloNormal);
                     token = new Token(TokenType.ID, nuevaPosicion);
                 }
+                tablaActual.setUltimoIdentificador(token);
                 break;
 
             case CADENA:

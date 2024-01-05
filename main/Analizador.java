@@ -8,13 +8,13 @@ import java.io.IOException;
 import java.util.*;
 
 import lexico.AnalizadorLexico;
+import semantico.AnalizadorSemantico;
 import sintactico.AnalizadorSintactico;
 import estructuras.*;
 
 public class Analizador {
+    public static GestorTablas gestorTablas = new GestorTablas();
 
-    public static Stack<TablaSimbolos> tablas = new Stack<>();
-                                                               
     public static void main(String[] args) {
 
         if (args.length < 1) {
@@ -27,7 +27,55 @@ public class Analizador {
         procesarFichero(rutaArchivo);
     }
 
+    private static void procesarFichero(String rutaArchivo) {
 
+        int linea = 0;
+
+        try (FileReader fichero = new FileReader(rutaArchivo)) {
+            List<Token> listaTokens = new ArrayList<Token>();
+            List<Integer> listaReglas = new ArrayList<Integer>();
+
+            AnalizadorLexico analizadorLexico = new AnalizadorLexico();
+            AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico();
+            AnalizadorSemantico analizadorSemantico = new AnalizadorSemantico();
+
+            Boolean finDeFichero = false;
+            do {
+                for (Token token : analizadorLexico.procesarCaracter((char) fichero.read())) {
+
+                    // Anadir token a la lista de tokens
+                    linea++;
+                    listaTokens.add(token);
+                    if (token.getTipo().equals(TokenType.FINDEFICHERO)) {
+                        finDeFichero = true;
+                    }
+
+                    // Analizador sintactico
+                    for (Integer regla : analizadorSintactico.procesarToken(token)) {
+                        listaReglas.add(regla);
+
+                        // Analizador semantico
+                        // analizadorSemantico.procesarRegla(regla);
+                    }
+                }
+            } while (!finDeFichero);
+
+            fichero.close();
+            
+            escribirReglasAplicadas(listaReglas, "output/reglasAplicadas.txt");
+            writeListToFile(listaTokens, "output/archivoTokens.txt");
+            writeStringToFile(gestorTablas.obtenerTablaActual().imprimirTabla(), "output/archivoTablaSimbolos.txt");
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Archivo no encontrado: " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Error de entrada/salida: " + e.getMessage());
+        } catch (IllegalStateException e) {
+            System.err.println("Error en el análisis " + e.getMessage() + " en línea " + linea);
+        }
+    }
+
+    
     public static void writeListToFile(List<Token> listaTokens, String fileName) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
 
@@ -55,48 +103,5 @@ public class Analizador {
         BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
         writer.write(content);
         writer.close();
-    }
-
-    private static void procesarFichero(String rutaArchivo) {
-
-        int linea = 0;
-
-        try (FileReader fichero = new FileReader(rutaArchivo)) {
-            List<Token> listaTokens = new ArrayList<Token>();
-
-            tablas.push(new TablaSimbolos(0));
-
-            AnalizadorLexico analizadorLexico = new AnalizadorLexico();
-            AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico();
-
-            Boolean finDeFichero = false;
-            do {
-                for (Token token : analizadorLexico.procesarCaracter((char) fichero.read())) {
-
-                    // Anadir token a la lista de tokens
-                    linea++;
-                    listaTokens.add(token);
-                    if (token.getTipo().equals(TokenType.FINDEFICHERO)) {
-                        finDeFichero = true;
-                    }
-
-                    // Analizador Sintactico
-                    analizadorSintactico.procesarToken(token);
-                }
-            } while (!finDeFichero);
-
-            fichero.close();
-            
-            escribirReglasAplicadas(analizadorSintactico.getReglasAplicadas(), "output/reglasAplicadas.txt");
-            writeListToFile(listaTokens, "output/archivoTokens.txt");
-            writeStringToFile(tablas.peek().imprimirTabla(), "output/archivoTablaSimbolos.txt");
-
-        } catch (FileNotFoundException e) {
-            System.err.println("Archivo no encontrado: " + e.getMessage());
-        } catch (IOException e) {
-            System.err.println("Error de entrada/salida: " + e.getMessage());
-        } catch (IllegalStateException e) {
-            System.err.println("Error en el análisis " + e.getMessage() + " en línea " + linea);
-        }
     }
 }

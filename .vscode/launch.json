@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "ParserGramatica",
+            "request": "launch",
+            "mainClass": "sintactico.ParserGramatica",
+            "projectName": "PDL"
+        },
+        {
+            "type": "java",
             "name": "TablaAnalisis",
             "request": "launch",
             "mainClass": "sintactico.TablaAnalisis",

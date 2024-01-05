@@ -35,24 +35,24 @@ public class AnalizadorLexico {
     /**
      * Procesa un caracter y actualiza el estado del analizador léxico.
      * 
-     * @param caracterProProcesar Caracter a procesar.
+     * @param caracterPorProcesar Caracter a procesar.
      * @return Lista de tokens identificados tras procesar el caracter.
      * @throws IllegalStateException Si se encuentran errores en el estado del analizador.
      */
-    public List<Token> procesarCaracter(Character caracterProProcesar) throws IllegalStateException {
+    public List<Token> procesarCaracter(Character caracterPorProcesar) throws IllegalStateException {
 
         List<Token> listaToken = new ArrayList<>();
 
-        while (caracterProProcesar != null) {
+        while (caracterPorProcesar != null) {
             String lexema = bufferCaracteres.toString();
 
             // Actualiza el estado según el caracter actual entrante
-            gestorEstados.actualizarEstado(caracterProProcesar, lexema);
+            gestorEstados.actualizarEstado(caracterPorProcesar, lexema);
 
             // Generar token y almacenarlo si no es nulo
             Token token = generadorDeTokens.generarToken(
                     gestorEstados.getEstadoFinal(),
-                    caracterProProcesar,
+                    caracterPorProcesar,
                     lexema);
             if (token != null) {
                 listaToken.add(token);
@@ -62,12 +62,12 @@ public class AnalizadorLexico {
             if (gestorEstados.getEstadoTransito() == EstadoTransito.INICIO) {
                 bufferCaracteres.setLength(0);
             } else {
-                bufferCaracteres.append(caracterProProcesar);
+                bufferCaracteres.append(caracterPorProcesar);
             }
 
             // Consumir el caracter si el analizador no se encuentra en ciertos estados
             if (debeConsumirCaracter(gestorEstados.getEstadoFinal())) {
-                caracterProProcesar = null;
+                caracterPorProcesar = null;
             }
         }
 
@@ -82,6 +82,7 @@ public class AnalizadorLexico {
      */
     private boolean debeConsumirCaracter(EstadoFinal estado) {
         return !(estado == EstadoFinal.SUMA || estado == EstadoFinal.ASIGNACION ||
-                estado == EstadoFinal.IDENTIFICADOR || estado == EstadoFinal.ENTERO);
+                estado == EstadoFinal.IDENTIFICADOR || estado == EstadoFinal.ENTERO || 
+                estado == EstadoFinal.PALABRARESERVADA );
     }
 }

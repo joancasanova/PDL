@@ -26,11 +26,18 @@ public class AccionReducir extends Accion {
     
     public Integer ejecutar(GestorPilas gestorPilas) {
 
+        System.out.println("\tReduccion: ");
+        System.out.println("\t- Regla: "+ regla);
+        System.out.println("\t- No terminal: "+ noTerminal);
+        System.out.println("\t- Cima estado: "+ gestorPilas.getPilaEstados().peek());
+        System.out.println("\t- Desapilar: "+ numeroDesapilar);
+
         // Desapila la cantidad calculada de estados de una sola vez
-        while (numeroDesapilar > 0) {
+        int i = numeroDesapilar;
+        while (i > 0) {
             gestorPilas.getPilaEstados().pop();
             gestorPilas.getPilaSimbolos().pop();
-            numeroDesapilar--;
+            i--;
         }
 
         // Actualizar las pilas

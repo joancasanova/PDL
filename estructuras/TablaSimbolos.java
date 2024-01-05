@@ -1,39 +1,57 @@
 package estructuras;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.*;
 
 public class TablaSimbolos {
     
     // Estructura para almacenar los símbolos
     private final Map<Integer, Simbolo> tabla;
 
+    // Ultimo identificador emitido
+    private Token ultimoIdentificador;
+
     // Numero identificador para la tabla de simbolos
     private Integer numeroTabla;
+
+    // Zona de declaracion
+    private Boolean zonaDeclaracion;
+
+    private Integer desplazamiento;
 
     public TablaSimbolos(Integer numeroTabla) {
         tabla = new HashMap<>();
         this.numeroTabla = numeroTabla;
+        this.zonaDeclaracion = false;
+        this.desplazamiento = 0;
     }
-    
-    // Clase interna para representar un símbolo
-    private static class Simbolo {
-        String nombre;
-        String tipo;
-        Integer desplazamiento;
-        Object valor;
 
-        Simbolo(String nombre, String tipo, Object valor, Integer desplazamiento) {
-            this.nombre = nombre;
-            this.tipo = tipo;
-            this.desplazamiento = desplazamiento;
-            this.valor = valor;
+    public void setUltimoIdentificador(Token token) {
+        if(token.getTipo() == TokenType.ID) {
+            ultimoIdentificador = token;
         }
     }
 
-    // Método para agregar un nuevo símbolo a la tabla
-    public void agregarSimbolo(Integer posicion, String lexema, String tipo, Object valor, Integer desplazamiento) {
-        Simbolo nuevoSimbolo = new Simbolo(lexema, tipo, valor, desplazamiento);
-        tabla.put(posicion, nuevoSimbolo);
+    public Token getUltimoIdentificador() {
+        return ultimoIdentificador;
+    }
+
+    public Boolean getZonaDeclaracion() {
+        return this.zonaDeclaracion;
+    }
+
+    public void setZonaDeclaracion(Boolean zonaDeclaracion) {
+        this.zonaDeclaracion = zonaDeclaracion;
+    }
+
+    public void agregarSimboloNormal(Integer posicion, SimboloNormal simboloNormal) {
+        tabla.put(posicion, simboloNormal);
+        if (!(simboloNormal.getAncho() == null)){
+            desplazamiento = desplazamiento + simboloNormal.getAncho();
+        }
+    }
+
+    public void agregarSimboloFuncion(Integer posicion, SimboloFuncion simboloFuncion) {
+        tabla.put(posicion, simboloFuncion);
     }
 
     // Método para obtener un símbolo existente de la tabla
@@ -41,11 +59,15 @@ public class TablaSimbolos {
         return tabla.get(posicion);
     }
 
+    public Integer getDesplazamiento() {
+        return this.desplazamiento;
+    }
+
     // Método para obtener posicion un símbolo existente de la tabla
     public Integer obtenerPosicionSimbolo(String nombre) {
         Integer posicion = null;
         for (Map.Entry<Integer, Simbolo> entry : tabla.entrySet()) {
-            if (entry.getValue().nombre.equals(nombre)) {
+            if (entry.getValue().getNombre().equals(nombre)) {
                 posicion = entry.getKey();
             }
         }
@@ -61,7 +83,7 @@ public class TablaSimbolos {
     public boolean simboloExiste(String nombre) {
 
         for (Simbolo simbolo : tabla.values()) {
-            if (simbolo.nombre.equals(nombre)) {
+            if (simbolo.getNombre().equals(nombre)) {
                 return true;
             }
         }
@@ -83,24 +105,27 @@ public class TablaSimbolos {
 
             // Obtenemos parametros de la entrada
             Simbolo simbolo = entrada.getValue();
-            String nombre = simbolo.nombre.toString();
-            String tipo = simbolo.tipo;
-            Object valor = simbolo.valor;
-            Integer desplazamiento = simbolo.desplazamiento;
-
+            String nombre = simbolo.getNombre().toString();
+            Tipo tipo = simbolo.getTipo();
+            Integer desplazamientoSimbolo;
+            
+            if (simbolo instanceof SimboloNormal) {
+                desplazamientoSimbolo = ((SimboloNormal)simbolo).getDesplazamiento();
+            } else {
+                desplazamientoSimbolo = -1;
+            }
 
             // Imprimimos la entrada
             sb.append("\n*\t");
             sb.append("LEXEMA\t:\t");
             sb.append("'" + nombre + "'\n");
 
-            //sb.append("+\t");
-            //sb.append("tipo\\t:\t");
-            //sb.append("'" + tipo + "'\n");
+            sb.append("Atributos: ");
+            sb.append("+ tipo: ");
+            sb.append("'" + tipo + "'\t");
 
-            //sb.append("+\t");
-            //sb.append("despl\t:\t");
-            //sb.append(desplazamiento);
+            sb.append("+ despl: ");
+            sb.append(desplazamientoSimbolo);
         }
 
         return sb.toString();
