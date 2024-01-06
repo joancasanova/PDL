@@ -37,7 +37,7 @@ public class Analizador {
 
             AnalizadorLexico analizadorLexico = new AnalizadorLexico();
             AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico();
-            AnalizadorSemantico analizadorSemantico = new AnalizadorSemantico();
+            //AnalizadorSemantico analizadorSemantico = new AnalizadorSemantico();
 
             Boolean finDeFichero = false;
             do {
@@ -54,8 +54,8 @@ public class Analizador {
                     for (Integer regla : analizadorSintactico.procesarToken(token)) {
                         listaReglas.add(regla);
 
-                        // Analizador semantico
-                        // analizadorSemantico.procesarRegla(regla);
+                    AnalizadorSemantico analizadorSemantico= new AnalizadorSemantico();
+                    analizadorSemantico.procesarRegla(regla);
                     }
                 }
             } while (!finDeFichero);

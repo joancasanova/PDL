@@ -8,7 +8,7 @@ public class SimboloFuncion extends Simbolo {
     private List<Modo> modoPaso;
     private Tipo tipoDevuelto;
 
-    public SimboloFuncion(Tipo tipo, String nombre, Integer numeroParametros, List<Tipo> tipoParametros, List<Modo> modoPaso, Tipo tipoDevuelto) {
+    public SimboloFuncion(Tipo tipo, String nombre, Integer numeroParametros, ArrayList<Tipo> tipoParametros, ArrayList<Modo> modoPaso, Tipo tipoDevuelto) {
         super(tipo, nombre);
         
         this.numeroParametros = numeroParametros;
@@ -29,7 +29,7 @@ public class SimboloFuncion extends Simbolo {
         return this.tipoParametros;
     }
 
-    public void setTipoParametros(List<Tipo> tipoParametros) {
+    public void setTipoParametros(ArrayList<Tipo> tipoParametros) {
         this.tipoParametros = tipoParametros;
     }
 
@@ -37,7 +37,7 @@ public class SimboloFuncion extends Simbolo {
         return this.modoPaso;
     }
 
-    public void setModoPaso(List<Modo> modoPaso) {
+    public void setModoPaso(ArrayList<Modo> modoPaso) {
         this.modoPaso = modoPaso;
     }
 
