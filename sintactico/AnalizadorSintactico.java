@@ -31,10 +31,10 @@ public class AnalizadorSintactico {
             String contenidoDeToken = obtenerContenidoToken(token);
             Accion accion = obtenerAccion(contenidoDeToken, gestorPilas.getPilaEstados().peek());
 
-            System.out.println("---");
-            System.out.println("Cima pila: "+ gestorPilas.getPilaEstados().peek());
-            System.out.println("Token: "+ contenidoDeToken);
-            System.out.println("Accion: "+ accion.getTipo());
+            //System.out.println("---");
+            //System.out.println("Cima pila: "+ gestorPilas.getPilaEstados().peek());
+            //System.out.println("Token: "+ contenidoDeToken);
+            //System.out.println("Accion: "+ accion.getTipo());
 
             Integer reglaAplicada = accion.ejecutar(gestorPilas);
             if (reglaAplicada != null) {

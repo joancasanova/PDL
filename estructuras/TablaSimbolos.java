@@ -3,7 +3,7 @@ package estructuras;
 import java.util.*;
 
 public class TablaSimbolos {
-    
+
     // Estructura para almacenar los símbolos
     private final Map<Integer, Simbolo> tabla;
 
@@ -13,50 +13,57 @@ public class TablaSimbolos {
     // Numero identificador para la tabla de simbolos
     private Integer numeroTabla;
 
-    // Zona de declaracion
-    private Boolean zonaDeclaracion;
+    // Zona de asignacion
+    private Boolean zonaAsignacion;
+
+    private Token identificadorEnZonaAsignacion;
 
     private Integer desplazamiento;
 
     public TablaSimbolos(Integer numeroTabla) {
         tabla = new HashMap<>();
         this.numeroTabla = numeroTabla;
-        this.zonaDeclaracion = false;
+        this.zonaAsignacion = false;
         this.desplazamiento = 0;
     }
 
-    public void setUltimoIdentificador(Token token) {
-        if(token.getTipo() == TokenType.ID) {
-            ultimoIdentificador = token;
+    public void setIdentificador(Token token) {
+        if (token.getTipo() == TokenType.ID) {
+            if (zonaAsignacion) {
+                identificadorEnZonaAsignacion = token;
+            } else {
+                ultimoIdentificador = token;
+            }
         }
+    }
+
+    public Token getIdentificadorEnZonaAsignacion() {
+        return identificadorEnZonaAsignacion;
     }
 
     public Token getUltimoIdentificador() {
         return ultimoIdentificador;
     }
 
-    public Boolean getZonaDeclaracion() {
-        return this.zonaDeclaracion;
+    public Boolean getZonaAsignacion() {
+        return this.zonaAsignacion;
     }
 
-    public void setZonaDeclaracion(Boolean zonaDeclaracion) {
-        this.zonaDeclaracion = zonaDeclaracion;
+    public void setZonaAsignacion(Boolean zonaAsignacion) {
+        this.zonaAsignacion = zonaAsignacion;
     }
 
-    public void agregarSimboloNormal(Integer posicion, SimboloNormal simboloNormal) {
+    public void agregarSimboloNormal(Integer posicion, Simbolo simboloNormal) {
         tabla.put(posicion, simboloNormal);
-        if (!(simboloNormal.getAncho() == null)){
-            desplazamiento = desplazamiento + simboloNormal.getAncho();
-        }
     }
-
-    public void agregarSimboloFuncion(Integer posicion, SimboloFuncion simboloFuncion) {
-        tabla.put(posicion, simboloFuncion);
-    }
-
+    
     // Método para obtener un símbolo existente de la tabla
     public Simbolo obtenerSimbolo(Integer posicion) {
         return tabla.get(posicion);
+    }
+
+    public void setDesplazamiento(int desplazamiento) {
+        this.desplazamiento = desplazamiento;
     }
 
     public Integer getDesplazamiento() {
@@ -93,13 +100,15 @@ public class TablaSimbolos {
     // Método para obtener un símbolo existente de la tabla
     public Integer numeroEntradas() {
         return tabla.size();
-    }    
+    }
 
     public String imprimirTabla() {
-    
+
         StringBuilder sb = new StringBuilder();
-        
-        sb.append("CONTENIDOS DE LA TABLA #" + numeroTabla + ":\n");
+
+        Integer numeroTablaAlterado = numeroTabla + 1;
+
+        sb.append("CONTENIDOS DE LA TABLA #" + numeroTablaAlterado + ":\n");
 
         for (Map.Entry<Integer, Simbolo> entrada : tabla.entrySet()) {
 
@@ -107,28 +116,60 @@ public class TablaSimbolos {
             Simbolo simbolo = entrada.getValue();
             String nombre = simbolo.getNombre().toString();
             Tipo tipo = simbolo.getTipo();
-            Integer desplazamientoSimbolo;
-            
-            if (simbolo instanceof SimboloNormal) {
-                desplazamientoSimbolo = ((SimboloNormal)simbolo).getDesplazamiento();
-            } else {
-                desplazamientoSimbolo = -1;
-            }
+            Integer desplazamientoSimbolo = simbolo.getDesplazamiento();
+            Tipo tipoRetorno = simbolo.getTipoRetorno();
 
             // Imprimimos la entrada
-            sb.append("\n*\t");
-            sb.append("LEXEMA\t:\t");
-            sb.append("'" + nombre + "'\n");
 
-            sb.append("Atributos: ");
-            sb.append("+ tipo: ");
-            sb.append("'" + tipo + "'\t");
+            if (tipoRetorno == null) {
+                sb.append("\n*\t");
+                sb.append("LEXEMA\t:\t");
+                sb.append("'" + nombre + "'\n");
 
-            sb.append("+ despl: ");
-            sb.append(desplazamientoSimbolo);
+                sb.append("Atributos: ");
+                sb.append("\n+ tipo: ");
+                sb.append("'" + tipo + "'\t");
+
+                sb.append("\n+ despl: ");
+                sb.append(desplazamientoSimbolo);
+            } else {
+
+                Integer numParam = simbolo.getNumeroParametros();
+                List<Tipo> parametros = simbolo.getTipoParametros();
+                List<Modo> modoParametros = simbolo.getModoPaso();
+
+                sb.append("\n*\t");
+                sb.append("LEXEMA\t:\t");
+                sb.append("'" + nombre + "'\n");
+
+                sb.append("Atributos: ");
+                sb.append("\n+ tipo: ");
+                sb.append("'" + tipo + "'\t");
+
+                sb.append("\n+ numParam: ");
+                sb.append("'" + numParam + "'\t");
+
+                int i = 0;
+                for (Tipo tipoParametro : parametros) {
+                    sb.append("\n+ TipoParam" + i + ": ");
+                    sb.append("'" + tipoParametro + "'\t");
+                    sb.append("\n+ ModoParam" + i + ": ");
+                    sb.append("'" + modoParametros.get(i) + "'\t");
+                    i++;
+                }
+
+                sb.append("\n+ TipoRetorno: ");
+                sb.append("'" + tipoRetorno + "'\t");
+
+                sb.append("\n+ EtiqFuncion: ");
+                sb.append("'" + nombre + "'\t");
+            }
         }
+
+        sb.append("\n");
+        sb.append("\n");
 
         return sb.toString();
     }
-    
+
 }

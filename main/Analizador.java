@@ -29,7 +29,7 @@ public class Analizador {
 
     private static void procesarFichero(String rutaArchivo) {
 
-        int linea = 0;
+        int linea = 1;
 
         try (FileReader fichero = new FileReader(rutaArchivo)) {
             List<Token> listaTokens = new ArrayList<Token>();
@@ -37,14 +37,21 @@ public class Analizador {
 
             AnalizadorLexico analizadorLexico = new AnalizadorLexico();
             AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico();
-            //AnalizadorSemantico analizadorSemantico = new AnalizadorSemantico();
+            AnalizadorSemantico analizadorSemantico = new AnalizadorSemantico();
 
             Boolean finDeFichero = false;
+
             do {
-                for (Token token : analizadorLexico.procesarCaracter((char) fichero.read())) {
+                char caracter = (char) fichero.read();
+                if (caracter == '\n') {
+                    linea++;
+                }
+
+                for (Token token : analizadorLexico.procesarCaracter(caracter)) {
+
+                    System.out.println(token.tipo);
 
                     // Anadir token a la lista de tokens
-                    linea++;
                     listaTokens.add(token);
                     if (token.getTipo().equals(TokenType.FINDEFICHERO)) {
                         finDeFichero = true;
@@ -52,10 +59,15 @@ public class Analizador {
 
                     // Analizador sintactico
                     for (Integer regla : analizadorSintactico.procesarToken(token)) {
+
                         listaReglas.add(regla);
 
-                    AnalizadorSemantico analizadorSemantico= new AnalizadorSemantico();
-                    analizadorSemantico.procesarRegla(regla);
+                        // Analizador semantico
+                        analizadorSemantico.procesarRegla(regla);
+                    }
+
+                    if (token.getTipo().equals(TokenType.PUNTOCOMA)) {
+                        gestorTablas.obtenerTablaActual().setZonaAsignacion(false);
                     }
                 }
             } while (!finDeFichero);
@@ -64,7 +76,7 @@ public class Analizador {
             
             escribirReglasAplicadas(listaReglas, "output/reglasAplicadas.txt");
             writeListToFile(listaTokens, "output/archivoTokens.txt");
-            writeStringToFile(gestorTablas.obtenerTablaActual().imprimirTabla(), "output/archivoTablaSimbolos.txt");
+            writeStringToFile(gestorTablas.getImpresionTabla().toString(), "output/archivoTablaSimbolos.txt");
 
         } catch (FileNotFoundException e) {
             System.err.println("Archivo no encontrado: " + e.getMessage());

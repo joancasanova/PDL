@@ -6,6 +6,5 @@ public enum Tipo {
     INT,
     STRING,
     VOID,
-    OK,
-    ERROR
+    OK
 }

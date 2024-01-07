@@ -4,11 +4,15 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class GestorTablas {
+
     private List<TablaSimbolos> tablas;
     private Integer numeroTabla;
 
-    public GestorTablas(){
+    private StringBuilder impresionTabla;
+
+    public GestorTablas() {
         this.tablas = new ArrayList<>();
+        this.impresionTabla = new StringBuilder();
         this.numeroTabla = -1;
         nuevaTabla();
     }
@@ -19,12 +23,13 @@ public class GestorTablas {
     }
 
     public void destruirTabla() throws IllegalStateException {
-        if (numeroTabla > 0) {
-            tablas.remove(numeroTabla);
-            numeroTabla--;
-        } else {
-            throw new IllegalStateException("Se ha intentado destruir la tabla de simbolos global");
-        }
+        impresionTabla.append(tablas.get(numeroTabla).imprimirTabla());
+        tablas.remove(numeroTabla);
+        numeroTabla--;
+    }
+
+    public StringBuilder getImpresionTabla() {
+        return this.impresionTabla;
     }
 
     public TablaSimbolos obtenerTablaActual() {

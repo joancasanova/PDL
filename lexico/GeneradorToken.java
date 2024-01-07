@@ -1,6 +1,6 @@
 package lexico;
 
-import estructuras.SimboloNormal;
+import estructuras.Simbolo;
 import estructuras.TablaSimbolos;
 import estructuras.Token;
 import estructuras.TokenType;
@@ -39,6 +39,8 @@ public class GeneradorToken {
      */
     public Token generarToken(EstadoFinal estadoFinal, Character charActual, String lexema) throws IllegalStateException {
         token = null;
+        TablaSimbolos tablaActual = Analizador.gestorTablas.obtenerTablaActual();
+
         switch (estadoFinal) {
             case PENDIENTE:
             case FINCOMENTARIO:
@@ -83,10 +85,12 @@ public class GeneradorToken {
 
             case ASIGNACION:
                 token = new Token(TokenType.ASIGNACION, "");
+                tablaActual.setZonaAsignacion(true);
                 break;
 
             case ASIGNACIONSUMA:
                 token = new Token(TokenType.ASIGNACIONSUMA, "");
+                tablaActual.setZonaAsignacion(true);
                 break;
 
             case SUMA:
@@ -98,18 +102,16 @@ public class GeneradorToken {
                 break;
 
             case IDENTIFICADOR:
-                TablaSimbolos tablaActual = Analizador.gestorTablas.obtenerTablaActual();
-
                 String nombre = lexema;
                 if (tablaActual.simboloExiste(nombre)) {
                     token = new Token(TokenType.ID, tablaActual.obtenerPosicionSimbolo(nombre));
                 } else {
                     int nuevaPosicion = tablaActual.numeroEntradas();
-                    SimboloNormal simboloNormal = new SimboloNormal(null, nombre, null, null);
+                    Simbolo simboloNormal = new Simbolo(null, nombre, null, null);
                     tablaActual.agregarSimboloNormal(nuevaPosicion, simboloNormal);
                     token = new Token(TokenType.ID, nuevaPosicion);
                 }
-                tablaActual.setUltimoIdentificador(token);
+                tablaActual.setIdentificador(token);
                 break;
 
             case CADENA:

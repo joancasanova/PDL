@@ -1,2 +1,1 @@
-let id string = "hola";
-x = 5;
+function fun1 void (string x, int y) {}
