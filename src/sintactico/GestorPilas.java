@@ -1,4 +1,4 @@
-package src.sintactico;
+package sintactico;
 
 import java.util.Stack;
 

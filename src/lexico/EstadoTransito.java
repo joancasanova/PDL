@@ -1,4 +1,4 @@
-package src.lexico;
+package lexico;
 
 // Enumeración de posibles estados de transición durante el análisis léxico.
 public enum EstadoTransito {

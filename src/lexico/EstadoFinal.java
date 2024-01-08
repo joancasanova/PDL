@@ -1,4 +1,4 @@
-package src.lexico;
+package lexico;
 
 // Enumeración de posibles estados finales tras el análisis de un lexema.
 public enum EstadoFinal {

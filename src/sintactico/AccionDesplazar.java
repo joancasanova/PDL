@@ -1,4 +1,4 @@
-package src.sintactico;
+package sintactico;
 
 public class AccionDesplazar extends Accion {
     private Integer estado;

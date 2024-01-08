@@ -1,4 +1,4 @@
-package src.token;
+package token;
 
 public enum TokenType {
     SUMA("'+'"),

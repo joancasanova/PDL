@@ -1,4 +1,4 @@
-package src.lexico;
+package lexico;
 
 /**
  * Clase GestorEstados que maneja los estados de transición y los estados finales

@@ -103,7 +103,7 @@ public class Analizador {
 
             escribirReglasAplicadas(listaReglas, "./output/reglasAplicadas.txt");
             writeListToFile(listaTokens, "./output/archivoTokens.txt");
-            writeStringToFile(gestorTablas.getImpresionTabla().toString(), "output/archivoTablaSimbolos.txt");
+            writeStringToFile(gestorTablas.getImpresionTabla().toString(), "./output/archivoTablaSimbolos.txt");
 
         } catch (FileNotFoundException e) {
             System.err.println("Archivo no encontrado: " + e.getMessage());

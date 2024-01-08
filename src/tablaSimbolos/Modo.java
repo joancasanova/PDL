@@ -1,4 +1,4 @@
-package src.tablaSimbolos;
+package tablaSimbolos;
 
 public enum Modo {
     REFERENCIA,

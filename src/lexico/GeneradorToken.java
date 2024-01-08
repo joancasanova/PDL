@@ -1,9 +1,9 @@
-package src.lexico;
+package lexico;
 
-import src.main.Analizador;
-import src.tablaSimbolos.Simbolo;
-import src.tablaSimbolos.TablaSimbolos;
-import src.token.*;
+import main.Analizador;
+import tablaSimbolos.Simbolo;
+import tablaSimbolos.TablaSimbolos;
+import token.*;
 
 /**
  * Clase GeneradorToken que se encarga de generar tokens en base a los estados finales

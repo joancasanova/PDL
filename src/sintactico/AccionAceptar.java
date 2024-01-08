@@ -1,4 +1,4 @@
-package src.sintactico;
+package sintactico;
 
 public class AccionAceptar extends Accion {
     public AccionAceptar() {
