@@ -1,4 +1,4 @@
-package tablaSimbolos;
+package src.tablaSimbolos;
 
 public enum Tipo {
     BOOLEAN,

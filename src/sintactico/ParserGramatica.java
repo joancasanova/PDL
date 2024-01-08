@@ -1,9 +1,9 @@
-package sintactico;
+package src.sintactico;
 
 import java.io.*;
 import java.util.*;
 
-import token.*;;
+import src.token.*;;
 
 /**
  * Clase que se encarga de parsear un archivo de texto generado por Bison.
@@ -22,7 +22,7 @@ public class ParserGramatica {
     private Set<String> terminales;
     private Set<String> noTerminales;
 
-    public ParserGramatica() {
+    public ParserGramatica() throws IOException {
         tablaAccion = new HashMap<>();
         tablaGoTo = new HashMap<>();
         reglas = new HashMap<>();
@@ -33,7 +33,7 @@ public class ParserGramatica {
         generateTable(filePath);
     }
 
-    private void generateTable(String filePath) {
+    private void generateTable(String filePath) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -261,8 +261,9 @@ public class ParserGramatica {
      * Muestra el contenido de la tabla de analisis.
      * 
      * @param args Argumentos de la línea de comandos.
+     * @throws IOException
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         ParserGramatica parserGramatica = new ParserGramatica();
         String filePath = FILE_PATH;
         parserGramatica.generateTable(filePath);

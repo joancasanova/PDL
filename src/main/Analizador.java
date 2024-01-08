@@ -1,4 +1,4 @@
-package main;
+package src.main;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -7,11 +7,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-import lexico.AnalizadorLexico;
-import semantico.AnalizadorSemantico;
-import sintactico.AnalizadorSintactico;
-import tablaSimbolos.*;
-import token.*;
+import src.lexico.AnalizadorLexico;
+import src.semantico.AnalizadorSemantico;
+import src.sintactico.AnalizadorSintactico;
+import src.tablaSimbolos.*;
+import src.token.*;
 
 public class Analizador {
     public static GestorTablas gestorTablas = new GestorTablas();
@@ -30,13 +30,22 @@ public class Analizador {
         Boolean semantico = false;
 
         if (args.length > 1) {
-            if (args[1].equals("sintactico")) {
+            if (args[1].equals("-sintactico")) {
                 sintactico = true;
             }
+            else {
+                System.out.println("Está ejecutando el analizado léxico solamente.");
+                System.out.println("Si desea ejecutar el analizador sintáctico también utilice el comando -sintactico.");
+            }
             if (args.length > 2) {
-                if (args[2].equals("semantico")) {
+                if (args[2].equals("-semantico")) {
+                    System.out.println("Por favor, especifique el nombre del archivo a analizar como argumento.");
                     semantico = true;
                 }
+            }
+            else {
+                System.out.println("No está ejecutando el analizador semantico.");
+                System.out.println("Si desea ejecutar el analizador semántico utilice el comando -semantico.");
             }
         }
 

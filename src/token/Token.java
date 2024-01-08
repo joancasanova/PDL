@@ -1,4 +1,4 @@
-package token;
+package src.token;
 
 public class Token {
     public TokenType tipo;

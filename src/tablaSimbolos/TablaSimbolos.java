@@ -1,9 +1,9 @@
-package tablaSimbolos;
+package src.tablaSimbolos;
 
 import java.util.List;
 import java.util.Map;
 
-import token.*;
+import src.token.*;
 
 import java.util.HashMap;
 

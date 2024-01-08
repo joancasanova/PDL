@@ -1,4 +1,4 @@
-package sintactico;
+package src.sintactico;
 
 public abstract class Accion {
     private String tipo;

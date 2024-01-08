@@ -1,4 +1,4 @@
-package lexico;
+package src.lexico;
 
 public enum PalabraReservada {
     BOOLEAN,
