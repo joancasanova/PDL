@@ -11,6 +11,7 @@
             "mainClass": "main.Analizador",
             "args": [
                 "input/input.txt",
+                "output",
                 "-sintactico",
                 "-semantico"
             ],

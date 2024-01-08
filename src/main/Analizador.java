@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import lexico.AnalizadorLexico;
@@ -18,41 +21,39 @@ public class Analizador {
 
     public static void main(String[] args) {
 
-        if (args.length < 1) {
-            System.err.println("Por favor, especifique el nombre del archivo a analizar como argumento.");
+        if (args.length < 2) {
+            System.err.println("Por favor, especifique la ruta del archivo a analizar como argumento.");
+            System.err.println("Por favor, especifique la ruta del directorio de salida (por ejemplo, output).");
             return;
         }
 
         String rutaArchivo = args[0];
-        
-        
+        String rutaSalida = args[1];
+
         Boolean sintactico = false;
         Boolean semantico = false;
 
-        if (args.length > 1) {
-            if (args[1].equals("-sintactico")) {
+        if (args.length > 2) {
+            if (args[2].equals("-sintactico")) {
                 sintactico = true;
-            }
-            else {
+            } else {
                 System.out.println("Está ejecutando el analizado léxico solamente.");
                 System.out.println("Si desea ejecutar el analizador sintáctico también utilice el comando -sintactico.");
             }
-            if (args.length > 2) {
-                if (args[2].equals("-semantico")) {
-                    System.out.println("Por favor, especifique el nombre del archivo a analizar como argumento.");
+            if (args.length > 3) {
+                if (args[3].equals("-semantico")) {
                     semantico = true;
                 }
-            }
-            else {
+            } else {
                 System.out.println("No está ejecutando el analizador semantico.");
                 System.out.println("Si desea ejecutar el analizador semántico utilice el comando -semantico.");
             }
         }
 
-        procesarFichero(rutaArchivo, sintactico, semantico);
+        procesarFichero(rutaArchivo, rutaSalida, sintactico, semantico);
     }
 
-    private static void procesarFichero(String rutaArchivo, Boolean sintactico, Boolean semantico) {
+    private static void procesarFichero(String rutaArchivo, String rutaSalida, Boolean sintactico, Boolean semantico) {
 
         int linea = 1;
 
@@ -100,10 +101,18 @@ public class Analizador {
             } while (!finDeFichero);
 
             fichero.close();
+            
+            crearDirectorio(rutaSalida);
+            String archivoReglas = rutaSalida + "/reglasAplicadas.txt";
+            crearArchivo(rutaSalida, archivoReglas);
+            String archivoTokens = rutaSalida + "/archivoTokens.txt";
+            crearArchivo(rutaSalida, archivoTokens);
+            String archivoTS = rutaSalida + "/archivoTablaSimbolos.txt";
+            crearArchivo(rutaSalida, archivoTS);
 
-            escribirReglasAplicadas(listaReglas, "./output/reglasAplicadas.txt");
-            writeListToFile(listaTokens, "./output/archivoTokens.txt");
-            writeStringToFile(gestorTablas.getImpresionTabla().toString(), "./output/archivoTablaSimbolos.txt");
+            escribirReglasAplicadas(listaReglas, archivoReglas);
+            writeListToFile(listaTokens, archivoTokens);
+            writeStringToFile(gestorTablas.getImpresionTabla().toString(), archivoTS);
 
         } catch (FileNotFoundException e) {
             System.err.println("Archivo no encontrado: " + e.getMessage());
@@ -111,6 +120,39 @@ public class Analizador {
             System.err.println("Error de entrada/salida: " + e.getMessage());
         } catch (IllegalStateException e) {
             System.err.println("Error en el análisis " + e.getMessage() + " en línea " + linea);
+        }
+    }
+
+    private static void crearDirectorio(String directorio) {
+        Path path = Paths.get(directorio);
+
+        // Intenta crear el directorio si no existe
+        try {
+            // Usa Files.exists(path) para verificar si el directorio ya existe
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
+            }
+        } catch (IOException e) {
+            System.err.println("Error al crear el directorio de salida");
+        }
+
+    }
+
+    private static void crearArchivo(String directorio, String archivo) {
+        Path directorioPath = Paths.get(directorio);
+        Path archivoPath = directorioPath.resolve(archivo);
+
+        try {
+            // Crea el directorio si no existe
+            if (!Files.exists(directorioPath)) {
+                Files.createDirectories(directorioPath);
+            }
+
+            // Crea el archivo si no existe
+            if (!Files.exists(archivoPath)) {
+                Files.createFile(archivoPath);
+            }
+        } catch (IOException e) {
         }
     }
 
