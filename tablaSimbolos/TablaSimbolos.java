@@ -1,6 +1,11 @@
-package estructuras;
+package tablaSimbolos;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+
+import token.*;
+
+import java.util.HashMap;
 
 public class TablaSimbolos {
 

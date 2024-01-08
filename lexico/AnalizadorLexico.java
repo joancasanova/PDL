@@ -2,7 +2,7 @@ package lexico;
 
 import java.util.*;
 
-import estructuras.Token;
+import token.*;
 
 /**
  * Clase que implementa un analizador léxico para un lenguaje de programación.

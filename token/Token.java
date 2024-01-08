@@ -1,4 +1,4 @@
-package estructuras;
+package token;
 
 public class Token {
     public TokenType tipo;

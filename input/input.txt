@@ -1,1 +1,10 @@
-function fun1 void (string x, int y) {}
+// CASO 10 -> Error Semantico
+let id int;
+
+function  nombrefun int (int param) {
+if(param == 0)
+param+=5;
+
+let error string;
+return error;
+}

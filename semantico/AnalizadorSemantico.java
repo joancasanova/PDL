@@ -1,7 +1,7 @@
 package semantico;
 
-import estructuras.*;
 import main.Analizador;
+import tablaSimbolos.*;
 
 import java.util.*;
 
@@ -26,13 +26,13 @@ public class AnalizadorSemantico {
      * 
      * @param numeroRegla El número de la regla a procesar.
      */
-    public void procesarRegla(Integer numeroRegla) throws IllegalStateException {
+    public void procesarRegla(Integer numeroRegla) throws IllegalStateException, NullPointerException {
 
         TablaSimbolos tablaActual = Analizador.gestorTablas.obtenerTablaActual();
 
         Integer posicion = 0;
 
-        System.out.println(numeroRegla);
+        // System.out.println(numeroRegla);
 
         switch (numeroRegla) {
             case 1:
@@ -118,9 +118,11 @@ public class AnalizadorSemantico {
                 Tipo tipoRetornoC = pilaTipos.pop();
                 Tipo tipoRetornoF1 = pilaTipos.pop();
 
-                if (!(tipoRetornoF1.equals(Tipo.VOID) && tipoRetornoC == Tipo.OK)) {
-                    throw new IllegalStateException(
+                if (!(tipoRetornoF1.equals(tipoRetornoC))) {
+                    if (!(tipoRetornoF1.equals(Tipo.VOID) && tipoRetornoC == Tipo.OK)) {
+                        throw new IllegalStateException(
                             "semantico: Tipo retorno de la funcion y tipo de funcion no coinciden");
+                    }
                 } else {
                     // No hay problemas con los tipos devueltos
                     // Eliminar tabla de simbolos local
@@ -183,9 +185,9 @@ public class AnalizadorSemantico {
 
                 if (TipoRetornoB != Tipo.OK && TipoRetornoC != Tipo.OK) {
                     throw new IllegalStateException(
-                            "semantico: Hay varios tipos de retorno en la funcion (varios return)");
+                            "semantico: Hay un error con el tipo de retorno de la función");
                 } else {
-                    if (TipoRetornoB != null) {
+                    if (TipoRetornoB != Tipo.OK) {
                         pilaTipos.add(TipoRetornoB);
                     } else {
                         pilaTipos.add(TipoRetornoC);
@@ -350,17 +352,17 @@ public class AnalizadorSemantico {
             case 43: // L: E Q 
             case 45: // Q: , E Q
                 listaDeParametros.add(pilaTipos.pop());
-                break;
+                break;      
 
             default:
                 // Manejo de reglas no implementadas o desconocidas
                 throw new IllegalStateException("semantico: regla no implementada");
         }
 
-        System.out.println("CONTENIDO PILA: ");
-        for (Tipo tipo : pilaTipos) {
-            System.out.println("-" + tipo);
-        }
+        // System.out.println("CONTENIDO PILA: ");
+        // for (Tipo tipo : pilaTipos) {
+        //    System.out.println("-" + tipo);
+        //}
     }
 
     private void asignarTipo(Tipo TipoSimboloT, TablaSimbolos tablaActual) {

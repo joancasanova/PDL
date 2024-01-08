@@ -1,4 +1,4 @@
-package estructuras;
+package lexico;
 
 public enum PalabraReservada {
     BOOLEAN,

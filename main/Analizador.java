@@ -10,7 +10,8 @@ import java.util.*;
 import lexico.AnalizadorLexico;
 import semantico.AnalizadorSemantico;
 import sintactico.AnalizadorSintactico;
-import estructuras.*;
+import tablaSimbolos.*;
+import token.*;
 
 public class Analizador {
     public static GestorTablas gestorTablas = new GestorTablas();
@@ -63,8 +64,6 @@ public class Analizador {
                 }
 
                 for (Token token : analizadorLexico.procesarCaracter(caracter)) {
-
-                    System.out.println(token.tipo);
 
                     // Anadir token a la lista de tokens
                     listaTokens.add(token);

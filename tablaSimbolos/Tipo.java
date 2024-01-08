@@ -1,4 +1,4 @@
-package estructuras;
+package tablaSimbolos;
 
 public enum Tipo {
     BOOLEAN,

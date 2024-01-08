@@ -1,24 +1,22 @@
 CONTENIDOS DE LA TABLA #1:
 
-*	LEXEMA	:	'x'
-Atributos: 
-+ tipo: 'null'	
-+ despl: null
-*	LEXEMA	:	'y'
+*	LEXEMA	:	'cadena'
 Atributos: 
 + tipo: 'STRING'	
-+ despl: 2
++ despl: 0
+*	LEXEMA	:	'y'
+Atributos: 
++ tipo: 'INT'	
++ despl: 128
 
 CONTENIDOS DE LA TABLA #0:
 
-*	LEXEMA	:	'fun1'
+*	LEXEMA	:	'nombre1'
 Atributos: 
 + tipo: 'FUNCTION'	
-+ numParam: '2'	
-+ TipoParam0: 'INT'	
++ numParam: '1'	
++ TipoParam0: 'STRING'	
 + ModoParam0: 'VALOR'	
-+ TipoParam1: 'STRING'	
-+ ModoParam1: 'VALOR'	
-+ TipoRetorno: 'VOID'	
-+ EtiqFuncion: 'fun1'	
++ TipoRetorno: 'INT'	
++ EtiqFuncion: 'nombre1'	
 

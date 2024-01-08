@@ -3,7 +3,7 @@ package sintactico;
 import java.io.*;
 import java.util.*;
 
-import estructuras.TokenType;
+import token.*;;
 
 /**
  * Clase que se encarga de parsear un archivo de texto generado por Bison.

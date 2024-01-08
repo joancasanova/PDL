@@ -1,7 +1,5 @@
 package lexico;
 
-import estructuras.PalabraReservada;
-
 /**
  * Clase GestorEstados que maneja los estados de transición y los estados finales
  * durante el análisis léxico de un conjunto de caracteres.

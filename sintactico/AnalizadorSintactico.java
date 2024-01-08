@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import estructuras.Token;
-import estructuras.TokenType;
-
+import token.*;
 /**
  * Clase AnalizadorSintactico para procesar tokens y aplicar reglas de análisis
  * sintáctico LR(1).
