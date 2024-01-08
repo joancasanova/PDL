@@ -183,7 +183,7 @@ public class AnalizadorSemantico {
 
                 if (TipoRetornoB != Tipo.OK && TipoRetornoC != Tipo.OK) {
                     throw new IllegalStateException(
-                            "semantico: Hay varios tipos de retorno en la funcion (varios return)\n");
+                            "semantico: Hay varios tipos de retorno en la funcion (varios return)");
                 } else {
                     if (TipoRetornoB != null) {
                         pilaTipos.add(TipoRetornoB);
@@ -204,7 +204,7 @@ public class AnalizadorSemantico {
                 if (tipoSimboloE1 == tipoSimboloU && tipoSimboloE1.equals(Tipo.INT)) {
                     pilaTipos.add(Tipo.BOOLEAN);
                 } else {
-                    throw new IllegalStateException("semantico: los tipos en la expresion E: E == U no coinciden\n");
+                    throw new IllegalStateException("semantico: los tipos en la expresion E: E == U no coinciden");
                 }
                 break;
 
@@ -215,7 +215,7 @@ public class AnalizadorSemantico {
                 if (tipoSimboloU1 == tipoSimboloV && tipoSimboloU1.equals(Tipo.INT)) {
                     pilaTipos.add(Tipo.INT);
                 } else {
-                    throw new IllegalStateException("semantico: los tipos en la expresion no coinciden\n");
+                    throw new IllegalStateException("semantico: los tipos en la expresion no coinciden");
 
                 }
                 break;
@@ -226,7 +226,7 @@ public class AnalizadorSemantico {
                 if (tipoSimboloW.equals(Tipo.BOOLEAN)) {
                     pilaTipos.add(Tipo.BOOLEAN);
                 } else {
-                    throw new IllegalStateException("semantico: los tipos en la expresion E: E == U no coinciden\n");
+                    throw new IllegalStateException("semantico: los tipos en la expresion E: E == U no coinciden");
                 }
                 break;
 
@@ -251,7 +251,7 @@ public class AnalizadorSemantico {
                 } else if (TipoSimboloE.equals(Tipo.INT)) {
                     pilaTipos.add(Tipo.INT);// Añado el simobolo W a la pila
                 } else {
-                    throw new IllegalStateException("semantico en expresion-> W: (E) tipo de E incorrecto\n");
+                    throw new IllegalStateException("semantico en expresion-> W: (E) tipo de E incorrecto");
                 }
                 break;
 
@@ -298,13 +298,13 @@ public class AnalizadorSemantico {
                 simboloGuardado = (Simbolo) tablaActual.obtenerSimbolo(posicion);
 
                 if (simboloGuardado.getTipo() == null) {
-                    throw new IllegalStateException("semantico: variable no inicializada en la expresion S: ID = E;\n");
+                    throw new IllegalStateException("semantico: variable no inicializada en la expresion S: ID = E;");
                 }
 
                 if (TipoSimboloE.equals(simboloGuardado.getTipo())) {
                     pilaTipos.add(Tipo.OK); // Simbolo S
                 } else {
-                    throw new IllegalStateException("semantico en expresion-> S: ID=E no coiniden tipos\n");
+                    throw new IllegalStateException("semantico en expresion-> S: ID=E no coiniden tipos");
                 }
                 break;
 
@@ -317,7 +317,7 @@ public class AnalizadorSemantico {
                         || tipoSimboloE.equals(Tipo.STRING)) {
                     pilaTipos.add(Tipo.OK);// Añado el simobolo S a la pila
                 } else {
-                    throw new IllegalStateException("semantico en expresion-> W: (E) tipo de E incorrecto\n");
+                    throw new IllegalStateException("semantico en expresion-> W: (E) tipo de E incorrecto");
                 }
                 break;
 
@@ -326,14 +326,14 @@ public class AnalizadorSemantico {
                 simboloGuardado = (Simbolo) tablaActual.obtenerSimbolo(posicion);
 
                 if (simboloGuardado.getTipo() == null) {
-                    throw new IllegalStateException("semantico: variable no inicializada en la expresion S: GET ID;\n");
+                    throw new IllegalStateException("semantico: variable no inicializada en la expresion S: GET ID;");
                 }
 
                 if (simboloGuardado.getTipo().equals(Tipo.INT) || simboloGuardado.getTipo().equals(Tipo.STRING)) {
                     pilaTipos.add(simboloGuardado.getTipo());// S tiene el simbolo de id
                 } else {
                     throw new IllegalStateException(
-                            "semantico en expresion-> S: GET ID; tipo de id no es valido, debe ser entero o string\n");
+                            "semantico en expresion-> S: GET ID; tipo de id no es valido, debe ser entero o string");
                 }
                 break;
 
@@ -342,7 +342,7 @@ public class AnalizadorSemantico {
 
                 if (tipoSimboloZ == null) {
                     throw new IllegalStateException(
-                            "semantico: variable no inicializada en la expresion S: RETURN Z;\n");
+                            "semantico: variable no inicializada en la expresion S: RETURN Z;");
                 }
                 pilaTipos.add(tipoSimboloZ);
                 break;

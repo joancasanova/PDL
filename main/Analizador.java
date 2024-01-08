@@ -23,11 +23,26 @@ public class Analizador {
         }
 
         String rutaArchivo = args[0];
+        
+        
+        Boolean sintactico = false;
+        Boolean semantico = false;
 
-        procesarFichero(rutaArchivo);
+        if (args.length > 1) {
+            if (args[1].equals("sintactico")) {
+                sintactico = true;
+            }
+            if (args.length > 2) {
+                if (args[2].equals("semantico")) {
+                    semantico = true;
+                }
+            }
+        }
+
+        procesarFichero(rutaArchivo, sintactico, semantico);
     }
 
-    private static void procesarFichero(String rutaArchivo) {
+    private static void procesarFichero(String rutaArchivo, Boolean sintactico, Boolean semantico) {
 
         int linea = 1;
 
@@ -58,12 +73,16 @@ public class Analizador {
                     }
 
                     // Analizador sintactico
-                    for (Integer regla : analizadorSintactico.procesarToken(token)) {
+                    if (sintactico) {
+                        for (Integer regla : analizadorSintactico.procesarToken(token)) {
 
-                        listaReglas.add(regla);
+                            listaReglas.add(regla);
 
-                        // Analizador semantico
-                        analizadorSemantico.procesarRegla(regla);
+                            // Analizador semantico
+                            if (semantico) {
+                                analizadorSemantico.procesarRegla(regla);
+                            }
+                        }
                     }
 
                     if (token.getTipo().equals(TokenType.PUNTOCOMA)) {
@@ -73,7 +92,7 @@ public class Analizador {
             } while (!finDeFichero);
 
             fichero.close();
-            
+
             escribirReglasAplicadas(listaReglas, "output/reglasAplicadas.txt");
             writeListToFile(listaTokens, "output/archivoTokens.txt");
             writeStringToFile(gestorTablas.getImpresionTabla().toString(), "output/archivoTablaSimbolos.txt");
@@ -87,7 +106,6 @@ public class Analizador {
         }
     }
 
-    
     public static void writeListToFile(List<Token> listaTokens, String fileName) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
 

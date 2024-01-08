@@ -24,7 +24,9 @@
             "request": "launch",
             "mainClass": "main.Analizador",
             "args": [
-                "input/input.txt"
+                "input/input.txt",
+                "sintactico",
+                "semantico"
             ],
             "projectName": "PDL"
         },
