@@ -1,5 +1,1 @@
 Main-Class: main.Analizador
-jar cmf manifest.txt PDL.jar -C ruta/del/directorio/bin .
-
-
-jar cmf manifest.txt PDL.jar -C src .

@@ -1,7 +1,7 @@
-package src.semantico;
+package semantico;
 
-import src.main.Analizador;
-import src.tablaSimbolos.*;
+import main.Analizador;
+import tablaSimbolos.*;
 
 import java.util.*;
 

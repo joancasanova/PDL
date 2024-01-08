@@ -1,9 +1,9 @@
-package src.sintactico;
+package sintactico;
 
 import java.io.*;
 import java.util.*;
 
-import src.token.*;;
+import token.*;;
 
 /**
  * Clase que se encarga de parsear un archivo de texto generado por Bison.
@@ -14,7 +14,7 @@ public class ParserGramatica {
     private static final String TERMINALS_SECTION = "Terminals";
     private static final String NONTERMINALS_SECTION = "Nonterminals";
     private static final String STATE_SECTION = "State";
-    private static final String FILE_PATH = "sintactico/gramatica.txt";
+    private static final String FILE_PATH = "src/sintactico/gramatica.txt";
 
     private Map<Integer, Map<String, Accion>> tablaAccion;
     private Map<Integer, Map<String, Integer>> tablaGoTo;
@@ -22,7 +22,7 @@ public class ParserGramatica {
     private Set<String> terminales;
     private Set<String> noTerminales;
 
-    public ParserGramatica() throws IOException {
+    public ParserGramatica() {
         tablaAccion = new HashMap<>();
         tablaGoTo = new HashMap<>();
         reglas = new HashMap<>();
@@ -33,7 +33,7 @@ public class ParserGramatica {
         generateTable(filePath);
     }
 
-    private void generateTable(String filePath) throws IOException {
+    private void generateTable(String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -53,7 +53,7 @@ public class ParserGramatica {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("El archivo de input de gramatica.txt no se ha encontrado");
         }
     }
 

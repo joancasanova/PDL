@@ -1,8 +1,8 @@
-package src.lexico;
+package lexico;
 
 import java.util.*;
 
-import src.token.*;
+import token.*;
 
 /**
  * Clase que implementa un analizador léxico para un lenguaje de programación.

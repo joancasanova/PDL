@@ -6,35 +6,15 @@
     "configurations": [
         {
             "type": "java",
-            "name": "ParserGramatica",
-            "request": "launch",
-            "mainClass": "sintactico.ParserGramatica",
-            "projectName": "PDL"
-        },
-        {
-            "type": "java",
-            "name": "TablaAnalisis",
-            "request": "launch",
-            "mainClass": "sintactico.TablaAnalisis",
-            "projectName": "PDL"
-        },
-        {
-            "type": "java",
             "name": "Analizador",
             "request": "launch",
             "mainClass": "main.Analizador",
             "args": [
                 "input/input.txt",
-                "sintactico",
-                "semantico"
+                "-sintactico",
+                "-semantico"
             ],
             "projectName": "PDL"
-        },
-        {
-            "type": "java",
-            "name": "Current File",
-            "request": "launch",
-            "mainClass": "${file}"
         }
     ]
 }

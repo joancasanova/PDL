@@ -1,4 +1,4 @@
-package src.main;
+package main;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -7,11 +7,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-import src.lexico.AnalizadorLexico;
-import src.semantico.AnalizadorSemantico;
-import src.sintactico.AnalizadorSintactico;
-import src.tablaSimbolos.*;
-import src.token.*;
+import lexico.AnalizadorLexico;
+import semantico.AnalizadorSemantico;
+import sintactico.AnalizadorSintactico;
+import tablaSimbolos.*;
+import token.*;
 
 public class Analizador {
     public static GestorTablas gestorTablas = new GestorTablas();
@@ -101,8 +101,8 @@ public class Analizador {
 
             fichero.close();
 
-            escribirReglasAplicadas(listaReglas, "output/reglasAplicadas.txt");
-            writeListToFile(listaTokens, "output/archivoTokens.txt");
+            escribirReglasAplicadas(listaReglas, "./output/reglasAplicadas.txt");
+            writeListToFile(listaTokens, "./output/archivoTokens.txt");
             writeStringToFile(gestorTablas.getImpresionTabla().toString(), "output/archivoTablaSimbolos.txt");
 
         } catch (FileNotFoundException e) {

@@ -1,4 +1,4 @@
-package src.sintactico;
+package sintactico;
 
 import java.io.IOException;
 import java.util.Map;
@@ -8,14 +8,13 @@ public class AccionReducir extends Accion {
     private String noTerminal;
     private Integer numeroDesapilar;
 
-    private static Map<Integer,Map<String,Integer>> gotoTable;
+    private static Map<Integer,Map<String,Integer>> gotoTable = new ParserGramatica().getTablaGoTo();
 
     public AccionReducir(Integer regla, String noTerminal, Integer numeroDesapilar) throws IOException {
         super.setTipo("reducir");
         this.noTerminal = noTerminal;
         this.regla = regla;
         this.numeroDesapilar = numeroDesapilar;
-        this.gotoTable = new ParserGramatica().getTablaGoTo();
     }
 
     public Integer getRegla() {

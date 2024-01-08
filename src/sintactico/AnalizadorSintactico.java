@@ -1,18 +1,18 @@
-package src.sintactico;
+package sintactico;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import src.token.*;
+import token.*;
 /**
  * Clase AnalizadorSintactico para procesar tokens y aplicar reglas de análisis
  * sintáctico LR(1).
  */
 public class AnalizadorSintactico {
 
-    private static ParserGramatica gramatica;
+    private static ParserGramatica gramatica = new ParserGramatica();
     private static GestorPilas gestorPilas = new GestorPilas();
 
     private Boolean aceptado;
@@ -21,9 +21,8 @@ public class AnalizadorSintactico {
      * Constructor del analizador sintáctico.
      * @throws IOException
      */
-    public AnalizadorSintactico() throws IOException {
+    public AnalizadorSintactico() {
         this.aceptado = false;
-        this.gramatica = new ParserGramatica();
     }
 
     public List<Integer> procesarToken(Token token) throws IllegalStateException {
