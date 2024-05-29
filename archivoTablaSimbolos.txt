@@ -1,0 +1,11 @@
+CONTENIDOS DE LA TABLA #0:
+
+*	LEXEMA	:	'x'
+Atributos: 
++ tipo: 'INT'	
++ despl: 0
+*	LEXEMA	:	'a'
+Atributos: 
++ tipo: 'INT'	
++ despl: 2
+

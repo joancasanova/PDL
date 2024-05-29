@@ -6,14 +6,18 @@
     "configurations": [
         {
             "type": "java",
+            "name": "ParserGramatica",
+            "request": "launch",
+            "mainClass": "sintactico.gramatica.ParserGramatica",
+            "projectName": "PDL"
+        },
+        {
+            "type": "java",
             "name": "Analizador",
             "request": "launch",
             "mainClass": "main.Analizador",
             "args": [
-                "input/input.txt",
-                "output",
-                "-sintactico",
-                "-semantico"
+                "input/input.txt"
             ],
             "projectName": "PDL"
         }

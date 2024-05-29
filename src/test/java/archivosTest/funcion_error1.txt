@@ -1,3 +1,4 @@
+fun1();
 function fun1 void (void) {
-    return 5;
+    return;
 }

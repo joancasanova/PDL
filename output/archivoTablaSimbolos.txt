@@ -1,7 +1,24 @@
-CONTENIDOS DE LA TABLA #0:
+CONTENIDOS DE LA TABLA #1:
 
 *	LEXEMA	:	'x'
 Atributos: 
-+ tipo: 'STRING'	
++ tipo: 'INT'	
++ despl: 2
+*	LEXEMA	:	'y'
+Atributos: 
++ tipo: 'BOOLEAN'	
 + despl: 0
+
+CONTENIDOS DE LA TABLA #0:
+
+*	LEXEMA	:	'factorial'
+Atributos: 
++ tipo: 'INT'	
++ numParam: '2'	
++ TipoParam0: 'INT'	
++ ModoParam0: 'VALOR'	
++ TipoParam1: 'BOOLEAN'	
++ ModoParam1: 'VALOR'	
++ TipoRetorno: 'INT'	
++ EtiqFuncion: 'factorial'	
 
