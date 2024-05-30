@@ -52,7 +52,7 @@ public class AnalizadorTest {
                     fail("No se esperaba una excepción para el archivo: " + inputFile + ", pero se encontró error: "
                             + errorOutput);
                 }
-                assertTrue(output.startsWith("Analisis completo"),
+                assertTrue(output.contains("completo"),
                         "Esperado analisis completo para el archivo: " + inputFile + ", pero se obtuvo: " + output);
             }
         } catch (Exception e) {

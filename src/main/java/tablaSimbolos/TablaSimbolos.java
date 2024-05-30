@@ -4,50 +4,84 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+import tablaSimbolos.enums.Modo;
+import tablaSimbolos.enums.Tipo;
+
+/**
+ * Clase TablaSimbolos que representa una tabla de símbolos utilizada en un
+ * compilador.
+ * La tabla de símbolos almacena información sobre identificadores como
+ * variables y funciones.
+ */
 public class TablaSimbolos {
 
     // Estructura para almacenar los símbolos
     private final Map<Integer, Simbolo> tabla;
 
-    // Numero identificador para la tabla de simbolos
+    // Número identificador para la tabla de símbolos
     private Integer numeroTabla;
     private Integer desplazamiento;
 
+    /**
+     * Constructor que inicializa la tabla de símbolos con un número de tabla dado.
+     * 
+     * @param numeroTabla El número identificador de la tabla de símbolos.
+     */
     public TablaSimbolos(Integer numeroTabla) {
-        tabla = new HashMap<>();
+        this.tabla = new HashMap<>();
         this.numeroTabla = numeroTabla;
         this.desplazamiento = 0;
     }
 
+    /**
+     * Agrega un símbolo a la tabla en una posición específica.
+     * 
+     * @param posicion La posición en la que se agregará el símbolo.
+     * @param simbolo  El símbolo a agregar.
+     */
     public void agregarSimbolo(Integer posicion, Simbolo simbolo) {
         tabla.put(posicion, simbolo);
     }
 
-    // Método para obtener un símbolo existente de la tabla
-    public Simbolo obtenerSimbolo(Integer posicion) {
-        return tabla.get(posicion);
-    }
-
+    /**
+     * Establece el desplazamiento actual en la tabla de símbolos.
+     * 
+     * @param desplazamiento El desplazamiento a establecer.
+     */
     public void setDesplazamiento(int desplazamiento) {
         this.desplazamiento = desplazamiento;
     }
 
+    /**
+     * Obtiene el desplazamiento actual en la tabla de símbolos.
+     * 
+     * @return El desplazamiento actual.
+     */
     public Integer getDesplazamiento() {
         return this.desplazamiento;
     }
 
-    // Método para obtener posicion un símbolo existente de la tabla
+    /**
+     * Obtiene la posición de un símbolo existente en la tabla.
+     * 
+     * @param simbolo El símbolo cuya posición se busca.
+     * @return La posición del símbolo en la tabla, o null si no se encuentra.
+     */
     public Integer obtenerPosicionSimbolo(Simbolo simbolo) {
-        Integer posicion = null;
         for (Map.Entry<Integer, Simbolo> entry : tabla.entrySet()) {
             if (entry.getValue().equals(simbolo)) {
-                posicion = entry.getKey();
+                return entry.getKey();
             }
         }
-        return posicion;
+        return null;
     }
 
-    // Método para verificar si un símbolo ya existe en la tabla
+    /**
+     * Verifica si un símbolo ya existe en la tabla.
+     * 
+     * @param nombre El nombre del símbolo a verificar.
+     * @return true si el símbolo existe, false en caso contrario.
+     */
     public boolean simboloExiste(String nombre) {
         for (Simbolo simbolo : tabla.values()) {
             if (simbolo.getNombre().equals(nombre)) {
@@ -57,7 +91,12 @@ public class TablaSimbolos {
         return false;
     }
 
-    // Método para verificar si un símbolo ya existe en la tabla
+    /**
+     * Obtiene un símbolo de la tabla por su nombre.
+     * 
+     * @param nombre El nombre del símbolo a buscar.
+     * @return El símbolo correspondiente, o null si no se encuentra.
+     */
     public Simbolo obtenerSimboloPorNombre(String nombre) {
         for (Simbolo simbolo : tabla.values()) {
             if (simbolo.getNombre().equals(nombre)) {
@@ -67,19 +106,29 @@ public class TablaSimbolos {
         return null;
     }
 
-    // Método para obtener un símbolo existente de la tabla
+    /**
+     * Obtiene el número de entradas en la tabla de símbolos.
+     * 
+     * @return El número de entradas en la tabla.
+     */
     public Integer numeroEntradas() {
         return tabla.size();
     }
 
-    public Map<Integer, Simbolo> getTabla() {
-        return this.tabla;
-    }
-
+    /**
+     * Obtiene el número identificador de la tabla de símbolos.
+     * 
+     * @return El número identificador de la tabla.
+     */
     public Integer getNumeroTabla() {
         return this.numeroTabla;
     }
 
+    /**
+     * Imprime el contenido de la tabla de símbolos.
+     * 
+     * @return Una cadena que representa el contenido de la tabla de símbolos.
+     */
     public String imprimirTabla() {
 
         StringBuilder sb = new StringBuilder();
@@ -117,7 +166,6 @@ public class TablaSimbolos {
                 sb.append("\n+ despl: ");
                 sb.append(desplazamientoSimbolo);
             } else {
-
                 Integer numParam = simbolo.getNumeroParametros();
                 List<Tipo> parametros = simbolo.getTipoParametros();
                 List<Modo> modoParametros = simbolo.getModoPaso();

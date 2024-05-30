@@ -2,76 +2,139 @@ package tablaSimbolos;
 
 import java.util.List;
 import java.util.Stack;
+
+import util.GestorErrores;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+/**
+ * Clase GestorTablas que gestiona las tablas de símbolos en un compilador.
+ */
 public class GestorTablas {
 
-    private static List<TablaSimbolos> tablas = new ArrayList<>();
-    private static int indiceTabla = -1;
-    private static int numeroTabla = -1;
+    private List<TablaSimbolos> tablas;
+    private int indiceTabla;
+    private int numeroTabla;
+
+    // Variables booleanas que indican si estamos en zonas especiales
+    private Boolean zonaParametros;
+    private Boolean zonaDeclaracion;
 
     // Simbolos que aún no tienen un tipo asignado (FIFO)
-    private static LinkedList<Simbolo> simbolosSinTipo = new LinkedList<>();
+    private LinkedList<Simbolo> simbolosSinTipo;
 
     // Ultimos simbolos insertados en la tabla (LIFO)
-    private static Stack<Simbolo> ultimosSimbolos = new Stack<>();
+    private Stack<Simbolo> ultimosSimbolos;
 
-    private static StringBuilder impresionTabla = new StringBuilder();
+    private StringBuilder impresionTabla;
 
-    private static Boolean zonaParametros = false;
-    private static Boolean zonaDeclaracion = false;
+    // Instancia única de la clase
+    private static GestorTablas instancia;
 
+    /**
+     * Constructor privado para evitar la creación de instancias.
+     */
     private GestorTablas() {
+        tablas = new ArrayList<>();
+        indiceTabla = -1;
+        numeroTabla = -1;
+        simbolosSinTipo = new LinkedList<>();
+        ultimosSimbolos = new Stack<>();
+        impresionTabla = new StringBuilder();
+        zonaParametros = false;
+        zonaDeclaracion = false;
     }
 
-    public static void nuevaTabla() {
+    /**
+     * Devuelve la instancia única de la clase.
+     * Si la instancia no ha sido creada aún, la crea.
+     * 
+     * @return La instancia única de GestorTablas.
+     */
+    public static synchronized GestorTablas getInstance() {
+        if (instancia == null) {
+            instancia = new GestorTablas();
+        }
+        return instancia;
+    }
+
+    /**
+     * Crea una nueva tabla de símbolos y la añade a la lista de tablas.
+     */
+    public void nuevaTabla() {
         tablas.add(new TablaSimbolos(numeroTabla));
         indiceTabla++;
         numeroTabla++;
     }
 
-    public static void destruirTabla() throws IllegalStateException {
+    /**
+     * Destruye la tabla de símbolos actual y la elimina de la lista de tablas.
+     * 
+     * @throws IllegalStateException si no hay tablas para destruir.
+     */
+    public void destruirTabla() throws IllegalStateException {
         impresionTabla.append(tablas.get(indiceTabla).imprimirTabla());
         tablas.remove(indiceTabla);
         indiceTabla--;
     }
 
-    public static StringBuilder getImpresionTabla() {
-        return GestorTablas.impresionTabla;
+    /**
+     * Obtiene la impresión de la tabla de símbolos.
+     * 
+     * @return Un StringBuilder con la impresión de la tabla.
+     */
+    public StringBuilder getImpresionTabla() {
+        return this.impresionTabla;
     }
 
-    public static TablaSimbolos obtenerTablaActual() {
+    /**
+     * Obtiene la tabla de símbolos actual.
+     * 
+     * @return La tabla de símbolos actual.
+     */
+    public TablaSimbolos obtenerTablaActual() {
         return tablas.get(indiceTabla);
     }
 
-    public static TablaSimbolos obtenerTablaGlobal() {
+    /**
+     * Obtiene la tabla de símbolos global.
+     * 
+     * @return La tabla de símbolos global.
+     */
+    public TablaSimbolos obtenerTablaGlobal() {
         return tablas.get(0);
     }
 
-    public static void setUltimoSimbolo(Simbolo simbolo) {
+    /**
+     * Añade a la lista de últimos símbolos añadidos un símbolo.
+     * Si el simbolo no tiene tipo, se añade a la lista de simbolos sin tipo.
+     * 
+     * @param simbolo El símbolo a añadir.
+     */
+    public void setUltimoSimbolo(Simbolo simbolo) {
         ultimosSimbolos.push(simbolo);
 
-        if (simbolo.getTipo() == null) { // El problema está aqui
+        if (simbolo.getTipo() == null) {
             simbolosSinTipo.add(simbolo);
         }
     }
 
-    public static Simbolo getUltimoSimbolo() {
+    /**
+     * Obtiene el último símbolo insertado en la tabla.
+     * 
+     * @return El último símbolo insertado.
+     */
+    public Simbolo getUltimoSimbolo() {
         return ultimosSimbolos.pop();
     }
 
-    public static Simbolo getSimboloFuncion(String nombreFuncion) {
-        TablaSimbolos tablaGlobal = GestorTablas.obtenerTablaGlobal();
-        for (Simbolo simboloGlobal : tablaGlobal.getTabla().values()) {
-            if (nombreFuncion.equals(simboloGlobal.getNombre())) {
-                return simboloGlobal;
-            }
-        }
-        return null;
-    }
-
-    public static Simbolo getUltimoSimboloFuncion() {
+    /**
+     * Obtiene el último símbolo de función insertado en la tabla.
+     * 
+     * @return El último símbolo de función.
+     */
+    public Simbolo getUltimoSimboloFuncion() {
         Stack<Simbolo> tempStack = new Stack<>();
         Simbolo simbolo = null;
 
@@ -95,10 +158,15 @@ public class GestorTablas {
         return simbolo;
     }
 
-    public static Simbolo consumirSimboloSinTipo() throws IllegalStateException {
-
+    /**
+     * Consume y devuelve un símbolo sin tipo de la lista.
+     * 
+     * @return El símbolo sin tipo.
+     * @throws IllegalStateException si no hay símbolos sin tipo.
+     */
+    public Simbolo consumirSimboloSinTipo() {
         if (simbolosSinTipo.size() < 1) {
-            throw new IllegalStateException("se está redeclarando una variable");
+            GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_REDECLARADA);
         }
 
         Simbolo simboloSinTipo = null;
@@ -112,33 +180,61 @@ public class GestorTablas {
         return simboloSinTipo;
     }
 
-    public static Simbolo verPrimerSimboloSinTipo() throws IllegalStateException {
-
+    /**
+     * Verifica el primer símbolo sin tipo en la lista.
+     * 
+     * @return El primer símbolo sin tipo o null si no hay símbolos sin tipo.
+     */
+    public Simbolo verPrimerSimboloSinTipo() {
         if (simbolosSinTipo.size() < 1) {
             return null;
         }
 
-        Simbolo simboloSinTipo = simbolosSinTipo.get(0);
-        return simboloSinTipo;
+        return simbolosSinTipo.get(0);
     }
 
-    public static Boolean getZonaDeclaracion() {
+    /**
+     * Obtiene el estado de la zona de declaración.
+     * 
+     * @return true si está en zona de declaración, false en caso contrario.
+     */
+    public Boolean getZonaDeclaracion() {
         return zonaDeclaracion;
     }
 
-    public static void setZonaDeclaracion(Boolean value) {
+    /**
+     * Establece el estado de la zona de declaración.
+     * 
+     * @param value true para activar la zona de declaración, false para
+     *              desactivarla.
+     */
+    public void setZonaDeclaracion(Boolean value) {
         zonaDeclaracion = value;
     }
 
-    public static Boolean getZonaParametros() {
+    /**
+     * Obtiene el estado de la zona de parámetros.
+     * 
+     * @return true si está en zona de parámetros, false en caso contrario.
+     */
+    public Boolean getZonaParametros() {
         return zonaParametros;
     }
 
-    public static void setZonaParametros(Boolean value) {
+    /**
+     * Establece el estado de la zona de parámetros.
+     * 
+     * @param value true para activar la zona de parámetros, false para
+     *              desactivarla.
+     */
+    public void setZonaParametros(Boolean value) {
         zonaParametros = value;
     }
 
-    public static void resetGestorTablas() {
+    /**
+     * Reinicia el gestor de tablas a su estado inicial.
+     */
+    public void resetGestorTablas() {
         tablas = new ArrayList<>();
         indiceTabla = -1;
         numeroTabla = -1;
@@ -146,5 +242,6 @@ public class GestorTablas {
         ultimosSimbolos = new Stack<>();
         impresionTabla = new StringBuilder();
         zonaParametros = false;
+        zonaDeclaracion = false;
     }
 }

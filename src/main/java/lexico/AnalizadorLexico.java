@@ -2,7 +2,10 @@ package lexico;
 
 import java.util.*;
 
+import lexico.enums.EstadoFinal;
+import lexico.enums.EstadoTransito;
 import token.*;
+import util.GestorErrores;
 
 /**
  * Clase que implementa un analizador léxico para un lenguaje de programación.
@@ -21,15 +24,35 @@ public class AnalizadorLexico {
     // Generador de tokens en base a los estados y lexemas identificados
     private GeneradorToken generadorDeTokens;
 
+    // Instancia única de la clase
+    private static AnalizadorLexico instancia;
+
     /**
-     * Constructor que inicializa el analizador léxico.
+     * Constructor privado que inicializa el analizador léxico.
      * Inicializa un StringBuilder para el buffer de caracteres y crea instancias
      * de GestorEstados y GeneradorToken.
      */
-    public AnalizadorLexico() {
+    private AnalizadorLexico() {
         this.bufferCaracteres = new StringBuilder();
-        this.gestorEstados = new GestorEstados();
-        this.generadorDeTokens = new GeneradorToken();
+        this.gestorEstados = GestorEstados.getInstance();
+        this.generadorDeTokens = GeneradorToken.getInstance();
+    }
+
+    /**
+     * Devuelve la instancia única de la clase.
+     * Si la instancia no ha sido creada aún, la crea.
+     * 
+     * @return La instancia única de AnalizadorLexico.
+     */
+    public static AnalizadorLexico getInstance() {
+        if (instancia == null) {
+            synchronized (AnalizadorLexico.class) {
+                if (instancia == null) {
+                    instancia = new AnalizadorLexico();
+                }
+            }
+        }
+        return instancia;
     }
 
     /**
@@ -48,7 +71,11 @@ public class AnalizadorLexico {
             String lexema = bufferCaracteres.toString();
 
             // Actualiza el estado según el caracter actual entrante
-            gestorEstados.actualizarEstado(caracterPorProcesar, lexema);
+            try {
+                gestorEstados.actualizarEstado(caracterPorProcesar, lexema);
+            } catch (IllegalStateException e) {
+                GestorErrores.lanzarError(GestorErrores.TipoError.LEXICO, e.getMessage());
+            }
 
             // Generar token y almacenarlo si no es nulo
             Token token = generadorDeTokens.generarToken(

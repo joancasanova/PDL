@@ -4,7 +4,7 @@ Grammar
 
     1 P: B P
     2  | F P
-    3  |
+    3  | ε
 
     4 B: IF '(' E ')' S
     5  | WHILE '(' E ')' '{' C '}'
@@ -29,10 +29,10 @@ Grammar
    18  | VOID
 
    19 K: ',' T ID K
-   20  |
+   20  | ε
 
    21 C: B C
-   22  |
+   22  | ε
 
    23 E: E EQ_OP U
    24  | U
@@ -57,13 +57,13 @@ Grammar
    39  | RETURN Z ';'
 
    40 L: E Q
-   41  |
+   41  | ε
 
    42 Q: ',' E Q
-   43  |
+   43  | ε
 
    44 Z: E
-   45  |
+   45  | ε
 
 
 Terminals, with rules where they appear

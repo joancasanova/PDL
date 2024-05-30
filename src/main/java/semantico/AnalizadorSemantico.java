@@ -1,10 +1,16 @@
 package semantico;
 
 import tablaSimbolos.*;
+import tablaSimbolos.enums.Modo;
+import tablaSimbolos.enums.Tipo;
+import util.GestorErrores;
 
 import java.util.*;
 
 public class AnalizadorSemantico {
+
+    // Gestor de tablas de simbolos
+    private GestorTablas gestorTablas;
 
     private ArrayList<Tipo> tipoParametrosFuncion = new ArrayList<>();
     private ArrayList<Modo> modoPasoParametros = new ArrayList<>();
@@ -14,13 +20,30 @@ public class AnalizadorSemantico {
     private Boolean ifWhileEjecutado;
     private Tipo tipoReturnIfWhile;
 
+    // Instancia única de la clase
+    private static AnalizadorSemantico instancia;
+
     /**
-     * Constructor del analizador semántico.
+     * Constructor privado del analizador semántico.
      */
-    public AnalizadorSemantico() {
-        this.pilaTipos = new Stack<Tipo>();
+    private AnalizadorSemantico() {
+        this.gestorTablas = GestorTablas.getInstance();
+        this.pilaTipos = new Stack<>();
         this.returnEjecutado = false;
         this.ifWhileEjecutado = false;
+    }
+
+    /**
+     * Devuelve la instancia única de la clase.
+     * Si la instancia no ha sido creada aún, la crea.
+     *
+     * @return La instancia única de AnalizadorSemantico.
+     */
+    public static synchronized AnalizadorSemantico getInstance() {
+        if (instancia == null) {
+            instancia = new AnalizadorSemantico();
+        }
+        return instancia;
     }
 
     /**
@@ -30,7 +53,7 @@ public class AnalizadorSemantico {
      */
     public void procesarRegla(Integer numeroRegla) throws IllegalStateException, NullPointerException {
 
-        TablaSimbolos tablaActual = GestorTablas.obtenerTablaActual();
+        TablaSimbolos tablaActual = gestorTablas.obtenerTablaActual();
 
         Simbolo simbolo;
         Tipo tipoSimbolo, tipoSimboloE, tipoSimboloT, tipoSimboloS, tipoSimboloE1, tipoSimboloU, tipoSimboloV,
@@ -38,7 +61,7 @@ public class AnalizadorSemantico {
 
         switch (numeroRegla) {
             case 1: // Aceptar
-                GestorTablas.destruirTabla();
+                gestorTablas.destruirTabla();
                 break;
 
             case 2: // P: B P
@@ -63,7 +86,7 @@ public class AnalizadorSemantico {
                 tipoSimboloE = pilaTipos.pop();
 
                 if (!tipoSimboloE.equals(Tipo.BOOLEAN)) {
-                    throw new IllegalStateException("semantico: expresion deberia ser de tipo boolean");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPO_BOOLEAN);
                 }
 
                 if (returnEjecutado) {
@@ -77,7 +100,7 @@ public class AnalizadorSemantico {
             case 7: // B: LET ID T ;
                 tipoSimbolo = pilaTipos.pop();
 
-                simbolo = GestorTablas.consumirSimboloSinTipo();
+                simbolo = gestorTablas.consumirSimboloSinTipo();
                 asignarTipo(simbolo, tipoSimbolo, tablaActual);
                 pilaTipos.add(Tipo.OK);
 
@@ -88,11 +111,11 @@ public class AnalizadorSemantico {
                 tipoSimboloT = pilaTipos.pop();
 
                 if (tipoSimboloE == tipoSimboloT) {
-
-                    simbolo = GestorTablas.consumirSimboloSinTipo();
+                    simbolo = gestorTablas.consumirSimboloSinTipo();
                     asignarTipo(simbolo, tipoSimboloT, tablaActual);
                 } else {
-                    throw new IllegalStateException("semantico: los tipos no coinciden");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_TIPOS_NO_COINCIDEN);
                 }
                 pilaTipos.add(Tipo.OK);
 
@@ -128,8 +151,8 @@ public class AnalizadorSemantico {
                     if (!(tipoRetornoF1.equals(tipoRetornoC))) {
                         if (!(tipoRetornoF1.equals(Tipo.VOID) && tipoRetornoC == Tipo.OK)) {
                             if (ifWhileEjecutado && !(tipoRetornoF1.equals(tipoReturnIfWhile))) {
-                                throw new IllegalStateException(
-                                        "semantico: Tipo retorno de la funcion y tipo de funcion no coinciden");
+                                GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                                        GestorErrores.ERROR_TIPO_RETORNO_FUNCION);
                             }
                         }
                     }
@@ -137,16 +160,16 @@ public class AnalizadorSemantico {
 
                 // No hay problemas con los tipos devueltos
                 // Eliminar tabla de simbolos local
-                GestorTablas.destruirTabla();
+                gestorTablas.destruirTabla();
                 returnEjecutado = false;
                 ifWhileEjecutado = false;
                 break;
 
             case 14: // F1: F2 ( A )
-                GestorTablas.setZonaParametros(false);
+                gestorTablas.setZonaParametros(false);
 
                 // Obtener el simbolo de la funcion y asignar el numero de parametros y tipos
-                simbolo = GestorTablas.getUltimoSimboloFuncion();
+                simbolo = gestorTablas.getUltimoSimboloFuncion();
                 simbolo.setNumeroParametros((Integer) tipoParametrosFuncion.size());
 
                 Collections.reverse(tipoParametrosFuncion);
@@ -161,16 +184,16 @@ public class AnalizadorSemantico {
                 break;
 
             case 15: // F2: FUNCTION ID H
-                GestorTablas.setZonaParametros(true);
-                GestorTablas.nuevaTabla();
+                gestorTablas.setZonaParametros(true);
+                gestorTablas.nuevaTabla();
                 returnEjecutado = false;
                 ifWhileEjecutado = false;
 
                 tipoSimbolo = pilaTipos.peek();
-                simbolo = GestorTablas.consumirSimboloSinTipo();
+                simbolo = gestorTablas.consumirSimboloSinTipo();
                 simbolo.setNumeroParametros(0);
                 simbolo.setTipoRetorno(tipoSimbolo);
-                asignarTipo(simbolo, tipoSimbolo, GestorTablas.obtenerTablaGlobal());
+                asignarTipo(simbolo, tipoSimbolo, gestorTablas.obtenerTablaGlobal());
                 break;
 
             case 17: // H: VOID
@@ -182,7 +205,7 @@ public class AnalizadorSemantico {
 
                 tipoSimbolo = pilaTipos.pop();
 
-                simbolo = GestorTablas.consumirSimboloSinTipo();
+                simbolo = gestorTablas.consumirSimboloSinTipo();
                 asignarTipo(simbolo, tipoSimbolo, tablaActual);
 
                 // Añadir a ambas listas los tipos de los parametros
@@ -196,8 +219,8 @@ public class AnalizadorSemantico {
                 TipoRetornoB = pilaTipos.pop();
 
                 if (TipoRetornoB != Tipo.OK && TipoRetornoC != Tipo.OK) {
-                    throw new IllegalStateException(
-                            "semantico: Hay un error con el tipo de retorno de la función");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_TIPO_RETORNO_FUNCION);
                 } else {
                     if (TipoRetornoB != Tipo.OK) {
                         pilaTipos.add(TipoRetornoB);
@@ -218,8 +241,8 @@ public class AnalizadorSemantico {
                 if (tipoSimboloE1 == tipoSimboloU && tipoSimboloE1.equals(Tipo.INT)) {
                     pilaTipos.add(Tipo.BOOLEAN);
                 } else {
-                    throw new IllegalStateException(
-                            "semantico: los tipos en la expresion de comparación no son compatibles");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_TIPOS_NO_COINCIDEN);
                 }
                 break;
 
@@ -228,12 +251,14 @@ public class AnalizadorSemantico {
                 tipoSimboloV = pilaTipos.pop();
 
                 if (tipoSimboloU1 == null || tipoSimboloV == null) {
-                    throw new IllegalStateException("semantico: se están utilizando variables sin declarar");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_VARIABLE_SIN_INICIALIZAR);
                 }
                 if (tipoSimboloU1 == tipoSimboloV && tipoSimboloU1.equals(Tipo.INT)) {
                     pilaTipos.add(Tipo.INT);
                 } else {
-                    throw new IllegalStateException("semantico: los tipos en la expresion no coinciden");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_TIPOS_NO_COINCIDEN);
                 }
                 break;
 
@@ -243,46 +268,47 @@ public class AnalizadorSemantico {
                 if (tipoSimbolo.equals(Tipo.BOOLEAN)) {
                     pilaTipos.add(Tipo.BOOLEAN);
                 } else {
-                    throw new IllegalStateException("semantico: los tipos en la expresion de negación no coinciden");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_TIPO_NO_COMPATIBLE);
                 }
                 break;
 
             case 30: // W: ID
-                simbolo = GestorTablas.getUltimoSimbolo();
+                simbolo = gestorTablas.getUltimoSimbolo();
                 if (simbolo.getTipo() == null) {
-                    throw new IllegalStateException("semantico: se está utilizando una variable sin inicializar");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_VARIABLE_SIN_INICIALIZAR);
                 }
                 pilaTipos.add(simbolo.getTipo());
                 break;
 
             case 31: // W: ( E )
-
                 tipoSimbolo = pilaTipos.pop();
 
                 if (tipoSimbolo.equals(Tipo.BOOLEAN)) {
-                    pilaTipos.add(Tipo.BOOLEAN);// Añado el simbolo W a al pila
+                    pilaTipos.add(Tipo.BOOLEAN);
                 } else if (tipoSimbolo.equals(Tipo.INT)) {
-                    pilaTipos.add(Tipo.INT);// Añado el simobolo W a la pila
+                    pilaTipos.add(Tipo.INT);
                 } else if (tipoSimbolo.equals(Tipo.STRING)) {
-                    pilaTipos.add(Tipo.STRING);// Añado el simobolo W a la pila
+                    pilaTipos.add(Tipo.STRING);
                 } else {
-                    throw new IllegalStateException("semantico en expresion-> W: (E) tipo de E incorrecto");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_TIPO_NO_COMPATIBLE);
                 }
                 break;
 
             case 32: // W: ID ( L )
-
                 int numeroParametros;
                 List<Tipo> parametrosFuncion;
                 Simbolo simboloFuncion = null;
 
                 // Buscar el simbolo de la funcion en la tabla anterior
-                simboloFuncion = GestorTablas.getUltimoSimboloFuncion();
+                simboloFuncion = gestorTablas.getUltimoSimboloFuncion();
 
                 // Estamos llamando a una funcion no declarada
                 if (simboloFuncion == null) {
-                    throw new IllegalStateException(
-                            "semantico: se está haciendo una llamada con una funcion no declarada");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_LLAMADA_FUNCION_NO_DECLARADA);
                 }
 
                 // Dentro de la misma funcion
@@ -299,8 +325,8 @@ public class AnalizadorSemantico {
 
                 // Comparar que el numero de parametros coinciden
                 if (numeroParametros != listaDeParametros.size()) {
-                    throw new IllegalStateException(
-                            "semantico: el numero de parametros no corresponde con los de la funcion");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_NUMERO_PARAMETROS);
                 }
 
                 // Comparar que el tipo de parametros coinciden
@@ -310,11 +336,12 @@ public class AnalizadorSemantico {
                 int i = 0;
                 for (Tipo tipo : listaDeParametros) {
                     if (tipo == null) {
-                        throw new IllegalStateException("semantico: uno de los argumentos de la funcion no tiene tipo");
+                        GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                                GestorErrores.ERROR_TIPO_PARAMETROS);
                     }
                     if (!tipo.equals(parametrosFuncion.get(i))) {
-                        throw new IllegalStateException(
-                                "semantico: los tipos de los parametros no coinciden con los de la funcion");
+                        GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                                GestorErrores.ERROR_TIPO_PARAMETROS);
                     }
                     i++;
                 }
@@ -333,12 +360,12 @@ public class AnalizadorSemantico {
                 simboloFuncion = null;
 
                 // Buscar el simbolo de la funcion en la tabla anterior
-                simboloFuncion = GestorTablas.getUltimoSimboloFuncion();
+                simboloFuncion = gestorTablas.getUltimoSimboloFuncion();
 
                 // Estamos llamando a una funcion no declarada
                 if (simboloFuncion == null) {
-                    throw new IllegalStateException(
-                            "semantico: se está haciendo una llamada con una funcion no declarada");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_LLAMADA_FUNCION_NO_DECLARADA);
                 }
 
                 // Dentro de la misma funcion
@@ -355,8 +382,8 @@ public class AnalizadorSemantico {
 
                 // Comparar que el numero de parametros coinciden
                 if (numeroParametros != listaDeParametros.size()) {
-                    throw new IllegalStateException(
-                            "semantico: el numero de parametros no corresponde con los de la funcion");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_NUMERO_PARAMETROS);
                 }
 
                 // Comparar que el tipo de parametros coinciden
@@ -370,11 +397,12 @@ public class AnalizadorSemantico {
                 }
                 for (Tipo tipo : listaDeParametros) {
                     if (tipo == null) {
-                        throw new IllegalStateException("semantico: uno de los argumentos de la funcion no tiene tipo");
+                        GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                                GestorErrores.ERROR_TIPO_PARAMETROS);
                     }
                     if (!tipo.equals(parametrosFuncion.get(i))) {
-                        throw new IllegalStateException(
-                                "semantico: los tipos de los parametros no coinciden con los de la funcion");
+                        GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                                GestorErrores.ERROR_TIPO_PARAMETROS);
                     }
                     if (tablaActual.getNumeroTabla() != -1) {
                         i--;
@@ -406,21 +434,21 @@ public class AnalizadorSemantico {
             case 36: // S: ID += E ;
                 tipoSimboloE = pilaTipos.pop();
 
-                if (GestorTablas.verPrimerSimboloSinTipo() == null) {
-                    simbolo = GestorTablas.getUltimoSimbolo();
+                if (gestorTablas.verPrimerSimboloSinTipo() == null) {
+                    simbolo = gestorTablas.getUltimoSimbolo();
                 } else {
-                    simbolo = GestorTablas.verPrimerSimboloSinTipo();
+                    simbolo = gestorTablas.verPrimerSimboloSinTipo();
                 }
 
                 // Asignar el tipo INT al identificador sin inicializar explicitamente
                 // (inicialización implícita)
                 if (simbolo.getTipo() == null) {
-
-                    simbolo = GestorTablas.consumirSimboloSinTipo();
+                    simbolo = gestorTablas.consumirSimboloSinTipo();
                     asignarTipo(simbolo, Tipo.INT, tablaActual);
                 }
                 if (!tipoSimboloE.equals(simbolo.getTipo())) {
-                    throw new IllegalStateException("semantico: no coinciden los tipos de la asignación");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_TIPOS_NO_COINCIDEN);
                 }
 
                 pilaTipos.add(Tipo.OK);
@@ -434,22 +462,24 @@ public class AnalizadorSemantico {
                         || tipoSimboloE.equals(Tipo.STRING)) {
                     pilaTipos.add(Tipo.OK);// Añado el simbolo S a la pila
                 } else {
-                    throw new IllegalStateException("semantico: tipo incorrecto para put");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_TIPO_NO_COMPATIBLE);
                 }
                 break;
 
             case 39: // S: GET ID ;
-                simbolo = GestorTablas.getUltimoSimbolo();
+                simbolo = gestorTablas.getUltimoSimbolo();
 
                 if (simbolo.getTipo() == null) {
-                    throw new IllegalStateException("semantico: variable no inicializada en la expresion S: GET ID;");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_VARIABLE_SIN_INICIALIZAR);
                 }
 
                 if (simbolo.getTipo().equals(Tipo.INT) || simbolo.getTipo().equals(Tipo.STRING)) {
-                    pilaTipos.add(simbolo.getTipo());// S tiene el simbolo de id
+                    pilaTipos.add(simbolo.getTipo());
                 } else {
-                    throw new IllegalStateException(
-                            "semantico en expresion-> S: GET ID; tipo de id no es valido, debe ser entero o string");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_TIPO_NO_COMPATIBLE);
                 }
                 break;
 
@@ -460,8 +490,8 @@ public class AnalizadorSemantico {
                 ifWhileEjecutado = true;
 
                 if (tipoSimbolo == null) {
-                    throw new IllegalStateException(
-                            "semantico: variable no inicializada en la expresion S: RETURN Z;");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_VARIABLE_SIN_INICIALIZAR);
                 }
 
                 break;
@@ -477,15 +507,14 @@ public class AnalizadorSemantico {
 
             default:
                 // Manejo de reglas no implementadas o desconocidas
-                throw new IllegalStateException("semantico: regla no implementada");
+                GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_REGLA_NO_IMPLEMENTADA);
         }
-
     }
 
     private void asignarTipo(Simbolo simbolo, Tipo tipoSimbolo, TablaSimbolos tabla) throws IllegalStateException {
         try {
             if (simbolo.getTipo() != null) {
-                throw new IllegalStateException("se está redeclarando una variable");
+                GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_REDECLARADA);
             }
 
             // Asignar atributos al simbolo
@@ -500,13 +529,22 @@ public class AnalizadorSemantico {
             } else if (tipoSimbolo.equals(Tipo.VOID)) {
                 simbolo.setAncho(0);
             } else {
-                throw new IllegalStateException("tipo no aceptado");
+                GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPO_NO_COMPATIBLE);
             }
 
             tabla.setDesplazamiento(tabla.getDesplazamiento() + simbolo.getAncho());
         } catch (Exception e) {
-            throw new IllegalStateException("semantico: " + e.getLocalizedMessage());
+            GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, e.getLocalizedMessage());
         }
     }
 
+    /**
+     * Reinicia el analizador semantico a su estado inicial.
+     */
+    public void resetAnalizadorSemantico() {
+        this.gestorTablas = GestorTablas.getInstance();
+        this.pilaTipos = new Stack<>();
+        this.returnEjecutado = false;
+        this.ifWhileEjecutado = false;
+    }
 }

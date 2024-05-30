@@ -3,22 +3,26 @@ package lexico;
 import java.util.ArrayList;
 import java.util.List;
 
+import lexico.enums.EstadoFinal;
 import tablaSimbolos.GestorTablas;
 import tablaSimbolos.Simbolo;
 import tablaSimbolos.TablaSimbolos;
 import token.*;
+import util.GestorErrores;
 
 /**
  * Clase GeneradorToken que se encarga de generar tokens en base a los estados
- * finales
- * y caracteres actuales durante el análisis léxico.
+ * finales y caracteres actuales durante el análisis léxico.
  */
 public class GeneradorToken {
 
     // Token generado
     private Token token;
 
-    // Simbolos a la espera de ser enviados
+    // Gestor de tablas de simbolos
+    private GestorTablas gestorTablas;
+
+    // Simbolos a la espera de ser enviados a Tabla de Simbolos
     private List<Simbolo> simbolosPorEnviar;
 
     // Ultimo token es PUNTOyCOMA
@@ -30,12 +34,33 @@ public class GeneradorToken {
     // Máximo valor para una constante entera
     private static final int MAX_VALOR_ENTERO = 32767;
 
+    // Instancia única de la clase
+    private static GeneradorToken instancia;
+
     /**
-     * Constructor por defecto de GeneradorToken.
+     * Constructor privado por defecto de GeneradorToken.
      */
-    public GeneradorToken() {
-        ultimoTokenPuntoComa = false;
-        simbolosPorEnviar = new ArrayList<>();
+    private GeneradorToken() {
+        this.gestorTablas = GestorTablas.getInstance();
+        this.ultimoTokenPuntoComa = false;
+        this.simbolosPorEnviar = new ArrayList<>();
+    }
+
+    /**
+     * Devuelve la instancia única de la clase.
+     * Si la instancia no ha sido creada aún, la crea.
+     * 
+     * @return La instancia única de GeneradorToken.
+     */
+    public static GeneradorToken getInstance() {
+        if (instancia == null) {
+            synchronized (GeneradorToken.class) {
+                if (instancia == null) {
+                    instancia = new GeneradorToken();
+                }
+            }
+        }
+        return instancia;
     }
 
     /**
@@ -54,8 +79,6 @@ public class GeneradorToken {
             throws IllegalStateException {
 
         token = null;
-        TablaSimbolos tablaActual = GestorTablas.obtenerTablaActual();
-        TablaSimbolos tablaGlobal = GestorTablas.obtenerTablaGlobal();
 
         switch (estadoFinal) {
             case PENDIENTE:
@@ -64,141 +87,197 @@ public class GeneradorToken {
                 break;
 
             case FINDEFICHERO:
-                token = new Token(TokenType.FINDEFICHERO, "");
-                break;
-
             case NEGACION:
-                token = new Token(TokenType.NEGACION, "");
-                break;
-
             case COMA:
-                token = new Token(TokenType.COMA, "");
-                break;
-
             case PUNTOCOMA:
-                token = new Token(TokenType.PUNTOCOMA, "");
-                break;
-
             case ABREPARENTESIS:
-                token = new Token(TokenType.ABREPARENTESIS, "");
-                break;
-
             case CIERRAPARENTESIS:
-                token = new Token(TokenType.CIERRAPARENTESIS, "");
-                break;
-
             case ABRECORCHETE:
-                token = new Token(TokenType.ABRECORCHETE, "");
-                break;
-
             case CIERRACORCHETE:
-                token = new Token(TokenType.CIERRACORCHETE, "");
-                break;
-
             case COMPARADOR:
-                token = new Token(TokenType.COMPARADOR, "");
-                break;
-
             case ASIGNACION:
-                token = new Token(TokenType.ASIGNACION, "");
-                break;
-
             case ASIGNACIONSUMA:
-                token = new Token(TokenType.ASIGNACIONSUMA, "");
-                break;
-
             case SUMA:
-                token = new Token(TokenType.SUMA, "");
+                token = crearTokenSimple(estadoFinal);
                 break;
 
             case PALABRARESERVADA:
-                if (!lexema.chars().allMatch(Character::isLowerCase)) {
-                    throw new IllegalStateException(
-                            "léxico: Las palabras reservadas deben ser escritas en minúsculas: " + lexema);
-                }
-                token = new Token(TokenType.PALABRARESERVADA, lexema);
+                validarPalabraReservada(lexema);
+                token = new Token(TipoToken.PALABRARESERVADA, lexema);
                 break;
 
             case IDENTIFICADOR:
-                String nombre = lexema;
-                Simbolo simbolo = null;
-                Integer posicionTS = null;
-
-                // Obtener simbolo de tabla actual
-                if (tablaActual.simboloExiste(nombre)) {
-                    simbolo = tablaActual.obtenerSimboloPorNombre(nombre);
-                    posicionTS = tablaActual.obtenerPosicionSimbolo(simbolo);
-
-                }
-
-                // Si no está, comprobar tabla global
-                else if (tablaGlobal.simboloExiste(nombre)
-                        && !GestorTablas.getZonaDeclaracion()
-                        && !GestorTablas.getZonaParametros()) {
-                    simbolo = tablaGlobal.obtenerSimboloPorNombre(nombre);
-                    posicionTS = tablaGlobal.obtenerPosicionSimbolo(simbolo);
-                }
-
-                // Si no está en ninguna tabla, crear e insertar en tabla actual
-                else {
-                    simbolo = new Simbolo(null, nombre, null, null);
-                    posicionTS = tablaActual.numeroEntradas();
-                    tablaActual.agregarSimbolo(posicionTS, simbolo);
-                }
-
-                // Establecer símbolo como pendiente de gestionar
-                if (!ultimoTokenPuntoComa) {
-                    GestorTablas.setUltimoSimbolo(simbolo);
-                } else {
-                    simbolosPorEnviar.add(simbolo);
-                }
-
-                token = new Token(TokenType.ID, posicionTS);
-
+                token = procesarIdentificador(lexema);
                 break;
 
             case CADENA:
-                if (lexema.length() - 2 >= MAX_CARACTERES_CADENA) {
-                    throw new IllegalStateException("léxico: Cadena demasiado larga: " + lexema);
-                }
-                if (lexema.contains("\n")) {
-                    throw new IllegalStateException("léxico: Cadena no puede contener salto de línea");
-                }
-                token = new Token(TokenType.CADENA, lexema);
+                validarCadena(lexema);
+                token = new Token(TipoToken.CADENA, lexema);
                 break;
 
             case ENTERO:
-                Integer valorEntero = Integer.valueOf(lexema);
-
-                // Se comprueba si el valor del entero no supera el valor máximo
-                if (valorEntero <= MAX_VALOR_ENTERO) {
-                    token = new Token(TokenType.ENTERO, valorEntero);
-                } else {
-                    throw new IllegalStateException(
-                            "léxico: Se ha superado el valor numérico máximo.\n Valor: " + valorEntero);
-                }
+                token = procesarEntero(lexema);
                 break;
+
+            default:
+                GestorErrores.lanzarError(GestorErrores.TipoError.LEXICO,
+                        GestorErrores.ESTADO_FINAL_NO_MANEJADO + estadoFinal);
         }
 
+        gestionarSimbolosPorEnviar();
+
+        actualizarZonaDeclaracion(token);
+
+        return token;
+    }
+
+    /**
+     * Crea un token simple basado en el estado final proporcionado.
+     * 
+     * @param estadoFinal El estado final alcanzado en el análisis léxico.
+     * @return El token creado.
+     */
+    private Token crearTokenSimple(EstadoFinal estadoFinal) {
+        return new Token(TipoToken.valueOf(estadoFinal.name()), "");
+    }
+
+    /**
+     * Valida que el lexema de una palabra reservada esté en minúsculas.
+     * 
+     * @param lexema El lexema a validar.
+     * @throws IllegalStateException Si la palabra reservada no está en minúsculas.
+     */
+    private void validarPalabraReservada(String lexema) throws IllegalStateException {
+        if (!lexema.chars().allMatch(Character::isLowerCase)) {
+            GestorErrores.lanzarError(GestorErrores.TipoError.LEXICO,
+                    GestorErrores.PALABRA_RESERVADA_MINUSCULAS + lexema);
+        }
+    }
+
+    /**
+     * Procesa un identificador, gestionando su simbolo en las tablas de símbolos.
+     * 
+     * @param lexema El lexema del identificador.
+     * @return El token del identificador.
+     */
+    private Token procesarIdentificador(String lexema) {
+        TablaSimbolos tablaActual = gestorTablas.obtenerTablaActual();
+        TablaSimbolos tablaGlobal = gestorTablas.obtenerTablaGlobal();
+        String nombre = lexema;
+        Simbolo simbolo;
+        Integer posicionTS;
+
+        simbolo = obtenerSimbolo(nombre, tablaActual, tablaGlobal);
+
+        // Establecer símbolo como pendiente de gestionar
         if (!ultimoTokenPuntoComa) {
-            for (Simbolo simboloPorEnviar : simbolosPorEnviar) {
-                GestorTablas.setUltimoSimbolo(simboloPorEnviar);
-            }
+            gestorTablas.setUltimoSimbolo(simbolo);
+        } else {
+            simbolosPorEnviar.add(simbolo);
+        }
+
+        posicionTS = tablaActual.obtenerPosicionSimbolo(simbolo);
+
+        return new Token(TipoToken.ID, posicionTS);
+    }
+
+    /**
+     * Obtiene el símbolo correspondiente al nombre del identificador, ya sea desde
+     * la tabla actual o la tabla global.
+     * 
+     * @param nombre      El nombre del identificador.
+     * @param tablaActual La tabla de símbolos actual.
+     * @param tablaGlobal La tabla de símbolos global.
+     * @return El símbolo correspondiente al identificador.
+     */
+    private Simbolo obtenerSimbolo(String nombre, TablaSimbolos tablaActual, TablaSimbolos tablaGlobal) {
+        Simbolo simbolo;
+
+        // Buscar simbolo en tabla actual
+        if (tablaActual.simboloExiste(nombre)) {
+            simbolo = tablaActual.obtenerSimboloPorNombre(nombre);
+        }
+
+        // Sino, buscar simbolo en tabla global
+        // (siempre que no se esté en una zona especial)
+        else if (tablaGlobal.simboloExiste(nombre)
+                && !gestorTablas.getZonaDeclaracion()
+                && !gestorTablas.getZonaParametros()) {
+            simbolo = tablaGlobal.obtenerSimboloPorNombre(nombre);
+        }
+
+        // Sino, crear un nuevo simbolo
+        else {
+            simbolo = new Simbolo(null, nombre, null, null);
+            tablaActual.agregarSimbolo(tablaActual.numeroEntradas(), simbolo);
+        }
+
+        return simbolo;
+    }
+
+    /**
+     * Valida que una cadena no exceda la longitud máxima y no contenga saltos de
+     * línea.
+     * 
+     * @param lexema La cadena a validar.
+     * @throws IllegalStateException Si la cadena es demasiado larga o contiene
+     *                               saltos de línea.
+     */
+    private void validarCadena(String lexema) throws IllegalStateException {
+        if (lexema.length() - 2 >= MAX_CARACTERES_CADENA) {
+            GestorErrores.lanzarError(GestorErrores.TipoError.LEXICO, GestorErrores.CADENA_LARGA + lexema);
+        }
+        if (lexema.contains("\n")) {
+            GestorErrores.lanzarError(GestorErrores.TipoError.LEXICO, GestorErrores.CADENA_SALTO_LINEA);
+        }
+    }
+
+    /**
+     * Procesa un entero, asegurando que no exceda el valor máximo permitido.
+     * 
+     * @param lexema El lexema que representa el entero.
+     * @return El token del entero.
+     * @throws IllegalStateException Si el entero excede el valor máximo permitido.
+     */
+    private Token procesarEntero(String lexema) throws IllegalStateException {
+        Integer valorEntero = Integer.valueOf(lexema);
+
+        // Se comprueba si el valor del entero no supera el valor máximo
+        if (valorEntero <= MAX_VALOR_ENTERO) {
+            return new Token(TipoToken.ENTERO, valorEntero);
+        } else {
+            GestorErrores.lanzarError(GestorErrores.TipoError.LEXICO, GestorErrores.ENTERO_MAXIMO + valorEntero);
+        }
+        return null;
+    }
+
+    /**
+     * Gestiona la lista de símbolos por enviar, estableciéndolos en la tabla de
+     * símbolos si es necesario.
+     */
+    private void gestionarSimbolosPorEnviar() {
+        if (!ultimoTokenPuntoComa) {
+            simbolosPorEnviar.forEach(gestorTablas::setUltimoSimbolo);
             simbolosPorEnviar.clear();
         }
+    }
 
+    /**
+     * Actualiza el estado de la zona de declaración según el tipo de token actual.
+     * 
+     * @param token El token procesado.
+     */
+    private void actualizarZonaDeclaracion(Token token) {
         if (token != null) {
-            if (token.getTipo().equals(TokenType.PALABRARESERVADA) && token.getAtributo().equals("let")) {
-                GestorTablas.setZonaDeclaracion(true);
+            if (TipoToken.PALABRARESERVADA.equals(token.getTipo()) && "let".equals(token.getAtributo())) {
+                gestorTablas.setZonaDeclaracion(true);
             }
-            if (token.getTipo() == TokenType.PUNTOCOMA || token.getTipo() == TokenType.ID) {
+            if (TipoToken.PUNTOCOMA.equals(token.getTipo()) || TipoToken.ID.equals(token.getTipo())) {
                 ultimoTokenPuntoComa = true;
-                GestorTablas.setZonaDeclaracion(false);
+                gestorTablas.setZonaDeclaracion(false);
             } else {
                 ultimoTokenPuntoComa = false;
             }
         }
-
-        return token;
     }
 }

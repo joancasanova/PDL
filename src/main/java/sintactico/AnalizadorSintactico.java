@@ -1,12 +1,14 @@
 package sintactico;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import sintactico.gramatica.ParserGramatica;
+import sintactico.accion.Accion;
+import sintactico.accion.AccionAceptar;
+import sintactico.accion.AccionReducir;
 import token.*;
+import util.GestorErrores;
 
 /**
  * Clase AnalizadorSintactico para procesar tokens y aplicar reglas de análisis
@@ -14,21 +16,44 @@ import token.*;
  */
 public class AnalizadorSintactico {
 
-    private static ParserGramatica gramatica = new ParserGramatica();
+    private static ParserGramatica gramatica = ParserGramatica.getInstance();
 
-    private GestorPilas gestorPilas = new GestorPilas();
+    private GestorPilas gestorPilas;
     private Boolean aceptado;
 
+    // Instancia única de la clase
+    private static AnalizadorSintactico instancia;
+
     /**
-     * Constructor del analizador sintáctico.
-     * 
-     * @throws IOException
+     * Constructor privado del analizador sintáctico para evitar la creación de
+     * instancias.
      */
-    public AnalizadorSintactico() {
+    private AnalizadorSintactico() {
         this.aceptado = false;
-        gestorPilas = new GestorPilas();
+        gestorPilas = GestorPilas.getInstance();
     }
 
+    /**
+     * Devuelve la instancia única de la clase.
+     * Si la instancia no ha sido creada aún, la crea.
+     * 
+     * @return La instancia única de AnalizadorSintactico.
+     */
+    public static synchronized AnalizadorSintactico getInstance() {
+        if (instancia == null) {
+            instancia = new AnalizadorSintactico();
+        }
+        return instancia;
+    }
+
+    /**
+     * Procesa un token y aplica las reglas sintácticas correspondientes.
+     * 
+     * @param token El token a procesar.
+     * @return Lista de reglas aplicadas durante el procesamiento.
+     * @throws IllegalStateException Si se encuentra un error en el análisis
+     *                               sintáctico.
+     */
     public List<Integer> procesarToken(Token token) throws IllegalStateException {
         List<Integer> reglasAplicadas = new ArrayList<>();
         while (true) {
@@ -60,30 +85,46 @@ public class AnalizadorSintactico {
         return reglasAplicadas;
     }
 
+    /**
+     * Obtiene la acción correspondiente a un token y un estado.
+     * 
+     * @param textoToken El texto del token.
+     * @param estadoCima El estado en la cima de la pila.
+     * @return La acción correspondiente.
+     * @throws IllegalStateException Si no se encuentra una acción válida.
+     */
     private Accion obtenerAccion(String textoToken, Integer estadoCima) throws IllegalStateException {
         Map<String, Accion> accionesEstado = gramatica.getTablaAccion().get(estadoCima);
         Accion accion = accionesEstado.getOrDefault(textoToken, accionesEstado.get("$DEFAULT"));
 
         if (accion == null) {
-            throw new IllegalStateException(
-                    "sintáctico: Error de análisis sintáctico en el token " + textoToken);
+            GestorErrores.lanzarError(
+                    GestorErrores.TipoError.SINTACTICO,
+                    GestorErrores.ERROR_TOKEN_NO_ESPERADO + textoToken);
         }
 
         return accion;
     }
 
     /**
-     * Obtiene el token procesado en la posición actual del análisis.
-     * Si se alcanza el final de la lista de tokens, devuelve el token especial
-     * FIN_DE_FICHERO.
-     *
-     * @param indiceTokenActual Índice del token actual en la lista de tokens.
-     * @return El token procesado en forma de cadena.
+     * Obtiene el contenido del token procesado en la posición actual del análisis.
+     * Si el token es una palabra reservada, devuelve su atributo en mayúsculas.
+     * 
+     * @param token El token a procesar.
+     * @return El contenido del token.
      */
     private String obtenerContenidoToken(Token token) {
-
         // Se devuelve el tipo o el atributo dependiendo de si es palabra reservada
-        return token.getTipo().equals(TokenType.PALABRARESERVADA) ? String.valueOf(token.getAtributo()).toUpperCase()
+        return token.getTipo().equals(TipoToken.PALABRARESERVADA) ? String.valueOf(token.getAtributo()).toUpperCase()
                 : String.valueOf(token.getTipo()).toUpperCase();
+    }
+
+    /**
+     * Reinicia el analizador sintactico a su estado inicial.
+     */
+    public void resetAnalizadorSintactico() {
+        this.aceptado = false;
+        gestorPilas.resetGestorPilas();
+        gestorPilas = GestorPilas.getInstance();
     }
 }

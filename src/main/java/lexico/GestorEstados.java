@@ -1,9 +1,13 @@
 package lexico;
 
+import lexico.enums.EstadoFinal;
+import lexico.enums.EstadoTransito;
+import lexico.enums.PalabraReservada;
+import util.GestorErrores;
+
 /**
  * Clase GestorEstados que maneja los estados de transición y los estados
- * finales
- * durante el análisis léxico de un conjunto de caracteres.
+ * finales durante el análisis léxico de un conjunto de caracteres.
  */
 public class GestorEstados {
 
@@ -13,13 +17,33 @@ public class GestorEstados {
     // Estado final alcanzado tras el análisis de una serie de caracteres.
     private EstadoFinal estadoFinal;
 
+    // Instancia única de la clase
+    private static GestorEstados instancia;
+
     /**
-     * Constructor de GestorEstados. Inicializa el estado de transición y el estado
-     * final.
+     * Constructor privado de GestorEstados. Inicializa el estado de transición y
+     * el estado final.
      */
-    public GestorEstados() {
+    private GestorEstados() {
         this.estadoTransito = EstadoTransito.INICIO;
         this.estadoFinal = EstadoFinal.PENDIENTE;
+    }
+
+    /**
+     * Devuelve la instancia única de la clase.
+     * Si la instancia no ha sido creada aún, la crea.
+     * 
+     * @return La instancia única de GestorEstados.
+     */
+    public static GestorEstados getInstance() {
+        if (instancia == null) {
+            synchronized (GestorEstados.class) {
+                if (instancia == null) {
+                    instancia = new GestorEstados();
+                }
+            }
+        }
+        return instancia;
     }
 
     /**
@@ -53,7 +77,6 @@ public class GestorEstados {
         estadoFinal = EstadoFinal.PENDIENTE;
 
         switch (estadoTransito) {
-
             case INICIO:
                 procesarEstadoInicial(charActual);
                 break;
@@ -62,7 +85,8 @@ public class GestorEstados {
                 if (charActual == '/') {
                     estadoTransito = EstadoTransito.TEXTOCOMENTARIO;
                 } else {
-                    throw new IllegalStateException("léxico: Caracter no esperado. Se esperaba /.");
+                    GestorErrores.lanzarError(GestorErrores.TipoError.LEXICO,
+                            GestorErrores.CARACTER_NO_ESPERADO_COMENTARIO);
                 }
                 break;
 
@@ -185,10 +209,10 @@ public class GestorEstados {
                 } else if (Character.isWhitespace(charActual) || charActual == '\t' || charActual == '\n') {
                     // Permanecer en el estado inicial
                 } else {
-                    throw new IllegalStateException("léxico: Error al procesar el caracter actual: " + charActual);
+                    GestorErrores.lanzarError(GestorErrores.TipoError.LEXICO,
+                            GestorErrores.CARACTER_NO_ESPERADO + charActual);
                 }
                 break;
         }
     }
-
 }
