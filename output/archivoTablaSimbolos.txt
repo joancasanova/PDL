@@ -1,51 +1,24 @@
-CONTENIDOS DE LA TABLA #0:
+CONTENIDOS DE LA TABLA #1:
 
 *	LEXEMA	:	'x'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 0
++ despl: 2
 *	LEXEMA	:	'y'
 Atributos: 
-+ tipo: 'INT'	
-+ despl: 2
-*	LEXEMA	:	'z'
++ tipo: 'BOOLEAN'	
++ despl: 0
+
+CONTENIDOS DE LA TABLA #0:
+
+*	LEXEMA	:	'factorial'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 4
-*	LEXEMA	:	'a'
-Atributos: 
-+ tipo: 'INT'	
-+ despl: 6
-*	LEXEMA	:	'b'
-Atributos: 
-+ tipo: 'INT'	
-+ despl: 8
-*	LEXEMA	:	'c'
-Atributos: 
-+ tipo: 'INT'	
-+ despl: 10
-*	LEXEMA	:	'd'
-Atributos: 
-+ tipo: 'INT'	
-+ despl: 12
-*	LEXEMA	:	'e'
-Atributos: 
-+ tipo: 'INT'	
-+ despl: 14
-*	LEXEMA	:	'f'
-Atributos: 
-+ tipo: 'INT'	
-+ despl: 16
-*	LEXEMA	:	'h'
-Atributos: 
-+ tipo: 'INT'	
-+ despl: 18
-*	LEXEMA	:	'i'
-Atributos: 
-+ tipo: 'INT'	
-+ despl: 20
-*	LEXEMA	:	'k'
-Atributos: 
-+ tipo: 'INT'	
-+ despl: 22
++ numParam: '2'	
++ TipoParam0: 'BOOLEAN'	
++ ModoParam0: 'VALOR'	
++ TipoParam1: 'INT'	
++ ModoParam1: 'VALOR'	
++ TipoRetorno: 'INT'	
++ EtiqFuncion: 'factorial'	
 

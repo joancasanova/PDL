@@ -27,7 +27,8 @@ public class AccionDesplazar extends Accion {
      * @return Siempre retorna null, ya que no aplica una regla.
      */
     @Override
-    public Integer ejecutar(GestorPilas gestorPilas) {
+    public Integer ejecutar() {
+        GestorPilas gestorPilas = GestorPilas.getInstance();
         gestorPilas.getPilaEstados().push(estado);
         gestorPilas.getPilaSimbolos().push(token);
         return null;

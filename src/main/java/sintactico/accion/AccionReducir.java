@@ -27,11 +27,12 @@ public class AccionReducir extends Accion {
     /**
      * Ejecuta la acción de reducción sobre el gestor de pilas.
      * 
-     * @param gestorPilas El gestor de pilas que maneja los estados y símbolos.
      * @return El número de la regla aplicada incrementado en uno.
      */
     @Override
-    public Integer ejecutar(GestorPilas gestorPilas) {
+    public Integer ejecutar() {
+
+        GestorPilas gestorPilas = GestorPilas.getInstance();
 
         // Desapila la cantidad calculada de estados de una sola vez
         int i = numeroDesapilar;

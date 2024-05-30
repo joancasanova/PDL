@@ -215,4 +215,12 @@ public class GestorEstados {
                 break;
         }
     }
+
+    /**
+     * Reinicia el GestorEstados a su estado inicial.
+     */
+    public void resetGestorEstados() {
+        this.estadoTransito = EstadoTransito.INICIO;
+        this.estadoFinal = EstadoFinal.PENDIENTE;
+    }
 }

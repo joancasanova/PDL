@@ -1,6 +1,5 @@
 package tablaSimbolos;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import tablaSimbolos.enums.Modo;
@@ -155,7 +154,7 @@ public class Simbolo {
      * 
      * @param tipoParametros La lista de tipos de los parámetros del símbolo.
      */
-    public void setTipoParametros(ArrayList<Tipo> tipoParametros) {
+    public void setTipoParametros(List<Tipo> tipoParametros) {
         this.tipoParametros = tipoParametros;
     }
 
@@ -175,7 +174,7 @@ public class Simbolo {
      * 
      * @param modoPaso La lista de modos de paso de los parámetros del símbolo.
      */
-    public void setModoPaso(ArrayList<Modo> modoPaso) {
+    public void setModoPaso(List<Modo> modoPaso) {
         this.modoPaso = modoPaso;
     }
 }

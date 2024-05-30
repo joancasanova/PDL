@@ -113,4 +113,15 @@ public class AnalizadorLexico {
                 estado == EstadoFinal.IDENTIFICADOR || estado == EstadoFinal.ENTERO ||
                 estado == EstadoFinal.PALABRARESERVADA);
     }
+
+    /**
+     * Reinicia el AnalizadorLexico a su estado inicial.
+     */
+    public void resetAnalizadorLexico() {
+        this.bufferCaracteres = new StringBuilder();
+        gestorEstados.resetGestorEstados();
+        generadorDeTokens.resetGeneradorToken();
+        this.gestorEstados = GestorEstados.getInstance();
+        this.generadorDeTokens = GeneradorToken.getInstance();
+    }
 }

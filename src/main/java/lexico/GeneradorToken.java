@@ -280,4 +280,13 @@ public class GeneradorToken {
             }
         }
     }
+
+    /**
+     * Reinicia el GeneradorToken a su estado inicial.
+     */
+    public void resetGeneradorToken() {
+        this.gestorTablas = GestorTablas.getInstance();
+        this.ultimoTokenPuntoComa = false;
+        this.simbolosPorEnviar = new ArrayList<>();
+    }
 }

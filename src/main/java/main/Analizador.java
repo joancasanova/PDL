@@ -13,19 +13,19 @@ public class Analizador {
         }
 
         String rutaArchivo = args[0];
-        GestorEntrada gestorArchivo = GestorEntrada.getInstance();
         try {
-            FileReader fichero = gestorArchivo.abrirArchivo(rutaArchivo);
+            FileReader fichero = new FileReader(rutaArchivo);
             GestorAnalisis gestorAnalisis = GestorAnalisis.getInstance();
             gestorAnalisis.procesarFichero(fichero);
             System.out.println(
                     "Análisis completo. Se han generado los archivos de tokens, reglas, y tabla de símbolos.");
+            fichero.close();
+        } catch (IllegalStateException e) {
+            System.err.println(e);
         } catch (IOException e) {
             GestorErrores.lanzarError(GestorErrores.TipoError.GENERICO, "Error de entrada/salida: " + e.getMessage());
         } catch (Exception e) {
             GestorErrores.lanzarError(GestorErrores.TipoError.GENERICO, "Error inesperado: " + e.getMessage());
-        } finally {
-            gestorArchivo.cerrarArchivo();
         }
     }
 }

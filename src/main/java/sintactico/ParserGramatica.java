@@ -42,8 +42,7 @@ public class ParserGramatica {
         terminales = new HashSet<>();
         noTerminales = new HashSet<>();
 
-        String filePath = FILE_PATH;
-        generarTabla(filePath);
+        generarTabla(FILE_PATH);
     }
 
     /**
@@ -301,5 +300,18 @@ public class ParserGramatica {
      */
     public Map<Integer, Map<String, Integer>> getTablaGoTo() {
         return this.tablaGoTo;
+    }
+
+    /**
+     * Reinicia el Parser Gramatica a su estado inicial.
+     */
+    public void resetParserGramatica() {
+        tablaAccion = new HashMap<>();
+        tablaGoTo = new HashMap<>();
+        reglas = new HashMap<>();
+        terminales = new HashSet<>();
+        noTerminales = new HashSet<>();
+
+        generarTabla(FILE_PATH);
     }
 }

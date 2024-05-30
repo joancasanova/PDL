@@ -4,8 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import lexico.AnalizadorLexico;
+import semantico.AnalizadorSemantico;
+import sintactico.AnalizadorSintactico;
+import tablaSimbolos.GestorTablas;
+
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.io.ByteArrayOutputStream;
@@ -24,18 +32,26 @@ public class AnalizadorTest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
 
-    private void setUpStreams() {
+    @BeforeEach
+    public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
     }
 
-    private void restoreStreams() {
+    @AfterEach
+    public void restoreStreams() {
         System.setOut(originalOut);
         System.setErr(originalErr);
+        outContent.reset();
+        errContent.reset();
+        // Reiniciar singletons y cualquier otra configuración necesaria
+        GestorTablas.getInstance().resetGestorTablas();
+        AnalizadorSintactico.getInstance().resetAnalizadorSintactico();
+        AnalizadorLexico.getInstance().resetAnalizadorLexico();
+        AnalizadorSemantico.getInstance().resetAnalizadorSemantico();
     }
 
     private void runTest(String inputFile, boolean esCorrecto) throws IOException {
-        setUpStreams();
         try {
             Analizador.main(new String[] { inputFile });
             String output = outContent.toString();
@@ -60,8 +76,6 @@ public class AnalizadorTest {
                 fail("\n\nTest: " + inputFile + "\nNo se esperaba una excepción, pero se lanzó: "
                         + e.getLocalizedMessage());
             }
-        } finally {
-            restoreStreams();
         }
     }
 
@@ -80,5 +94,4 @@ public class AnalizadorTest {
     public void testFiles(String inputFile, boolean esCorrecto) throws IOException {
         runTest(inputFile, esCorrecto);
     }
-
 }

@@ -1,15 +1,12 @@
-x = 0;
-y = 1;
-z = x + y;
-
-let a int = 0;
-let b int = 1;
-let c int = a + b;
-
-let d int = 0;
-let e int = 1;
-let f int = d + 5;
-
-let h int = 1;
+function p1 int (int a) {
+    return a;
+}
+function p2 void (void) {
+}
+function p3 string (string a, int b) {
+    return a;
+}sad
 let i int = 0;
-let k int = h + i;
+p1 (5);           // llamada a una función con un argumento entero
+p2 ();            // llamada sin parámetros a una función
+p3 ("", i + 8);   // llamada con dos argumentos a una función

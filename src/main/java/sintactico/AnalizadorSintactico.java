@@ -16,8 +16,6 @@ import util.GestorErrores;
  */
 public class AnalizadorSintactico {
 
-    private static ParserGramatica gramatica = ParserGramatica.getInstance();
-
     private GestorPilas gestorPilas;
     private Boolean aceptado;
 
@@ -60,7 +58,7 @@ public class AnalizadorSintactico {
             String contenidoDeToken = obtenerContenidoToken(token);
             Accion accion = obtenerAccion(contenidoDeToken, gestorPilas.getPilaEstados().peek());
 
-            Integer reglaAplicada = accion.ejecutar(gestorPilas);
+            Integer reglaAplicada = accion.ejecutar();
             if (reglaAplicada != null) {
                 reglasAplicadas.add(reglaAplicada);
             }
@@ -94,7 +92,7 @@ public class AnalizadorSintactico {
      * @throws IllegalStateException Si no se encuentra una acción válida.
      */
     private Accion obtenerAccion(String textoToken, Integer estadoCima) throws IllegalStateException {
-        Map<String, Accion> accionesEstado = gramatica.getTablaAccion().get(estadoCima);
+        Map<String, Accion> accionesEstado = ParserGramatica.getInstance().getTablaAccion().get(estadoCima);
         Accion accion = accionesEstado.getOrDefault(textoToken, accionesEstado.get("$DEFAULT"));
 
         if (accion == null) {
@@ -124,6 +122,7 @@ public class AnalizadorSintactico {
      */
     public void resetAnalizadorSintactico() {
         this.aceptado = false;
+        ParserGramatica.getInstance().resetParserGramatica();
         gestorPilas.resetGestorPilas();
         gestorPilas = GestorPilas.getInstance();
     }

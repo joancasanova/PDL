@@ -60,6 +60,7 @@ public class GestorAnalisis {
      */
     public void procesarFichero(FileReader fichero) throws IOException {
         gestorTablas.nuevaTabla();
+        GestorErrores.iniciarLinea();
         List<Token> listaTokens = new ArrayList<>();
         List<Integer> listaReglas = new ArrayList<>();
 
@@ -83,7 +84,9 @@ public class GestorAnalisis {
         } while (!finDeFichero);
 
         GestorSalida.escribirSalida(listaTokens, listaReglas, gestorTablas.getImpresionTabla().toString());
+
         gestorTablas.resetGestorTablas();
+        analizadorLexico.resetAnalizadorLexico();
         analizadorSintactico.resetAnalizadorSintactico();
         analizadorSemantico.resetAnalizadorSemantico();
     }
