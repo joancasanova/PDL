@@ -12,18 +12,33 @@ import java.util.List;
  */
 public class GestorParametros {
 
+    private static GestorParametros instancia;
+
     private ArrayList<Tipo> tipoParametrosFuncion;
     private ArrayList<Modo> modoPasoParametros;
     private ArrayList<Tipo> listaDeParametros;
 
     /**
-     * Constructor de la clase GestorParametros.
+     * Constructor privado de la clase GestorParametros.
      * Inicializa las listas de tipos y modos de paso de los parámetros.
      */
-    public GestorParametros() {
+    private GestorParametros() {
         this.tipoParametrosFuncion = new ArrayList<>();
         this.modoPasoParametros = new ArrayList<>();
         this.listaDeParametros = new ArrayList<>();
+    }
+
+    /**
+     * Devuelve la instancia única de la clase.
+     * Si la instancia no ha sido creada aún, la crea.
+     *
+     * @return La instancia única de GestorParametros.
+     */
+    public static synchronized GestorParametros getInstance() {
+        if (instancia == null) {
+            instancia = new GestorParametros();
+        }
+        return instancia;
     }
 
     /**
@@ -82,16 +97,6 @@ public class GestorParametros {
     }
 
     /**
-     * Reinicia las listas de tipos y modos de paso de los parámetros a su estado
-     * inicial.
-     */
-    public void reset() {
-        tipoParametrosFuncion.clear();
-        modoPasoParametros.clear();
-        listaDeParametros.clear();
-    }
-
-    /**
      * Comprueba si la lista de tipos de parámetros de la función está vacía.
      *
      * @return true si la lista está vacía, false en caso contrario.
@@ -144,5 +149,15 @@ public class GestorParametros {
      */
     public List<Modo> getCopiaModoPasoParametros() {
         return new ArrayList<>(modoPasoParametros);
+    }
+
+    /**
+     * Reinicia las listas de tipos y modos de paso de los parámetros a su estado
+     * inicial.
+     */
+    public void reset() {
+        tipoParametrosFuncion.clear();
+        modoPasoParametros.clear();
+        listaDeParametros.clear();
     }
 }

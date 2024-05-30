@@ -60,10 +60,8 @@ public class AnalizadorLexico {
      * 
      * @param caracterPorProcesar Caracter a procesar.
      * @return Lista de tokens identificados tras procesar el caracter.
-     * @throws IllegalStateException Si se encuentran errores en el estado del
-     *                               analizador.
      */
-    public List<Token> procesarCaracter(Character caracterPorProcesar) throws IllegalStateException {
+    public List<Token> procesarCaracter(Character caracterPorProcesar) {
 
         List<Token> listaToken = new ArrayList<>();
 
@@ -71,11 +69,7 @@ public class AnalizadorLexico {
             String lexema = bufferCaracteres.toString();
 
             // Actualiza el estado según el caracter actual entrante
-            try {
-                gestorEstados.actualizarEstado(caracterPorProcesar, lexema);
-            } catch (IllegalStateException e) {
-                GestorErrores.lanzarError(GestorErrores.TipoError.LEXICO, e.getMessage());
-            }
+            gestorEstados.actualizarEstado(caracterPorProcesar, lexema);
 
             // Generar token y almacenarlo si no es nulo
             Token token = generadorDeTokens.generarToken(

@@ -35,7 +35,7 @@ public final class GestorErrores {
     public static final String ERROR_TIPO_RETORNO_FUNCION = "Tipo retorno de la función y tipo de función no coinciden";
     public static final String ERROR_NUMERO_PARAMETROS = "El número de parámetros no coinciden con los de la función";
     public static final String ERROR_TIPO_PARAMETROS = "El tipos de parámetros no coinciden con los de la función";
-    public static final String ERROR_REGLA_NO_IMPLEMENTADA = "Se ha recibido una regla no esperada";
+    public static final String ERROR_REGLA_NO_IMPLEMENTADA = "S ha recibido una regla no esperada";
 
     // Mensajes de error genéricos
     public static final String ESPECIFICAR_INPUT = "Por favor, especifique la ruta del archivo a analizar.";
@@ -58,7 +58,7 @@ public final class GestorErrores {
     }
 
     public static void iniciarLinea() {
-        linea = 0;
+        linea = 1;
     }
 
     public static void incrementarLinea() {

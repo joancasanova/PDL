@@ -5,6 +5,14 @@ import java.io.IOException;
 
 import util.GestorErrores;
 
+/**
+ * Clase principal del analizador que se encarga de procesar el archivo de
+ * entrada.
+ * 
+ * @autor Juan Francisco Casanova Ferrer
+ * @institution Universidad Politécnica de Madrid
+ * @contact juancasanovaferrer@gmail.com
+ */
 public class Analizador {
 
     public static void main(String[] args) {
@@ -21,7 +29,7 @@ public class Analizador {
                     "Análisis completo. Se han generado los archivos de tokens, reglas, y tabla de símbolos.");
             fichero.close();
         } catch (IllegalStateException e) {
-            System.err.println(e);
+            System.err.println(e.getLocalizedMessage());
         } catch (IOException e) {
             GestorErrores.lanzarError(GestorErrores.TipoError.GENERICO, "Error de entrada/salida: " + e.getMessage());
         } catch (Exception e) {

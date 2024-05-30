@@ -7,23 +7,46 @@ import util.GestorErrores;
 
 import java.util.*;
 
+/**
+ * Clase ProcesadorReglas que se encarga de procesar las reglas semánticas.
+ */
 public class ProcesadorReglas {
+
+    private static ProcesadorReglas instancia;
 
     private GestorTablas gestorTablas;
     private Stack<Tipo> pilaTipos;
     private GestorParametros gestorParametros;
-    private Boolean returnEjecutado;
-    private Boolean ifWhileEjecutado;
-    private Tipo tipoReturnIfWhile;
+    private EstadoSemantico estadoSemantico;
 
-    public ProcesadorReglas() {
+    /**
+     * Constructor privado para evitar la creación de instancias.
+     */
+    private ProcesadorReglas() {
         this.gestorTablas = GestorTablas.getInstance();
         this.pilaTipos = new Stack<>();
-        this.gestorParametros = new GestorParametros();
-        this.returnEjecutado = false;
-        this.ifWhileEjecutado = false;
+        this.gestorParametros = GestorParametros.getInstance();
+        this.estadoSemantico = EstadoSemantico.getInstance();
     }
 
+    /**
+     * Devuelve la instancia única de la clase.
+     * Si la instancia no ha sido creada aún, la crea.
+     *
+     * @return La instancia única de ProcesadorReglas.
+     */
+    public static synchronized ProcesadorReglas getInstance() {
+        if (instancia == null) {
+            instancia = new ProcesadorReglas();
+        }
+        return instancia;
+    }
+
+    /**
+     * Procesa una regla específica en función de su número.
+     *
+     * @param numeroRegla El número de la regla a procesar.
+     */
     public void procesarRegla(Integer numeroRegla) {
         switch (numeroRegla) {
             case 1: // Aceptar
@@ -138,23 +161,32 @@ public class ProcesadorReglas {
         }
     }
 
+    /**
+     * Procesa la regla de aceptación, destruyendo la tabla de símbolos actual.
+     */
     private void aceptar() {
         gestorTablas.destruirTabla();
     }
 
+    /**
+     * Procesa las reglas de estructuras de control IF y WHILE.
+     */
     private void procesarIfWhile() {
-        ifWhileEjecutado = true;
+        estadoSemantico.setIfWhileEjecutado(true);
         Tipo tipoSimboloS = pilaTipos.pop();
         Tipo tipoSimboloE = pilaTipos.pop();
         if (!tipoSimboloE.equals(Tipo.BOOLEAN)) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPO_BOOLEAN);
         }
-        if (returnEjecutado) {
-            tipoReturnIfWhile = tipoSimboloS;
+        if (estadoSemantico.getReturnEjecutado()) {
+            estadoSemantico.setTipoReturnIfWhile(tipoSimboloS);
         }
         pilaTipos.add(Tipo.OK);
     }
 
+    /**
+     * Procesa la declaración de una variable.
+     */
     private void procesarDeclaracion() {
         Tipo tipoSimbolo = pilaTipos.pop();
         Simbolo simbolo = gestorTablas.consumirSimboloSinTipo();
@@ -162,6 +194,9 @@ public class ProcesadorReglas {
         pilaTipos.add(Tipo.OK);
     }
 
+    /**
+     * Procesa la asignación de una variable.
+     */
     private void procesarAsignacion() {
         Tipo tipoSimboloE = pilaTipos.pop();
         Tipo tipoSimboloT = pilaTipos.pop();
@@ -174,6 +209,9 @@ public class ProcesadorReglas {
         pilaTipos.add(Tipo.OK);
     }
 
+    /**
+     * Procesa el retorno de una función.
+     */
     private void procesarRetorno() {
         Tipo tipoRetornoS = pilaTipos.pop();
         if (tipoRetornoS != null) {
@@ -181,13 +219,18 @@ public class ProcesadorReglas {
         }
     }
 
+    /**
+     * Procesa una función, verificando los tipos de retorno y destruyendo la tabla
+     * de símbolos.
+     */
     private void procesarFuncion() {
         Tipo tipoRetornoC = pilaTipos.pop();
         Tipo tipoRetornoF1 = pilaTipos.pop();
-        if (returnEjecutado) {
+        if (estadoSemantico.getReturnEjecutado()) {
             if (!(tipoRetornoF1.equals(tipoRetornoC))) {
                 if (!(tipoRetornoF1.equals(Tipo.VOID) && tipoRetornoC == Tipo.OK)) {
-                    if (ifWhileEjecutado && !(tipoRetornoF1.equals(tipoReturnIfWhile))) {
+                    if (estadoSemantico.getIfWhileEjecutado()
+                            && !(tipoRetornoF1.equals(estadoSemantico.getTipoReturnIfWhile()))) {
                         GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
                                 GestorErrores.ERROR_TIPO_RETORNO_FUNCION);
                     }
@@ -195,10 +238,13 @@ public class ProcesadorReglas {
             }
         }
         gestorTablas.destruirTabla();
-        returnEjecutado = false;
-        ifWhileEjecutado = false;
+        estadoSemantico.setReturnEjecutado(false);
+        estadoSemantico.setIfWhileEjecutado(false);
     }
 
+    /**
+     * Procesa los parámetros de una función, asignando tipos y modos de paso.
+     */
     private void procesarParametrosFuncion() {
         gestorTablas.setZonaParametros(false);
         Simbolo simbolo = gestorTablas.getUltimoSimboloFuncion();
@@ -208,11 +254,14 @@ public class ProcesadorReglas {
         gestorParametros.reset();
     }
 
+    /**
+     * Procesa la declaración de una función, creando una nueva tabla de símbolos.
+     */
     private void procesarFuncionID() {
         gestorTablas.setZonaParametros(true);
         gestorTablas.nuevaTabla();
-        returnEjecutado = false;
-        ifWhileEjecutado = false;
+        estadoSemantico.setReturnEjecutado(false);
+        estadoSemantico.setIfWhileEjecutado(false);
         Tipo tipoSimbolo = pilaTipos.peek();
         Simbolo simbolo = gestorTablas.consumirSimboloSinTipo();
         simbolo.setNumeroParametros(0);
@@ -220,6 +269,9 @@ public class ProcesadorReglas {
         asignarTipo(simbolo, tipoSimbolo, gestorTablas.obtenerTablaGlobal());
     }
 
+    /**
+     * Procesa los parámetros de una función.
+     */
     private void procesarParametros() {
         Tipo tipoSimbolo = pilaTipos.pop();
         Simbolo simbolo = gestorTablas.consumirSimboloSinTipo();
@@ -227,6 +279,9 @@ public class ProcesadorReglas {
         gestorParametros.addParametroFuncion(tipoSimbolo, Modo.VALOR);
     }
 
+    /**
+     * Procesa una secuencia de instrucciones.
+     */
     private void procesarSecuencia() {
         Tipo tipoRetornoC = pilaTipos.pop();
         Tipo tipoRetornoB = pilaTipos.pop();
@@ -241,6 +296,9 @@ public class ProcesadorReglas {
         }
     }
 
+    /**
+     * Procesa una comparación de igualdad.
+     */
     private void procesarComparacion() {
         Tipo tipoSimboloE1 = pilaTipos.pop();
         Tipo tipoSimboloU = pilaTipos.pop();
@@ -251,6 +309,9 @@ public class ProcesadorReglas {
         }
     }
 
+    /**
+     * Procesa una operación de suma.
+     */
     private void procesarSuma() {
         Tipo tipoSimboloU1 = pilaTipos.pop();
         Tipo tipoSimboloV = pilaTipos.pop();
@@ -264,6 +325,9 @@ public class ProcesadorReglas {
         }
     }
 
+    /**
+     * Procesa una negación lógica.
+     */
     private void procesarNegacion() {
         Tipo tipoSimbolo = pilaTipos.pop();
         if (tipoSimbolo.equals(Tipo.BOOLEAN)) {
@@ -273,6 +337,9 @@ public class ProcesadorReglas {
         }
     }
 
+    /**
+     * Procesa un identificador.
+     */
     private void procesarIdentificador() {
         Simbolo simbolo = gestorTablas.getUltimoSimbolo();
         if (simbolo.getTipo() == null) {
@@ -281,6 +348,9 @@ public class ProcesadorReglas {
         pilaTipos.add(simbolo.getTipo());
     }
 
+    /**
+     * Procesa una expresión entre paréntesis.
+     */
     private void procesarParentesis() {
         Tipo tipoSimbolo = pilaTipos.pop();
         if (tipoSimbolo.equals(Tipo.BOOLEAN)) {
@@ -294,6 +364,9 @@ public class ProcesadorReglas {
         }
     }
 
+    /**
+     * Procesa una llamada a una función.
+     */
     private void procesarLlamadaFuncion() {
         Simbolo simboloFuncion = gestorTablas.getUltimoSimboloFuncion();
         verificarLlamadaFuncion(simboloFuncion);
@@ -304,6 +377,9 @@ public class ProcesadorReglas {
         }
     }
 
+    /**
+     * Procesa una llamada a una función con parámetros.
+     */
     private void procesarLlamadaFuncionConParametros() {
         Simbolo simboloFuncion = gestorTablas.getUltimoSimboloFuncion();
         verificarLlamadaFuncion(simboloFuncion);
@@ -316,6 +392,9 @@ public class ProcesadorReglas {
         pilaTipos.add(Tipo.OK);
     }
 
+    /**
+     * Procesa una asignación con operación.
+     */
     private void procesarAsignacionConOperacion() {
         Tipo tipoSimboloE = pilaTipos.pop();
         Simbolo simbolo = gestorTablas.verPrimerSimboloSinTipo() == null
@@ -331,6 +410,9 @@ public class ProcesadorReglas {
         pilaTipos.add(Tipo.OK);
     }
 
+    /**
+     * Procesa la instrucción PUT.
+     */
     private void procesarPut() {
         Tipo tipoSimboloE = pilaTipos.pop();
         if (tipoSimboloE.equals(Tipo.INT) || tipoSimboloE.equals(Tipo.STRING)) {
@@ -340,27 +422,38 @@ public class ProcesadorReglas {
         }
     }
 
+    /**
+     * Procesa la instrucción GET.
+     */
     private void procesarGet() {
         Simbolo simbolo = gestorTablas.getUltimoSimbolo();
         if (simbolo.getTipo() == null) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_SIN_INICIALIZAR);
         }
         if (simbolo.getTipo().equals(Tipo.INT) || simbolo.getTipo().equals(Tipo.STRING)) {
-            pilaTipos.add(simbolo.getTipo());
+            pilaTipos.add(Tipo.OK);
         } else {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPO_NO_COMPATIBLE);
         }
     }
 
+    /**
+     * Procesa la instrucción RETURN.
+     */
     private void procesarReturn() {
         Tipo tipoSimbolo = pilaTipos.peek();
-        returnEjecutado = true;
-        ifWhileEjecutado = true;
+        estadoSemantico.setReturnEjecutado(true);
+        estadoSemantico.setIfWhileEjecutado(true);
         if (tipoSimbolo == null) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_SIN_INICIALIZAR);
         }
     }
 
+    /**
+     * Verifica una llamada a una función.
+     *
+     * @param simboloFuncion El símbolo de la función a verificar.
+     */
     private void verificarLlamadaFuncion(Simbolo simboloFuncion) {
         if (simboloFuncion == null) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
@@ -374,6 +467,12 @@ public class ProcesadorReglas {
         gestorParametros.reset();
     }
 
+    /**
+     * Obtiene los parámetros de una función.
+     *
+     * @param simboloFuncion El símbolo de la función.
+     * @return La lista de tipos de parámetros de la función.
+     */
     private List<Tipo> obtenerParametrosFuncion(Simbolo simboloFuncion) {
         if (gestorTablas.obtenerTablaActual().getNumeroTabla() > 0 && simboloFuncion.getNumeroParametros() == null) {
             return new ArrayList<>(gestorParametros.getTipoParametrosFuncion());
@@ -382,6 +481,11 @@ public class ProcesadorReglas {
         }
     }
 
+    /**
+     * Verifica los tipos de los parámetros de una función.
+     *
+     * @param parametrosFuncion La lista de tipos de parámetros de la función.
+     */
     private void verificarTipoParametros(List<Tipo> parametrosFuncion) {
         List<Tipo> listaDeParametros = new ArrayList<>(gestorParametros.getListaDeParametros());
         for (int i = 0; i < listaDeParametros.size(); i++) {
@@ -392,6 +496,13 @@ public class ProcesadorReglas {
         }
     }
 
+    /**
+     * Asigna un tipo a un símbolo.
+     *
+     * @param simbolo     El símbolo al que se le asignará el tipo.
+     * @param tipoSimbolo El tipo a asignar.
+     * @param tabla       La tabla de símbolos donde se realizará la asignación.
+     */
     private void asignarTipo(Simbolo simbolo, Tipo tipoSimbolo, TablaSimbolos tabla) {
         if (simbolo.getTipo() != null) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_REDECLARADA);
@@ -402,6 +513,12 @@ public class ProcesadorReglas {
         tabla.setDesplazamiento(tabla.getDesplazamiento() + simbolo.getAncho());
     }
 
+    /**
+     * Calcula el ancho de un tipo.
+     *
+     * @param tipo El tipo cuyo ancho se va a calcular.
+     * @return El ancho del tipo.
+     */
     private int calcularAncho(Tipo tipo) {
         switch (tipo) {
             case STRING:
@@ -417,11 +534,14 @@ public class ProcesadorReglas {
         }
     }
 
+    /**
+     * Reinicia el procesador de reglas a su estado inicial.
+     */
     public void resetProcesadorReglas() {
+        gestorParametros.reset();
         this.gestorTablas = GestorTablas.getInstance();
         this.pilaTipos = new Stack<>();
-        this.gestorParametros = new GestorParametros();
-        this.returnEjecutado = false;
-        this.ifWhileEjecutado = false;
+        this.gestorParametros = GestorParametros.getInstance();
+        this.estadoSemantico = EstadoSemantico.getInstance();
     }
 }

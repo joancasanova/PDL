@@ -11,7 +11,7 @@ public class AnalizadorSemantico {
      * Constructor privado del analizador semántico.
      */
     private AnalizadorSemantico() {
-        this.procesadorReglas = new ProcesadorReglas();
+        this.procesadorReglas = ProcesadorReglas.getInstance();
     }
 
     /**
@@ -40,6 +40,7 @@ public class AnalizadorSemantico {
      * Reinicia el analizador semantico a su estado inicial.
      */
     public void resetAnalizadorSemantico() {
-        this.procesadorReglas = new ProcesadorReglas();
+        procesadorReglas.resetProcesadorReglas();
+        this.procesadorReglas = ProcesadorReglas.getInstance();
     }
 }
