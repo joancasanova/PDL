@@ -23,11 +23,14 @@ bin/
 *.settings/
 
 # VS Code files
-.vscode/
+.vscode/*
+.vscode
+.vscode*
 
 # Gradle files
 .gradle/
 build/
+gradle*
 gradle/
 !gradle/wrapper/gradle-wrapper.jar
 
