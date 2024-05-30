@@ -72,11 +72,8 @@ public class GeneradorToken {
      * @param charActual  El carácter actual en el análisis.
      * @param lexema      El lexema actual a procesar.
      * @return El token procesado o null si no hay token.
-     * @throws IllegalStateException Si se encuentra un error en el procesamiento
-     *                               del token.
      */
-    public Token generarToken(EstadoFinal estadoFinal, Character charActual, String lexema)
-            throws IllegalStateException {
+    public Token generarToken(EstadoFinal estadoFinal, Character charActual, String lexema) {
 
         token = null;
 

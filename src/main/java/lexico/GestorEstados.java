@@ -69,10 +69,8 @@ public class GestorEstados {
      * 
      * @param charActual El carácter actual a procesar.
      * @param lexema     El lexema actual a procesar.
-     * @throws IllegalStateException Si se encuentran errores en el estado del
-     *                               analizador.
      */
-    public void actualizarEstado(Character charActual, String lexema) throws IllegalStateException {
+    public void actualizarEstado(Character charActual, String lexema) {
 
         estadoFinal = EstadoFinal.PENDIENTE;
 
