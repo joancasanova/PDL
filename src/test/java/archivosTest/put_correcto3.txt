@@ -1,2 +1,0 @@
-let a string = "Adiós";
-put "Hola"; put a;

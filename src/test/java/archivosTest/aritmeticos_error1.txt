@@ -1,3 +1,0 @@
-let x string = "hola";
-let y int = 1;
-let z int = x + y;

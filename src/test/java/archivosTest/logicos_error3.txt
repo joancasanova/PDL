@@ -1,2 +1,0 @@
-let x string = "hola";
-if (!(x == 0)) a = 0;

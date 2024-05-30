@@ -1,4 +1,0 @@
-function f int (int a) {
-    let x int = 32767;
-    let x int = 327;    
-}
