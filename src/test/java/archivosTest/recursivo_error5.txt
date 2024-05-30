@@ -1,4 +1,0 @@
-function FactorialRecursivo int (int n)	{
-    a = 0;
-    return FactorialRecursivo(a, n);
-}

@@ -1,5 +1,0 @@
-function demo void (void)
-{
-	let v1 int;
-	get v1; get v1;
-}

@@ -1,4 +1,0 @@
-let i int = 0;
-let b boolean;
-i = b + i;
-b = !i;
