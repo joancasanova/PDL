@@ -72,10 +72,14 @@ public class GestorAnalisis {
                 if (token.getTipo().equals(TipoToken.FINDEFICHERO)) {
                     finDeFichero = true;
                 }
-                List<Integer> reglasProcesadas = analizadorSintactico.procesarToken(token);
-                for (Integer regla : reglasProcesadas) {
-                    listaReglas.add(regla);
-                    analizadorSemantico.procesarRegla(regla);
+
+                analizadorSintactico.setTokenProcesado(false);
+                while (!analizadorSintactico.getTokenProcesado()) {
+                    Integer regla = analizadorSintactico.procesarToken(token);
+                    if (regla != null) {
+                        listaReglas.add(regla);
+                        analizadorSemantico.procesarRegla(regla);
+                    }
                 }
             }
             if (caracter == '\n') {

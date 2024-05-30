@@ -1,11 +1,8 @@
 package sintactico;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import sintactico.accion.Accion;
-import sintactico.accion.AccionAceptar;
 import sintactico.accion.AccionReducir;
 import token.*;
 import util.GestorErrores;
@@ -17,7 +14,7 @@ import util.GestorErrores;
 public class AnalizadorSintactico {
 
     private GestorPilas gestorPilas;
-    private Boolean aceptado;
+    private Boolean tokenProcesado;
 
     // Instancia única de la clase
     private static AnalizadorSintactico instancia;
@@ -27,7 +24,7 @@ public class AnalizadorSintactico {
      * instancias.
      */
     private AnalizadorSintactico() {
-        this.aceptado = false;
+        this.tokenProcesado = false;
         gestorPilas = GestorPilas.getInstance();
     }
 
@@ -49,38 +46,17 @@ public class AnalizadorSintactico {
      * 
      * @param token El token a procesar.
      * @return Lista de reglas aplicadas durante el procesamiento.
-     * @throws IllegalStateException Si se encuentra un error en el análisis
-     *                               sintáctico.
      */
-    public List<Integer> procesarToken(Token token) throws IllegalStateException {
-        List<Integer> reglasAplicadas = new ArrayList<>();
-        while (true) {
-            String contenidoDeToken = obtenerContenidoToken(token);
-            Accion accion = obtenerAccion(contenidoDeToken, gestorPilas.getPilaEstados().peek());
+    public Integer procesarToken(Token token) {
+        String contenidoDeToken = obtenerContenidoToken(token);
+        Accion accion = obtenerAccion(contenidoDeToken, gestorPilas.getPilaEstados().peek());
 
-            Integer reglaAplicada = accion.ejecutar();
-            if (reglaAplicada != null) {
-                reglasAplicadas.add(reglaAplicada);
-            }
-
-            // Si la acción es de aceptación, finalizar el procesamiento
-            if (accion instanceof AccionAceptar) {
-                aceptado = true;
-                break;
-            }
-
-            // Caso especial para el fin de fichero sin aceptación: continuar procesando
-            if (contenidoDeToken.equals("FINDEFICHERO") && !aceptado) {
-                continue;
-            }
-
-            // En caso de una acción de reducción, saltar al siguiente token
-            else if (!(accion instanceof AccionReducir)) {
-                break;
-            }
+        // En caso de no ser una acción de reducción, ir a por el siguiente token
+        if (!(accion instanceof AccionReducir)) {
+            setTokenProcesado(true);
         }
 
-        return reglasAplicadas;
+        return accion.ejecutar();
     }
 
     /**
@@ -89,9 +65,8 @@ public class AnalizadorSintactico {
      * @param textoToken El texto del token.
      * @param estadoCima El estado en la cima de la pila.
      * @return La acción correspondiente.
-     * @throws IllegalStateException Si no se encuentra una acción válida.
      */
-    private Accion obtenerAccion(String textoToken, Integer estadoCima) throws IllegalStateException {
+    private Accion obtenerAccion(String textoToken, Integer estadoCima) {
         Map<String, Accion> accionesEstado = ParserGramatica.getInstance().getTablaAccion().get(estadoCima);
         Accion accion = accionesEstado.getOrDefault(textoToken, accionesEstado.get("$DEFAULT"));
 
@@ -117,13 +92,22 @@ public class AnalizadorSintactico {
                 : String.valueOf(token.getTipo()).toUpperCase();
     }
 
+    public void setTokenProcesado(Boolean valor) {
+        this.tokenProcesado = valor;
+    }
+
+    public boolean getTokenProcesado() {
+        return this.tokenProcesado;
+    }
+
     /**
      * Reinicia el analizador sintactico a su estado inicial.
      */
     public void resetAnalizadorSintactico() {
-        this.aceptado = false;
+        this.tokenProcesado = false;
         ParserGramatica.getInstance().resetParserGramatica();
         gestorPilas.resetGestorPilas();
         gestorPilas = GestorPilas.getInstance();
     }
+
 }
