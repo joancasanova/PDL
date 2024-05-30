@@ -33,7 +33,9 @@ public class AnalizadorSemantico {
      * @param numeroRegla El número de la regla a procesar.
      */
     public void procesarRegla(Integer numeroRegla) {
-        procesadorReglas.procesarRegla(numeroRegla);
+        if (numeroRegla != null) {
+            procesadorReglas.procesarRegla(numeroRegla);
+        }
     }
 
     /**

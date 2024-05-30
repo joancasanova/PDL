@@ -39,7 +39,7 @@ public final class GestorErrores {
 
     // Mensajes de error genéricos
     public static final String ESPECIFICAR_INPUT = "Por favor, especifique la ruta del archivo a analizar.";
-    public static final String ARCHIVO_GRAMATICA_NO_ENCONTRADO = "El archivo de gramatica.txt no se ha encontrado (directorio resources)";
+    public static final String ARCHIVO_GRAMATICA_NO_ENCONTRADO = "El archivo de gramatica.output no se ha encontrado (directorio resources)";
 
     // Constructor privado para evitar instanciación
     private GestorErrores() {

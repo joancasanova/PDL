@@ -96,7 +96,7 @@ public class AnalizadorSintactico {
         this.tokenProcesado = valor;
     }
 
-    public boolean getTokenProcesado() {
+    public boolean isTokenProcesado() {
         return this.tokenProcesado;
     }
 

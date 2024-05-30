@@ -74,7 +74,7 @@ public class GestorAnalisis {
                 }
 
                 analizadorSintactico.setTokenProcesado(false);
-                while (!analizadorSintactico.getTokenProcesado()) {
+                while (!analizadorSintactico.isTokenProcesado()) {
                     Integer regla = analizadorSintactico.procesarToken(token);
                     if (regla != null) {
                         listaReglas.add(regla);

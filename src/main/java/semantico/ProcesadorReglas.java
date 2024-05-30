@@ -17,7 +17,9 @@ public class ProcesadorReglas {
     private GestorTablas gestorTablas;
     private Stack<Tipo> pilaTipos;
     private GestorParametros gestorParametros;
-    private EstadoSemantico estadoSemantico;
+
+    private Boolean zonaFuncion;
+    private Tipo tipoReturnCondicional;
 
     /**
      * Constructor privado para evitar la creación de instancias.
@@ -26,7 +28,7 @@ public class ProcesadorReglas {
         this.gestorTablas = GestorTablas.getInstance();
         this.pilaTipos = new Stack<>();
         this.gestorParametros = GestorParametros.getInstance();
-        this.estadoSemantico = EstadoSemantico.getInstance();
+        this.zonaFuncion = false;
     }
 
     /**
@@ -172,15 +174,13 @@ public class ProcesadorReglas {
      * Procesa las reglas de estructuras de control IF y WHILE.
      */
     private void procesarIfWhile() {
-        estadoSemantico.setIfWhileEjecutado(true);
         Tipo tipoSimboloS = pilaTipos.pop();
         Tipo tipoSimboloE = pilaTipos.pop();
         if (!tipoSimboloE.equals(Tipo.BOOLEAN)) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPO_BOOLEAN);
         }
-        if (estadoSemantico.getReturnEjecutado()) {
-            estadoSemantico.setTipoReturnIfWhile(tipoSimboloS);
-        }
+
+        tipoReturnCondicional = tipoSimboloS;
         pilaTipos.add(Tipo.OK);
     }
 
@@ -226,20 +226,18 @@ public class ProcesadorReglas {
     private void procesarFuncion() {
         Tipo tipoRetornoC = pilaTipos.pop();
         Tipo tipoRetornoF1 = pilaTipos.pop();
-        if (estadoSemantico.getReturnEjecutado()) {
-            if (!(tipoRetornoF1.equals(tipoRetornoC))) {
-                if (!(tipoRetornoF1.equals(Tipo.VOID) && tipoRetornoC == Tipo.OK)) {
-                    if (estadoSemantico.getIfWhileEjecutado()
-                            && !(tipoRetornoF1.equals(estadoSemantico.getTipoReturnIfWhile()))) {
-                        GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
-                                GestorErrores.ERROR_TIPO_RETORNO_FUNCION);
-                    }
+
+        if (!(tipoRetornoF1.equals(tipoRetornoC))) {
+            if (!(tipoRetornoF1.equals(Tipo.VOID) && tipoRetornoC == Tipo.OK)) {
+                if (zonaFuncion
+                        && !(tipoRetornoF1.equals(tipoReturnCondicional))) {
+                    GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
+                            GestorErrores.ERROR_TIPO_RETORNO_FUNCION);
                 }
             }
         }
+
         gestorTablas.destruirTabla();
-        estadoSemantico.setReturnEjecutado(false);
-        estadoSemantico.setIfWhileEjecutado(false);
     }
 
     /**
@@ -258,10 +256,9 @@ public class ProcesadorReglas {
      * Procesa la declaración de una función, creando una nueva tabla de símbolos.
      */
     private void procesarFuncionID() {
+        zonaFuncion = false;
         gestorTablas.setZonaParametros(true);
         gestorTablas.nuevaTabla();
-        estadoSemantico.setReturnEjecutado(false);
-        estadoSemantico.setIfWhileEjecutado(false);
         Tipo tipoSimbolo = pilaTipos.peek();
         Simbolo simbolo = gestorTablas.consumirSimboloSinTipo();
         simbolo.setNumeroParametros(0);
@@ -442,8 +439,7 @@ public class ProcesadorReglas {
      */
     private void procesarReturn() {
         Tipo tipoSimbolo = pilaTipos.peek();
-        estadoSemantico.setReturnEjecutado(true);
-        estadoSemantico.setIfWhileEjecutado(true);
+        zonaFuncion = true;
         if (tipoSimbolo == null) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_SIN_INICIALIZAR);
         }
@@ -542,6 +538,7 @@ public class ProcesadorReglas {
         this.gestorTablas = GestorTablas.getInstance();
         this.pilaTipos = new Stack<>();
         this.gestorParametros = GestorParametros.getInstance();
-        this.estadoSemantico = EstadoSemantico.getInstance();
+        this.zonaFuncion = false;
+        this.tipoReturnCondicional = null;
     }
 }
