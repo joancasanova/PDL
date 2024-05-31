@@ -1,5 +1,3 @@
-<div style="text-align: justify;">
-
 # Procesador de Lenguaje JS-PdL
 
 Este proyecto ha sido desarrollado para la asignatura **Procesadores de Lenguajes** en la **Universidad Politécnica de Madrid** durante el curso 2023-24.
@@ -494,6 +492,3 @@ Esta guía busca no solo facilitar la superación de la asignatura, sino tambié
 ¡Gracias por tu atención y buena suerte con el desarrollo de tu práctica!
 
 Si necesitas más detalles o quieres sugerir alguna modificación o mejora, no dudes en enviar un correo electrónico a juancasanovaferrer@gmail.com
-
-
-</div>
