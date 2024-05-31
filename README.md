@@ -33,7 +33,7 @@ Este programa implementa un procesador de lenguaje para el lenguaje **JS-PdL**, 
 
 Para esta práctica, se requiere desarrollar una serie de funcionalidades obligatorias y opcionales. Las funcionalidades completas pueden consultarse en la siguiente página: [Funciones JS-PdL](https://dlsiis.fi.upm.es/procesadores/IntroJavaScript.html).
 
-Las funcionalidades opcionales implementadas en este proyecto son:
+Las funcionalidades implementadas en este proyecto son:
 
 - **Sentencias**: Sentencia repetitiva (`while`)
 - **Operadores especiales**: Asignación con suma (`+=`)
