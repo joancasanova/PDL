@@ -406,21 +406,26 @@ Una consecuencia directa de este tipo de evaluación es que el código que se ej
 
 ## 4. Cómo Ejecutar el Proyecto
 
-Para ejecutar el proyecto desde la línea de comandos, sigue estos pasos:
+Para ejecutar el proyecto usando Gradle, sigue estos pasos:
 
-0. Navega al directorio raiz del proyecto:
+0. Navega al directorio del proyecto:
     ```sh
     cd /ruta/al/directorio/del/proyecto
     ```
 
-1. Compila los archivos Java:
+1. Asegúrate de que tienes Gradle instalado. Puedes verificarlo con:
     ```sh
-    javac -d bin -sourcepath src src/main/java/main/Analizador.java
+    gradle -v
     ```
 
-2. Ejecuta el programa con el archivo de entrada:
+2. Compila el proyecto:
     ```sh
-    java -cp bin main.Analizador input/input.txt
+    gradle build
+    ```
+
+3. Ejecuta el proyecto:
+    ```sh
+    gradle run
     ```
 
 Asegúrate de que el archivo `input.txt` está en el directorio `input` antes de ejecutar el programa.
