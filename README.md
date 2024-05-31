@@ -25,11 +25,11 @@ Para cualquier duda, no dudes en contactar conmigo, estaré encantado de ayudart
     - [Problemática de la Asignatura](#problemática-de-la-asignatura)
     - [Solución Propuesta](#solución-propuesta)
 
-## 0. Descripción del Proyecto
+## Descripción del Proyecto
 
 Este programa implementa un procesador de lenguaje para el lenguaje **JS-PdL**, una variante de JavaScript diseñada específicamente para la práctica de esta asignatura. Cabe destacar que las características de JS-PdL no coinciden al 100% con el estándar de JavaScript, ya que es una versión simplificada de éste.
 
-## 1. Funcionalidades Implementadas
+## Funcionalidades Implementadas
 
 Para esta práctica, se requiere desarrollar una serie de funcionalidades obligatorias y opcionales. Las funcionalidades completas pueden consultarse en la siguiente página: [Funciones JS-PdL](https://dlsiis.fi.upm.es/procesadores/IntroJavaScript.html).
 
@@ -41,7 +41,7 @@ Las funcionalidades opcionales implementadas en este proyecto son:
 - **Comentarios**: Comentario de línea (`//`)
 - **Cadenas**: Con comillas dobles (`" "`)
 
-## 2. Guía Completa para el Desarrollo de la Práctica - JS-PdL
+## Guía Completa para el Desarrollo de la Práctica - JS-PdL
 
 A continuación se presenta una guía detallada basada en el código de este repositorio para el desarrollo de la práctica.
 
@@ -49,13 +49,13 @@ A continuación se presenta una guía detallada basada en el código de este rep
 
 El desarrollo de la práctica se divide en las siguientes fases:
 
-1. **Tabla de Símbolos**
-2. **Definir Tokens**
-3. **Analizador Léxico**
-4. **Analizador Sintáctico**
-5. **Analizador Semántico**
-6. **Pruebas**
-7. **Presentación**
+0. **Tabla de Símbolos**
+1. **Definir Tokens**
+2. **Analizador Léxico**
+3. **Analizador Sintáctico**
+4. **Analizador Semántico**
+5. **Pruebas**
+6. **Presentación**
 
 ### 0. Tabla de Símbolos
 
@@ -432,7 +432,7 @@ Asegúrate de que el archivo `input.txt` está en el directorio `input` antes de
 
 Si necesitas más detalles o alguna modificación, no dudes en decírmelo.
 
-## 4. Motivación para el Desarrollo de esta Guía
+## Motivación para el Desarrollo de esta Guía
 
 ### Problemática de la Asignatura
 
