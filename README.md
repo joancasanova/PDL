@@ -430,7 +430,7 @@ Para ejecutar el proyecto usando Gradle, sigue estos pasos:
 
 Asegúrate de que el archivo `input.txt` está en el directorio `input` antes de ejecutar el programa.
 
-Si necesitas más detalles o alguna modificación, no dudes en decírmelo.
+Si necesitas más detalles, no dudes en preguntar.
 
 ## Motivación para el Desarrollo de esta Guía
 
