@@ -87,6 +87,7 @@ public class GestorAnalisis {
             }
         } while (!finDeFichero);
 
+        listaReglas.add(1);
         GestorSalida.escribirSalida(listaTokens, listaReglas, gestorTablas.getImpresionTabla().toString());
 
         gestorTablas.resetGestorTablas();

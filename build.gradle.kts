@@ -9,6 +9,16 @@ repositories {
     mavenCentral()
 }
 
+allprojects {
+    tasks.withType<JavaCompile> {
+        options.encoding = "UTF-8"
+    }
+
+    tasks.withType<ProcessResources> {
+        filteringCharset = "UTF-8"
+    }
+}
+
 dependencies {
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")

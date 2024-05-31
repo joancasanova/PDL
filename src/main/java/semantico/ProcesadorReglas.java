@@ -194,7 +194,7 @@ public class ProcesadorReglas {
     private void procesarDeclaracion() {
         Tipo tipo = pilaTipos.pop();
         Simbolo simbolo = gestorTablas.consumirSimboloSinTipo();
-        asignarTipoEnTablaSimbolos(simbolo, tipo, gestorTablas.obtenerTablaActual());
+        gestorTablas.asignarTipo(simbolo, tipo, gestorTablas.obtenerTablaActual());
 
         pilaTipos.add(Tipo.OK);
     }
@@ -210,7 +210,7 @@ public class ProcesadorReglas {
 
         if (tipoE == tipoT) {
             Simbolo simbolo = gestorTablas.consumirSimboloSinTipo();
-            asignarTipoEnTablaSimbolos(simbolo, tipoT, gestorTablas.obtenerTablaActual());
+            gestorTablas.asignarTipo(simbolo, tipoT, gestorTablas.obtenerTablaActual());
         } else {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPOS_NO_COINCIDEN);
         }
@@ -277,7 +277,7 @@ public class ProcesadorReglas {
         Simbolo simbolo = gestorTablas.consumirSimboloSinTipo();
         simbolo.setNumeroParametros(0);
         simbolo.setTipoRetorno(tipo);
-        asignarTipoEnTablaSimbolos(simbolo, tipo, gestorTablas.obtenerTablaGlobal());
+        gestorTablas.asignarTipo(simbolo, tipo, gestorTablas.obtenerTablaGlobal());
     }
 
     /**
@@ -289,7 +289,7 @@ public class ProcesadorReglas {
     private void procesarParametro() {
         Tipo tipo = pilaTipos.pop();
         Simbolo simbolo = gestorTablas.consumirSimboloSinTipo();
-        asignarTipoEnTablaSimbolos(simbolo, tipo, gestorTablas.obtenerTablaActual());
+        gestorTablas.asignarTipo(simbolo, tipo, gestorTablas.obtenerTablaActual());
         gestorParametros.addParametroFuncion(tipo, Modo.VALOR);
     }
 
@@ -335,9 +335,6 @@ public class ProcesadorReglas {
     private void procesarSuma() {
         Tipo tipoU1 = pilaTipos.pop();
         Tipo tipoV = pilaTipos.pop();
-        if (tipoU1 == null || tipoV == null) {
-            GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_SIN_INICIALIZAR);
-        }
         if (tipoU1 == tipoV && tipoU1.equals(Tipo.INT)) {
             pilaTipos.add(Tipo.INT);
         } else {
@@ -367,7 +364,8 @@ public class ProcesadorReglas {
     private void procesarIdentificador() {
         Simbolo simbolo = gestorTablas.getUltimoSimbolo();
         if (simbolo.getTipo() == null) {
-            GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_SIN_INICIALIZAR);
+            gestorTablas.actualizarSimboloSinTipo(simbolo);
+            simbolo.setTipo(Tipo.INT);
         }
         pilaTipos.add(simbolo.getTipo());
     }
@@ -427,8 +425,8 @@ public class ProcesadorReglas {
         Tipo tipoE = pilaTipos.pop();
         Simbolo simbolo = gestorTablas.getUltimoSimbolo();
         if (simbolo.getTipo() == null) {
-            simbolo = gestorTablas.consumirSimboloSinTipo();
-            asignarTipoEnTablaSimbolos(simbolo, Tipo.INT, gestorTablas.obtenerTablaActual());
+            gestorTablas.actualizarSimboloSinTipo(simbolo);
+            gestorTablas.asignarTipo(simbolo, Tipo.INT, gestorTablas.obtenerTablaActual());
         }
         if (!tipoE.equals(simbolo.getTipo())) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPOS_NO_COINCIDEN);
@@ -458,7 +456,8 @@ public class ProcesadorReglas {
     private void procesarGet() {
         Simbolo simbolo = gestorTablas.getUltimoSimbolo();
         if (simbolo.getTipo() == null) {
-            GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_SIN_INICIALIZAR);
+            gestorTablas.actualizarSimboloSinTipo(simbolo);
+            simbolo.setTipo(Tipo.INT);
         }
         if (simbolo.getTipo().equals(Tipo.INT) || simbolo.getTipo().equals(Tipo.STRING)) {
             pilaTipos.add(Tipo.OK);
@@ -473,11 +472,7 @@ public class ProcesadorReglas {
      * case 40: // S: RETURN Z ;
      */
     private void procesarReturn() {
-        Tipo tipo = pilaTipos.peek();
         returnEjecutado = true;
-        if (tipo == null) {
-            GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_SIN_INICIALIZAR);
-        }
     }
 
     /**
@@ -524,44 +519,6 @@ public class ProcesadorReglas {
             if (tipoParametro == null || !tipoParametro.equals(parametrosFuncion.get(i))) {
                 GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPO_PARAMETROS);
             }
-        }
-    }
-
-    /**
-     * Asigna un tipo a un símbolo.
-     *
-     * @param simbolo El símbolo al que se le asignará el tipo.
-     * @param tipo    El tipo a asignar.
-     * @param tabla   La tabla de símbolos donde se realizará la asignación.
-     */
-    private void asignarTipoEnTablaSimbolos(Simbolo simbolo, Tipo tipo, TablaSimbolos tabla) {
-        if (simbolo.getTipo() != null) {
-            GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_REDECLARADA);
-        }
-        simbolo.setDesplazamiento(tabla.getDesplazamiento());
-        simbolo.setTipo(tipo);
-        simbolo.setAncho(calcularAncho(tipo));
-        tabla.setDesplazamiento(tabla.getDesplazamiento() + simbolo.getAncho());
-    }
-
-    /**
-     * Calcula el ancho de un tipo.
-     *
-     * @param tipo El tipo cuyo ancho se va a calcular.
-     * @return El ancho del tipo.
-     */
-    private int calcularAncho(Tipo tipo) {
-        switch (tipo) {
-            case STRING:
-                return 128;
-            case BOOLEAN:
-            case INT:
-                return 2;
-            case VOID:
-                return 0;
-            default:
-                GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPO_NO_COMPATIBLE);
-                return -1; // no se alcanza
         }
     }
 

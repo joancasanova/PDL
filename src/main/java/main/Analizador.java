@@ -2,6 +2,7 @@ package main;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import util.GestorErrores;
 
@@ -15,16 +16,20 @@ import util.GestorErrores;
  */
 public class Analizador {
 
+    private final static String DIRECTORIO_ENTRADA = "input";
+    private final static String ARCHIVO_INPUT = Paths.get(DIRECTORIO_ENTRADA, "input.txt").toString();
+
     public static void main(String[] args) {
-        if (args.length < 1) {
-            GestorErrores.lanzarError(GestorErrores.TipoError.GENERICO, GestorErrores.ESPECIFICAR_INPUT);
+        String rutaArchivo;
+        if (args.length > 0) {
+            rutaArchivo = args[0];
+        } else {
+            rutaArchivo = ARCHIVO_INPUT;
         }
 
-        String rutaArchivo = args[0];
         try {
             FileReader fichero = new FileReader(rutaArchivo);
-            GestorAnalisis gestorAnalisis = GestorAnalisis.getInstance();
-            gestorAnalisis.procesarFichero(fichero);
+            GestorAnalisis.getInstance().procesarFichero(fichero);
             System.out.println(
                     "Análisis completo. Se han generado los archivos de tokens, reglas, y tabla de símbolos.");
             fichero.close();

@@ -1,9 +1,7 @@
-/// Programa de ejemplo  //
-// El ejemplo incorpora elementos del lenguaje opcionales y elementos que no todos los grupos tienen que implementar //
+// Programa de ejemplo 
 
-let s 	// variable global cadena //
-	string;
-	
+let s string;	// variable global cadena
+
 function FactorialRecursivo int (int n)	// n: parámetro formal de la función entera //
 {
 	if (n == 0)	return 1;
@@ -19,12 +17,11 @@ function salto string (void)
 }
 
 function FactorialDo int (int n)
-{    
-    let factorial int = 0 + uno + 1;	// variable local inicializada a uno
-	while (n == 0)
-	{
-		factorial += n;	// equivale a: factorial = factorial / n; n = n - 1;
-	}		// mientras n no sea 0	
+{
+	let factorial int = 0 + uno + 1;	// variable local inicializada a uno
+	while (n == 0) {
+		factorial = n + 1;	// equivale a: factorial = factorial / n; n = n - 1;
+	}
 	return factorial;		// devuelve el valor entero de la variable factorial
 }
 
@@ -32,9 +29,9 @@ function FactorialWhile int (void)
 {
 	let factorial int = 1;	// variables locales: factorial inicializada a 1
 	let i	int;			// variables locales: i inicializada a 0 por omisión
-	while (i == i)			// num es variable global entera sin declarar
+	while (i == num)			// num es variable global entera sin declarar
 	{
-		factorial = factorial + i;	// equivale a: i = i + 1; factorial = factorial / i;
+		factorial = 1+ i;	// equivale a: i = i + 1; factorial = factorial / i;
 	}
 	return factorial;
 }
@@ -43,14 +40,13 @@ function FactorialFor int (int n)
 {
 	let i int;
 	let factorial int = UNO;	// declaración de variables locales //
-	while (i == 1)
-	{
-		factorial = i;
-	}
+
 	return factorial;
 }
 
-let Whil int;	// tres variables globales
+let For int;
+let Do int;
+let xhile int;	// tres variables globales
 
 function imprime void (string s, string msg, int f)	// función que recibe 3 argumentos //
 {
@@ -59,8 +55,8 @@ function imprime void (string s, string msg, int f)	// función que recibe 3 arg
 	return;	// finaliza la ejecución de la función (en este caso, se podría omitir) //
 }
 
-function cadena string (boolean log)
-{
+function cadena string (boolean log){
+
 	if (!log) return s;
 }	// fin cadena: función que devuelve una cadena
 
@@ -70,21 +66,22 @@ s = "El factorial ";	// Primera sentencia que se ejecutaría
 put s;
 put
  "\nIntroduce un 'número'.";
-get 
- s;	// se lee un número del teclado y se guarda en la variable global num //
+put 
+ num;	// se lee un número del teclado y se guarda en la variable global num //
 
 function bisiesto boolean (int a)	
 {			
 	return 
-		(a + 4 == 0);	//se tienen en cuenta la precedencia de operadores
+		(a + 4 == 0 );	//se tienen en cuenta la precedencia de operadores
 } // fin de bisiesto: función lógica
 
 function dias int (int m, int a)
 {
 } // fin de dias. Todos los return devuelven un entero y la función es entera
 
-function esFechaCorrecta boolean (int d, int m, int a)	{
-	return m==1+dias(m,a);
+function esFechaCorrecta boolean (int d, int m, int a)	
+{
+	return m==dias(m,a);
 } //fin de esFechaCorrecta
 
 function imprimeSuma void (int v, int w)	
@@ -93,7 +90,7 @@ function imprimeSuma void (int v, int w)
 	put (salto());
 } //fin de imprimeSuma
 
-function potencia void(int z, int dim)	
+function potencia void (int z, int dim)	
 {
 	let s int;	// Oculta a la global
 	while (s==0)
@@ -108,7 +105,7 @@ function demo void (void)	// definición de la función demo, sin argumentos y q
 	let v1 int; let v2 int; let v3 int;
 	let zv int ; // Variables locales
 
-	put"Escriba números: ";
+	put"Escriba 'tres' números: ";
 	get v1; get v2; get v3;
 	
 	if (v3 == 0) return;
@@ -116,19 +113,27 @@ function demo void (void)	// definición de la función demo, sin argumentos y q
 	if (!((v1 == v2)))	// NOT ((v1 igual a v2) AND (v1 distinto de v3))  //
 	
 		put "Escriba su nombre: ";
+		let s string;	// Oculta a la s global
+		get s;
+		if (v2 == v3)	// si v2<v3, v0=v2; en otro caso v0=1/v3 //
+		
+			v0 = v2; // se declara v0 aquí, por lo que se puede utilizar hasta el final de la función
+		
+		put s;
+	
 	s = "El primer valor era ";
 	if (v1 == 0)
 		put (s); put v1; put ".\n";
-
-	potencia (2, 4);
+	
+		put s; imprimeSuma (uno, UNO); put (".\n");	// imprime: `El primer valor era 0.\n´
+	
+	potencia (v0, 4);
 	let i int;
 
 	potencia (zv, 5);
-	imprimeSuma (i, i);
-	imprime ("", cadena(1==1), 666);
+	imprimeSuma (i, num);
+	imprime ("", cadena(0==0), 666);
 }
 
 demo();
 // esto constituye la llamada a una función sin argumentos. 
-// Es en este instante cuando se llama a esta función y, por tanto, 
-// cuando se ejecuta todo el código de dicha función //

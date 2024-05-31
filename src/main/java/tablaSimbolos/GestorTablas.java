@@ -3,6 +3,7 @@ package tablaSimbolos;
 import java.util.List;
 import java.util.Stack;
 
+import tablaSimbolos.enums.Tipo;
 import util.GestorErrores;
 
 import java.util.ArrayList;
@@ -162,9 +163,39 @@ public class GestorTablas {
      * Consume y devuelve un símbolo sin tipo de la lista.
      * 
      * @return El símbolo sin tipo.
-     * @throws IllegalStateException si no hay símbolos sin tipo.
      */
     public Simbolo consumirSimboloSinTipo() {
+        if (simbolosSinTipo.size() < 1) {
+            GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_REDECLARADA);
+        }
+
+        Simbolo simboloSinTipo = null;
+
+        if (zonaParametros) {
+            simboloSinTipo = simbolosSinTipo.removeLast();
+        } else {
+            simboloSinTipo = simbolosSinTipo.removeFirst();
+        }
+
+        return simboloSinTipo;
+    }
+
+    /**
+     * Actualizar simbolo sin tipo para eliminarlo de la lista.
+     *
+     * @param simbolo El simbolo que se desea eliminar de la lista.
+     */
+    public void actualizarSimboloSinTipo(Simbolo simbolo) {
+        simbolosSinTipo.remove(simbolo);
+    }
+
+    /**
+     * Consume y devuelve un símbolo sin tipo de la lista.
+     * 
+     * @return El símbolo sin tipo.
+     * @throws IllegalStateException si no hay símbolos sin tipo.
+     */
+    public Simbolo actualizarSimboloSinTipo() {
         if (simbolosSinTipo.size() < 1) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_REDECLARADA);
         }
@@ -216,6 +247,44 @@ public class GestorTablas {
      */
     public void setZonaParametros(Boolean value) {
         zonaParametros = value;
+    }
+
+    /**
+     * Asigna un tipo a un símbolo.
+     *
+     * @param simbolo El símbolo al que se le asignará el tipo.
+     * @param tipo    El tipo a asignar.
+     * @param tabla   La tabla de símbolos donde se realizará la asignación.
+     */
+    public void asignarTipo(Simbolo simbolo, Tipo tipo, TablaSimbolos tabla) {
+        if (simbolo.getTipo() != null) {
+            GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_REDECLARADA);
+        }
+        simbolo.setDesplazamiento(tabla.getDesplazamiento());
+        simbolo.setTipo(tipo);
+        simbolo.setAncho(calcularAncho(tipo));
+        tabla.setDesplazamiento(tabla.getDesplazamiento() + simbolo.getAncho());
+    }
+
+    /**
+     * Calcula el ancho de un tipo.
+     *
+     * @param tipo El tipo cuyo ancho se va a calcular.
+     * @return El ancho del tipo.
+     */
+    private int calcularAncho(Tipo tipo) {
+        switch (tipo) {
+            case STRING:
+                return 128;
+            case BOOLEAN:
+            case INT:
+                return 2;
+            case VOID:
+                return 0;
+            default:
+                GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPO_NO_COMPATIBLE);
+                return -1; // no se alcanza
+        }
     }
 
     /**

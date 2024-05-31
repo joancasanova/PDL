@@ -4,8 +4,6 @@ import tablaSimbolos.enums.Modo;
 import tablaSimbolos.enums.Tipo;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Clase GestorParametros que gestiona los parámetros de las funciones

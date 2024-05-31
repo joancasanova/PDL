@@ -1,4 +1,4 @@
 function f boolean (int a)	
 {			
-    return (!(a + 4) == 0);
+    return (!(a ++ 4) == 0);
 }

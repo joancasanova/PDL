@@ -14,31 +14,29 @@ public final class GestorErrores {
     }
 
     // Mensajes de error léxicos
-    public static final String PALABRA_RESERVADA_MINUSCULAS = "Las palabras reservadas deben ser escritas en minúsculas: ";
+    public static final String PALABRA_RESERVADA_MINUSCULAS = "Las palabras reservadas deben ser escritas en minusculas: ";
     public static final String CADENA_LARGA = "Cadena demasiado larga: ";
-    public static final String CADENA_SALTO_LINEA = "Cadena no puede contener salto de línea";
-    public static final String ENTERO_MAXIMO = "Se ha superado el valor numérico máximo. Valor: ";
+    public static final String CADENA_SALTO_LINEA = "Cadena no puede contener salto de linea";
+    public static final String ENTERO_MAXIMO = "Se ha superado el valor numerico maximo. Valor: ";
     public static final String ESTADO_FINAL_NO_MANEJADO = "Estado final no manejado: ";
-    public static final String CARACTER_NO_ESPERADO_COMENTARIO = "Caracter no esperado. Se esperaba /.";
+    public static final String CARACTER_NO_ESPERADO_COMENTARIO = "Caracter no esperado. Se esperaba /";
     public static final String CARACTER_NO_ESPERADO = "Error al procesar el caracter actual: ";
 
     // Mensajes de error sintácticos
     public static final String ERROR_TOKEN_NO_ESPERADO = "Token no esperado: ";
 
     // Mensajes de error semánticos
-    public static final String ERROR_TIPO_BOOLEAN = "La expresión debería ser de tipo booleano";
-    public static final String ERROR_TIPOS_NO_COINCIDEN = "Los tipos de la expresión no coinciden";
-    public static final String ERROR_TIPO_NO_COMPATIBLE = "Tipo de la expresión no compatible";
-    public static final String ERROR_LLAMADA_FUNCION_NO_DECLARADA = "Se está haciendo una llamada a una función no declarada";
-    public static final String ERROR_VARIABLE_SIN_INICIALIZAR = "Se está utilizando una variable sin inicializar";
-    public static final String ERROR_VARIABLE_REDECLARADA = "Se está redeclarando una variable";
-    public static final String ERROR_TIPO_RETORNO_FUNCION = "Tipo retorno de la función y tipo de función no coinciden";
-    public static final String ERROR_NUMERO_PARAMETROS = "El número de parámetros no coinciden con los de la función";
-    public static final String ERROR_TIPO_PARAMETROS = "El tipos de parámetros no coinciden con los de la función";
-    public static final String ERROR_REGLA_NO_IMPLEMENTADA = "S ha recibido una regla no esperada";
+    public static final String ERROR_TIPO_BOOLEAN = "La expresion deberia ser de tipo booleano";
+    public static final String ERROR_TIPOS_NO_COINCIDEN = "Los tipos de la expresion no coinciden";
+    public static final String ERROR_TIPO_NO_COMPATIBLE = "Tipo de la expresion no compatible";
+    public static final String ERROR_LLAMADA_FUNCION_NO_DECLARADA = "Se esta haciendo una llamada a una funcion no declarada";
+    public static final String ERROR_VARIABLE_REDECLARADA = "Se esta redeclarando una variable";
+    public static final String ERROR_TIPO_RETORNO_FUNCION = "Tipo retorno de la funcion y tipo de funcion no coinciden";
+    public static final String ERROR_NUMERO_PARAMETROS = "El numero de parametros no coinciden con los de la funcion";
+    public static final String ERROR_TIPO_PARAMETROS = "El tipos de parametros no coinciden con los de la funcion";
+    public static final String ERROR_REGLA_NO_IMPLEMENTADA = "Se ha recibido una regla no esperada";
 
     // Mensajes de error genéricos
-    public static final String ESPECIFICAR_INPUT = "Por favor, especifique la ruta del archivo a analizar.";
     public static final String ARCHIVO_GRAMATICA_NO_ENCONTRADO = "El archivo de gramatica.output no se ha encontrado (directorio resources)";
 
     // Constructor privado para evitar instanciación
@@ -54,7 +52,7 @@ public final class GestorErrores {
      */
     public static void lanzarError(TipoError tipoError, String mensaje) {
         String tipo = tipoError.name().toLowerCase();
-        throw new IllegalStateException("Error " + tipo + ": " + mensaje + " en línea " + linea);
+        throw new IllegalStateException("Error " + tipo + ": " + mensaje + " en linea " + linea);
     }
 
     public static void iniciarLinea() {
