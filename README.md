@@ -436,25 +436,25 @@ Si necesitas más detalles o alguna modificación, no dudes en decírmelo.
 
 ### Problemática de la Asignatura
 
-**Ratio elevado de suspensos: cuello de botella**
+**Ratio elevado de suspensos: cuello de botella:**
 La asignatura de Procesadores de Lenguajes tiene un alto índice de suspensos, convirtiéndose en un verdadero cuello de botella para los estudiantes de Ingeniería Informática. Este elevado ratio de suspensos puede desmotivar a los alumnos, retrasar su progreso académico, e incluso motivar al avandono del grado.
 
-**Cantidad de trabajo desproporcionada para 3 ECTS**
+**Cantidad de trabajo desproporcionada para 3 ECTS:**
 La carga de trabajo que se exige a los estudiantes para completar esta asignatura es considerablemente elevada en comparación con los 3 ECTS asignados. Esto genera una desproporción entre el esfuerzo requerido y los créditos obtenidos, profundizando en la sensación de desmotivación y agotamiento. La percepción general, y reflejada en las encuestas, es que el esfuerzo necesario para aprobar esta asignatura no se ve reflejado en los créditos otorgados.
 
-**Profesores que no colaboran**
+**Profesores que no colaboran:**
 La falta de colaboración y apoyo por parte de algunos profesores agrava la situación. En ocasiones, los estudiantes no reciben la orientación y el feedback necesarios para avanzar en sus proyectos, lo que aumenta la frustración y la dificultad para superar la asignatura. En sesiones de tutorías es común recibir un trato poco predispuesto a ayudar, con respuestas vagas a las dudas planteadas y, en algunos casos, incluso con actitud desagradable.
 
-**Falso reparto de trabajo entre compañeros**
+**Falso reparto de trabajo entre compañeros:**
 A menudo, los trabajos en grupo presentan un falso reparto de tareas, donde no todos los miembros del grupo contribuyen equitativamente. Esto puede derivar en situaciones no deseadas donde el esfuerzo de unos pocos se diluye en el grupo, afectando negativamente a la evaluación individual. Este problema es exacerbado por la falta de mecanismos efectivos para evaluar la contribución individual dentro de los grupos.
 
-**Corrección en caja negra**
+**Corrección en caja negra:**
 La corrección de los trabajos se realiza bajo un enfoque de caja negra, es decir, se evalúa únicamente el resultado de la ejecución de una serie de pruebas sin considerar el diseño, los conocimientos reales adquiridos por los estudiantes, ni el esfuerzo invertido en el desarrollo del proyecto. Este tipo de evaluación no refleja adecuadamente las competencias adquiridas en la asignatura y puede resultar negligente para los alumnos que han trabajado diligentemente en su proyecto.
 
-**Falsa concepción de que el examen demuestra conocimientos sobre la asignatura**
+**Falsa concepción de que el examen demuestra conocimientos sobre la asignatura:**
 Existe una percepción errónea de que el examen final es un verdadero reflejo del conocimiento y las habilidades adquiridas en la asignatura. Sin embargo, la forma más eficiente de superar el examen y maximizar la nota es aprendiendo los ejercicios tipo y repitiendo las respuestas de memoria, sin una comprensión profunda de los conceptos. Esto no fomenta un aprendizaje significativo ni el desarrollo de competencias reales.
 
-**Problemática alargada en el tiempo**
+**Problemática alargada en el tiempo:**
 Esta situación se ha dilatado en el tiempo y no se ha hecho nada para cambiarlo. La persistencia de estos problemas a lo largo de años sin una intervención adecuada ha perpetuado un entorno académico hostil y a menudo desalentador para los estudiantes.
 
 ### Solución Propuesta
