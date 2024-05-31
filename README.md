@@ -64,7 +64,7 @@ La tabla de símbolos es una estructura esencial que guarda los identificadores 
 - Implementación: `src/main/java/tablaSimbolos`
 
 Pasos a seguir:
-- Este módulo y sus clases son generales y pueden ser referenciados directamente para el desarrollo de la práctica.
+- Este módulo y sus clases son generales y pueden ser una referencia directa para el desarrollo de la práctica.
 
 ### 1. Definir Tokens
 
@@ -74,7 +74,7 @@ Un token es la unidad léxica más pequeña e indivisible con significado propio
 
 Pasos a seguir:
 
-0. **Definir los Tokens:** Se deben definir los tokens de la práctica, que dependen de las opciones elegidas.
+0. **Definir los Tokens:** Se deben definir los tokens de la práctica, que dependen de las opciones de que se deben implementar.
 
 1. **Adaptar `TipoToken.java`:**
     - Incluir todos los tokens, incluyendo `FINDEFICHERO`.
@@ -107,7 +107,7 @@ Pasos a seguir:
 
 1. **Adaptar Enums** (`src/main/java/lexico/enums`):
 
-    - `PalabraReservada.java`: Escibir aquí las palabras reservadas.
+    - `PalabraReservada.java`: Escribir aquí las palabras reservadas.
     - `EstadoTransito.java`: Definir los estados de tránsito del autómata. Ejemplos:
         - `SIMBOLOIGUAL`: Estado intermedio entre los tokens `=` ASIGNACION y `==` COMPARADOR.
         - `LEXEMA`: Estado intermedio entre los tokens IDENTIFICADOR y PALABRARESERVADA.
@@ -162,12 +162,12 @@ Tan solo se tiene que crear la gramática sintáctica correspondiente a la prác
         sudo apt update
         sudo apt install bison
         ```
-    - En Windows: descarga WSL y ejecuta los comandos desde ahí.
+    - En Windows: descarga WSL y ejecuta los comandos desde ahí, o utiliza una máquina virtual de Linux.
 
 2. **Crear el archivo `gramatica.y`**:
 
     - Este archivo sirve como input para Bison.
-    - **IMPORTANTE**: Los nombres entre paréntesis en `TipoToken` se usarán en `%token`. Incluir también las palabras reservadas. No incluir `$end`.
+    - **IMPORTANTE**: Los nombres entre paréntesis de `TipoToken` se usarán en `%token`. Incluir también las palabras reservadas. No incluir `$end`.
     - Ejemplo de archivo `.y`:
 
         ```yacc
@@ -294,7 +294,7 @@ Tan solo se tiene que crear la gramática sintáctica correspondiente a la prác
     - Comprobar que se generan correctamente las reglas:
         1. Crear un archivo `input.txt` y guardarlo en el directorio `input`.
         2. Comprobar que las reglas en `output/reglasAplicadas.txt` son correctas.
-        3. Usar el programa **VASt** para representar el árbol sintáctico (se explicará más adelante cómo usar VASt).
+        3. Usar el programa **VASt** para representar el árbol sintáctico (se explica más adelante cómo usar VASt).
 
 ### 4. Analizador Semántico
 
@@ -325,11 +325,11 @@ En el directorio `src/test/archivosTest` se han creado una serie de pruebas. Se 
 
 ### 6. Presentación
 
-La presentación consiste en procesar un fichero de input delante de uno de los profesores. Durante la presentación no se realizan preguntas acerca del proceso de desarrollo, ni se pide que se explique el diseño del procesador, ni conceptos relativos a la asignatura. Esta presentación se reduce exclusivamente a comprobar que los archivos de output son correctos, se genera el árbol sintáctico con VASt, y se han identificado los errores en el input.
+La presentación consiste en procesar un fichero de input. Durante la presentación no se realizan preguntas acerca del proceso de desarrollo, ni se pide que se explique el diseño del procesador, ni se pregunta sobre conceptos relativos a la asignatura. Esta presentación se reduce exclusivamente a comprobar que los archivos de output son correctos, se genera el árbol sintáctico con VASt, y se han identificado los errores en el input.
 
-En otras palabras, se trata de superar una prueba, el método para superarla es indiferente. A este tipo de procedimiento se le llama pruebas de caja negra.
+En otras palabras, se trata de superar una prueba, el método para superarla es indiferente. A este tipo de testing se le llama pruebas de caja negra, sirve para evaluar que se cumplen los requisitos funcionales de un producto sin tener en cuenta su diseño interno.
 
-Una consecuencia directa de este tipo de evaluación es que el código que se ejecute durante esta presentación puede ser el desarrollado por el alumno, o no, ya que no se realiza ningún tipo de comprobación. Y, aunque el código sea realmente desarrollado por el alumno, este puede no seguir ninguno de los principios impartidos en la asignatura y tener un diseño completamente alternativo, o deficiente.
+Una consecuencia directa de este tipo de evaluación es que el código que se ejecute durante esta presentación puede ser el desarrollado por el alumno, o no, ya que no se realiza ningún tipo de comprobación. Y, aunque el código sea realmente desarrollado por el alumno, este puede no seguir ninguno de los principios impartidos en la asignatura y tener un diseño completamente alternativo o deficiente.
 
 ### Visualización de Árboles Sintácticos con VASt
 
@@ -436,42 +436,42 @@ Si necesitas más detalles, no dudes en preguntar.
 
 ### Problemática de la Asignatura
 
-**Ratio elevado de suspensos: cuello de botella:**
-La asignatura de Procesadores de Lenguajes tiene un alto índice de suspensos, convirtiéndose en un verdadero cuello de botella para los estudiantes de Ingeniería Informática. Este elevado ratio de suspensos puede desmotivar a los alumnos, retrasar su progreso académico, e incluso motivar al avandono del grado.
+**Ratio elevado de suspensos:**
+La asignatura de Procesadores de Lenguajes tiene un alto índice de suspensos, convirtiéndose en un verdadero cuello de botella para los estudiantes de Ingeniería Informática. Este elevado ratio de suspensos puede desmotivar a los alumnos, retrasar su progreso académico, e incluso alentar al abandono del grado. Esta situación se lleva arrastrando desde hace años y refleja una problemática estructural.
 
 **Cantidad de trabajo desproporcionada para 3 ECTS:**
-La carga de trabajo que se exige a los estudiantes para completar esta asignatura es considerablemente elevada en comparación con los 3 ECTS asignados. Esto genera una desproporción entre el esfuerzo requerido y los créditos obtenidos, profundizando en la sensación de desmotivación y agotamiento. La percepción general, y reflejada en las encuestas, es que el esfuerzo necesario para aprobar esta asignatura no se ve reflejado en los créditos otorgados.
+La carga de trabajo que se exige a los estudiantes para completar esta asignatura es considerablemente elevada en comparación con los 3 ECTS asignados. Esto genera una desproporción entre el esfuerzo requerido y los créditos obtenidos, profundizando en la sensación de desmotivación y agotamiento. La percepción general, y manifestada en las encuestas, es que el esfuerzo necesario para aprobar esta asignatura no se ve reflejado en los créditos otorgados.
 
 **Profesores que no colaboran:**
 La falta de colaboración y apoyo por parte de algunos profesores agrava la situación. En ocasiones, los estudiantes no reciben la orientación y el feedback necesarios para avanzar en sus proyectos, lo que aumenta la frustración y la dificultad para superar la asignatura. En sesiones de tutorías es común recibir un trato poco predispuesto a ayudar, con respuestas vagas a las dudas planteadas y, en algunos casos, incluso con actitud desagradable.
 
 **Falso reparto de trabajo entre compañeros:**
-A menudo, los trabajos en grupo presentan un falso reparto de tareas, donde no todos los miembros del grupo contribuyen equitativamente. Esto puede derivar en situaciones no deseadas donde el esfuerzo de unos pocos se diluye en el grupo, afectando negativamente a la evaluación individual. Este problema es exacerbado por la falta de mecanismos efectivos para evaluar la contribución individual dentro de los grupos.
+A menudo, los trabajos en grupo presentan un falso reparto de tareas, donde no todos los miembros del grupo contribuyen equitativamente. Esto puede derivar en situaciones no deseadas donde el esfuerzo de unos pocos se diluye en el grupo, afectando negativamente a la evaluación individual. Este problema es exacerbado por la falta de mecanismos efectivos para evaluar la contribución individual dentro de los grupos en esta asignatura.
 
-**Corrección en caja negra:**
+**Corrección que no tiene en cuenta el trabajo realizado:**
 La corrección de los trabajos se realiza bajo un enfoque de caja negra, es decir, se evalúa únicamente el resultado de la ejecución de una serie de pruebas sin considerar el diseño, los conocimientos reales adquiridos por los estudiantes, ni el esfuerzo invertido en el desarrollo del proyecto. Este tipo de evaluación no refleja adecuadamente las competencias adquiridas en la asignatura y puede resultar negligente para los alumnos que han trabajado diligentemente en su proyecto.
 
 **Falsa concepción de que el examen demuestra conocimientos sobre la asignatura:**
-Existe una percepción errónea de que el examen final es un verdadero reflejo del conocimiento y las habilidades adquiridas en la asignatura. Sin embargo, la forma más eficiente de superar el examen y maximizar la nota es aprendiendo los ejercicios tipo y repitiendo las respuestas de memoria, sin una comprensión profunda de los conceptos. Esto no fomenta un aprendizaje significativo ni el desarrollo de competencias reales.
+Existe una percepción errónea de que el examen final evidencia el conocimiento y las habilidades adquiridas en la asignatura. Sin embargo, la forma más eficiente de superar el examen y maximizar la nota es aprendiendo los ejercicios tipo y repitiendo las respuestas de memoria, sin una comprensión profunda de los conceptos. Esto no fomenta un aprendizaje significativo ni el desarrollo de competencias reales.
 
 **Problemática alargada en el tiempo:**
 Esta situación se ha dilatado en el tiempo y no se ha hecho nada para cambiarlo. La persistencia de estos problemas a lo largo de años sin una intervención adecuada ha perpetuado un entorno académico hostil y a menudo desalentador para los estudiantes.
 
 ### Solución Propuesta
-Con esta guía se pretende abordar los problemas mencionados, en particular la escasa colaboración de los profesores y la "corrección en caja negra", de modo que si algún alumno la sigue, el profesorado deba asegurarse de que se han comprendido bien los conceptos de la asignatura durante la sesión de presentación. Se espera una reacción constructiva por parte del profesorado de la asignatura en la siguiente dirección:
+Con esta guía se pretende abordar los problemas mencionados, en particular la escasa colaboración de los profesores y la corrección inadecuada. De este modo, si algún alumno sigue esta la guía, el profesorado debería asegurarse de que se han comprendido bien los conceptos de la asignatura durante la sesión de presentación. Se espera una reacción constructiva por parte del profesorado de la asignatura en la siguiente dirección:
 
 - **Evaluación del diseño:**
 
-    1. **Realizar preguntas en la sesión de presentación a TODOS los miembros del grupo:**
+    1. **Realizar preguntas en la sesión de presentación a todos los miembros del grupo:**
         Durante la presentación del proyecto, se propone formular preguntas relativas al desarrollo de la práctica a todos los miembros del grupo para asegurar que todos han participado activamente y poseen un entendimiento del trabajo realizado.
 
     2. **Exposición de los módulos implementados:**
         Los estudiantes deben ser capaces de presentar y explicar los módulos que han implementado, detallando su funcionalidad y su integración en el proyecto global.
 
     3. **Inspección del código desarrollado:**
-        Se propone inspeccionar directamente el código y evaluar en función de si aplica correctamente los conceptos de la asignatura. Esto incluye la implementación de diferentes módulos utilizando la lógica correspondiente y siguiendo los algoritmos presentados en la asignatura.
+        Se propone inspeccionar directamente el código y evaluar en función de si aplica correctamente los conceptos impartidos. Esto incluye la implementación de diferentes módulos utilizando la lógica correspondiente y siguiendo los algoritmos que se enseñan en la asignatura.
 
-    4. **Comprobación de que el código utilizado en la exposición está realmente dsarrollado por los alumnos:**
+    4. **Comprobación de que el código utilizado en la exposición está realmente desarrollado por los alumnos:**
         Es fundamental verificar que el código presentado ha sido desarrollado por los alumnos y no ha sido plagiado, garantizando la integridad académica.
 
 
