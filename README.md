@@ -151,7 +151,7 @@ El analizador sintáctico recibe token a token y genera como output las reglas u
 
 Se ha implementado un analizador sintáctico **ASCENDENTE LR**. Es decir, se aconseja elegir esta opción en la práctica si se desea seguir esta guía.
 
-Tan solo se tiene que crear la gramática sintáctica correspondiente a la práctica, y procesarla con bison (se explica a continuación cómo). Para desarrollar el analizador sintáctico, sigue estos pasos:
+La tarea principal es crear la gramática sintáctica correspondiente a la práctica y procesarla con bison (se explica a continuación cómo).
 
 0. **Crear la gramática del analizador sintáctico**.
 
