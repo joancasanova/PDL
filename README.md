@@ -7,11 +7,11 @@ Este proyecto ha sido desarrollado para la asignatura **Procesadores de Lenguaje
 
 Para cualquier duda, no dudes en contactar conmigo, estaré encantado de ayudarte.
 
-## Table of Contents
+## Contenidos
 
-1. [Descripción del Proyecto](#descripción-del-proyecto)
-2. [Funcionalidades Implementadas](#funcionalidades-implementadas)
-3. [Guía Completa para el Desarrollo de la Práctica - JS-PdL](#guía-completa-para-el-desarrollo-de-la-práctica---js-pdl)
+0. [Descripción del Proyecto](#descripción-del-proyecto)
+1. [Funcionalidades Implementadas](#funcionalidades-implementadas)
+2. [Guía Completa para el Desarrollo de la Práctica - JS-PdL](#guía-completa-para-el-desarrollo-de-la-práctica---js-pdl)
     - [0. Tabla de Símbolos](#0-tabla-de-símbolos)
     - [1. Definir Tokens](#1-definir-tokens)
     - [2. Analizador Léxico](#2-analizador-léxico)
@@ -20,16 +20,16 @@ Para cualquier duda, no dudes en contactar conmigo, estaré encantado de ayudart
     - [5. Pruebas](#5-pruebas)
     - [6. Presentación](#6-presentación)
     - [Visualización de Árboles Sintácticos con VASt](#visualización-de-árboles-sintácticos-con-vast)
-4. [Cómo Ejecutar el Proyecto](#cómo-ejecutar-el-proyecto)
-5. [Motivación para el Desarrollo de esta Guía](#motivación-para-el-desarrollo-de-esta-guía)
+3. [Cómo Ejecutar el Proyecto](#cómo-ejecutar-el-proyecto)
+4. [Motivación para el Desarrollo de esta Guía](#motivación-para-el-desarrollo-de-esta-guía)
     - [Problemática de la Asignatura](#problemática-de-la-asignatura)
     - [Solución Propuesta](#solución-propuesta)
 
-## 1. Descripción del Proyecto
+## Descripción del Proyecto
 
 Este programa implementa un procesador de lenguaje para el lenguaje **JS-PdL**, una variante de JavaScript diseñada específicamente para la práctica de esta asignatura. Cabe destacar que las características de JS-PdL no coinciden al 100% con el estándar de JavaScript, ya que es una versión simplificada de éste.
 
-## 2. Funcionalidades Implementadas
+## Funcionalidades Implementadas
 
 Para esta práctica, se requiere desarrollar una serie de funcionalidades obligatorias y opcionales. Las funcionalidades completas pueden consultarse en la siguiente página: [Funciones JS-PdL](https://dlsiis.fi.upm.es/procesadores/IntroJavaScript.html).
 
@@ -41,7 +41,7 @@ Las funcionalidades opcionales implementadas en este proyecto son:
 - **Comentarios**: Comentario de línea (`//`)
 - **Cadenas**: Con comillas dobles (`" "`)
 
-## 3. Guía Completa para el Desarrollo de la Práctica - JS-PdL
+## Guía Completa para el Desarrollo de la Práctica - JS-PdL
 
 A continuación se presenta una guía detallada basada en el código de este repositorio para el desarrollo de la práctica.
 
@@ -49,13 +49,13 @@ A continuación se presenta una guía detallada basada en el código de este rep
 
 El desarrollo de la práctica se divide en las siguientes fases:
 
-1. **Tabla de Símbolos**
-2. **Definir Tokens**
-3. **Analizador Léxico**
-4. **Analizador Sintáctico**
-5. **Analizador Semántico**
-6. **Pruebas**
-7. **Presentación**
+0. **Tabla de Símbolos**
+1. **Definir Tokens**
+2. **Analizador Léxico**
+3. **Analizador Sintáctico**
+4. **Analizador Semántico**
+5. **Pruebas**
+6. **Presentación**
 
 ### 0. Tabla de Símbolos
 
@@ -64,7 +64,7 @@ La tabla de símbolos es una estructura esencial que guarda los identificadores 
 - Implementación: `src/main/java/tablaSimbolos`
 
 Pasos a seguir:
-- Este módulo y sus clases son generales y pueden ser referenciados directamente para el desarrollo de la práctica.
+- Este módulo y sus clases son generales y pueden ser una referencia directa para el desarrollo de la práctica.
 
 ### 1. Definir Tokens
 
@@ -74,7 +74,7 @@ Un token es la unidad léxica más pequeña e indivisible con significado propio
 
 Pasos a seguir:
 
-0. **Definir los Tokens:** Se deben definir los tokens de la práctica, que dependen de las opciones elegidas.
+0. **Definir los Tokens:** Se deben definir los tokens de la práctica, que dependen de las opciones de que se deben implementar.
 
 1. **Adaptar `TipoToken.java`:**
     - Incluir todos los tokens, incluyendo `FINDEFICHERO`.
@@ -107,7 +107,7 @@ Pasos a seguir:
 
 1. **Adaptar Enums** (`src/main/java/lexico/enums`):
 
-    - `PalabraReservada.java`: Escibir aquí las palabras reservadas.
+    - `PalabraReservada.java`: Escribir aquí las palabras reservadas.
     - `EstadoTransito.java`: Definir los estados de tránsito del autómata. Ejemplos:
         - `SIMBOLOIGUAL`: Estado intermedio entre los tokens `=` ASIGNACION y `==` COMPARADOR.
         - `LEXEMA`: Estado intermedio entre los tokens IDENTIFICADOR y PALABRARESERVADA.
@@ -151,7 +151,7 @@ El analizador sintáctico recibe token a token y genera como output las reglas u
 
 Se ha implementado un analizador sintáctico **ASCENDENTE LR**. Es decir, se aconseja elegir esta opción en la práctica si se desea seguir esta guía.
 
-Tan solo se tiene que crear la gramática sintáctica correspondiente a la práctica, y procesarla con bison (se explica a continuación cómo). Para desarrollar el analizador sintáctico, sigue estos pasos:
+La tarea principal es crear la gramática sintáctica correspondiente a la práctica y procesarla con bison (se explica a continuación cómo).
 
 0. **Crear la gramática del analizador sintáctico**.
 
@@ -162,12 +162,12 @@ Tan solo se tiene que crear la gramática sintáctica correspondiente a la prác
         sudo apt update
         sudo apt install bison
         ```
-    - En Windows: descarga WSL y ejecuta los comandos desde ahí.
+    - En Windows: descarga WSL y ejecuta los comandos desde ahí, o utiliza una máquina virtual de Linux.
 
 2. **Crear el archivo `gramatica.y`**:
 
     - Este archivo sirve como input para Bison.
-    - **IMPORTANTE**: Los nombres entre paréntesis en `TipoToken` se usarán en `%token`. Incluir también las palabras reservadas. No incluir `$end`.
+    - **IMPORTANTE**: Los nombres entre paréntesis de `TipoToken` se usarán en `%token`. Incluir también las palabras reservadas. No incluir `$end`.
     - Ejemplo de archivo `.y`:
 
         ```yacc
@@ -294,7 +294,7 @@ Tan solo se tiene que crear la gramática sintáctica correspondiente a la prác
     - Comprobar que se generan correctamente las reglas:
         1. Crear un archivo `input.txt` y guardarlo en el directorio `input`.
         2. Comprobar que las reglas en `output/reglasAplicadas.txt` son correctas.
-        3. Usar el programa **VASt** para representar el árbol sintáctico (se explicará más adelante cómo usar VASt).
+        3. Usar el programa **VASt** para representar el árbol sintáctico (se explica más adelante cómo usar VASt).
 
 ### 4. Analizador Semántico
 
@@ -325,11 +325,11 @@ En el directorio `src/test/archivosTest` se han creado una serie de pruebas. Se 
 
 ### 6. Presentación
 
-La presentación consiste en procesar un fichero de input delante de uno de los profesores. Durante la presentación no se realizan preguntas acerca del proceso de desarrollo, ni se pide que se explique el diseño del procesador, ni conceptos relativos a la asignatura. Esta presentación se reduce exclusivamente a comprobar que los archivos de output son correctos, se genera el árbol sintáctico con VASt, y se han identificado los errores en el input.
+La presentación consiste en procesar un fichero de input. Durante la presentación no se realizan preguntas acerca del proceso de desarrollo, ni se pide que se explique el diseño del procesador, ni se pregunta sobre conceptos relativos a la asignatura. Esta presentación se reduce exclusivamente a comprobar que los archivos de output son correctos, se genera el árbol sintáctico con VASt, y se han identificado los errores en el input.
 
-En otras palabras, se trata de superar una prueba, el método para superarla es indiferente. A este tipo de procedimiento se le llama pruebas de caja negra.
+En otras palabras, se trata de superar una prueba, el método para superarla es indiferente. A este tipo de testing se le llama pruebas de caja negra, sirve para evaluar que se cumplen los requisitos funcionales de un producto sin tener en cuenta su diseño interno.
 
-Una consecuencia directa de este tipo de evaluación es que el código que se ejecute durante esta presentación puede ser el desarrollado por el alumno, o no, ya que no se realiza ningún tipo de comprobación. Y, aunque el código sea realmente desarrollado por el alumno, este puede no seguir ninguno de los principios impartidos en la asignatura y tener un diseño completamente alternativo, o deficiente.
+Una consecuencia directa de este tipo de evaluación es que el código que se ejecute durante esta presentación puede ser el desarrollado por el alumno, o no, ya que no se realiza ningún tipo de comprobación. Y, aunque el código sea realmente desarrollado por el alumno, este puede no seguir ninguno de los principios impartidos en la asignatura y tener un diseño completamente alternativo o deficiente.
 
 ### Visualización de Árboles Sintácticos con VASt
 
@@ -404,7 +404,7 @@ Una consecuencia directa de este tipo de evaluación es que el código que se ej
 
 5. **Archivo > Generar Árbol**.
 
-## 4. Cómo Ejecutar el Proyecto
+## 3. Cómo Ejecutar el Proyecto
 
 Para ejecutar el proyecto usando Gradle, sigue estos pasos:
 
@@ -430,50 +430,49 @@ Para ejecutar el proyecto usando Gradle, sigue estos pasos:
 
 Asegúrate de que el archivo `input.txt` está en el directorio `input` antes de ejecutar el programa.
 
-Si necesitas más detalles o alguna modificación, no dudes en decírmelo.
+Si necesitas más detalles, no dudes en preguntar.
 
-## 5. Motivación para el Desarrollo de esta Guía
+## Motivación para el Desarrollo de esta Guía
 
 ### Problemática de la Asignatura
 
-**Ratio elevado de suspensos: cuello de botella:**
-La asignatura de Procesadores de Lenguajes tiene un alto índice de suspensos, convirtiéndose en un verdadero cuello de botella para los estudiantes de Ingeniería Informática. Este elevado ratio de suspensos puede desmotivar a los alumnos, retrasar su progreso académico, e incluso motivar al avandono del grado.
+**Ratio elevado de suspensos:**
+La asignatura de Procesadores de Lenguajes tiene un alto índice de suspensos, convirtiéndose en un cuello de botella para los estudiantes de Ingeniería Informática. Este elevado ratio de suspensos tiene como consecuencia la desmotivación de los alumnos, el retrasar su progreso académico, e incluso alentar al abandono del grado. En la [página web de la asignatura](https://dlsiis.fi.upm.es/procesadores/FAQ.html) se revela que tan solo el 68% de los "estudiantes que se han esforzado" aprueban la práctica. Esto es una estadística reveladora, ya que implica que más del 30% de los alumnos que se esfuerzan suspenden, es decir, existe un problema si un tercio de los alumnos trabajadores no son capaces de superar la práctica. Esta situación se lleva arrastrando desde hace años y refleja una problemática estructural.
 
 **Cantidad de trabajo desproporcionada para 3 ECTS:**
-La carga de trabajo que se exige a los estudiantes para completar esta asignatura es considerablemente elevada en comparación con los 3 ECTS asignados. Esto genera una desproporción entre el esfuerzo requerido y los créditos obtenidos, profundizando en la sensación de desmotivación y agotamiento. La percepción general, y reflejada en las encuestas, es que el esfuerzo necesario para aprobar esta asignatura no se ve reflejado en los créditos otorgados.
+La carga de trabajo que se exige a los estudiantes para completar esta asignatura es considerablemente elevada en comparación con los 3 ECTS asignados. Esto genera una desproporción entre el esfuerzo requerido y los créditos obtenidos, profundizando en la sensación de desmotivación y agotamiento. La percepción general, y manifestada en las encuestas, es que el esfuerzo necesario para aprobar esta asignatura no se ve reflejado en los créditos otorgados.
 
-**Profesores que no colaboran:**
-La falta de colaboración y apoyo por parte de algunos profesores agrava la situación. En ocasiones, los estudiantes no reciben la orientación y el feedback necesarios para avanzar en sus proyectos, lo que aumenta la frustración y la dificultad para superar la asignatura. En sesiones de tutorías es común recibir un trato poco predispuesto a ayudar, con respuestas vagas a las dudas planteadas y, en algunos casos, incluso con actitud desagradable.
+**Colaboración deficiente del equipo docente:**
+Mientras que es evidente que el equipo docente pone extensas herramientas y recursos a disposición del alumno, como las clases presenciales, clases para las prácticas, o la página web de Draco, estos recursos no atajan la problemática real a la que se enfrentan los alumnos con esta práctica. Debido a las grandes dimensiones de ésta, el reto no solo recae en comprender los conceptos teóricos de la materia, sino también en la organización y el desarrollo de un software no trivial. Respecto a esto último, los alumnos se ven solos. La falta de colaboración y apoyo por parte de algunos profesores agrava la situación. En ocasiones, los estudiantes no reciben la orientación y el feedback necesarios para avanzar en sus proyectos, lo que aumenta la frustración y la dificultad para superar la asignatura. Es también de conocimiento general que en sesiones de tutorías es común recibir un trato poco predispuesto a ayudar, con respuestas vagas a las dudas planteadas y, en algunos casos, incluso se dan comportamientos desagradables.
 
-**Falso reparto de trabajo entre compañeros:**
-A menudo, los trabajos en grupo presentan un falso reparto de tareas, donde no todos los miembros del grupo contribuyen equitativamente. Esto puede derivar en situaciones no deseadas donde el esfuerzo de unos pocos se diluye en el grupo, afectando negativamente a la evaluación individual. Este problema es exacerbado por la falta de mecanismos efectivos para evaluar la contribución individual dentro de los grupos.
+**Reparto desequilibrado de trabajo entre compañeros:**
+A menudo, los trabajos en grupo presentan un reparto desequilibrado de tareas, donde no todos los miembros del grupo contribuyen equitativamente. Esto puede derivar en situaciones no deseadas donde el esfuerzo de unos pocos se diluye en el grupo, afectando negativamente a la evaluación individual. Este problema es exacerbado por la falta de mecanismos efectivos para evaluar la contribución individual dentro de los grupos en esta asignatura. En el caso concreto de esta práctica, este problema se ve acentuado ya que, debido a las dimensiones del proyecto, si no se consigue un reparto equitativo de las tareas, la carga de trabajo pasa a ser desmesurada para el alumno. Este problema es muy común, ya que no es sencillo encontrar compañeros que tengan las habilidades y la predisposición necesarias para abordar la práctica, y es mera cuestión de suerte encontrarlos.
 
-**Corrección en caja negra:**
+**Corrección que no tiene en cuenta el trabajo realizado:**
 La corrección de los trabajos se realiza bajo un enfoque de caja negra, es decir, se evalúa únicamente el resultado de la ejecución de una serie de pruebas sin considerar el diseño, los conocimientos reales adquiridos por los estudiantes, ni el esfuerzo invertido en el desarrollo del proyecto. Este tipo de evaluación no refleja adecuadamente las competencias adquiridas en la asignatura y puede resultar negligente para los alumnos que han trabajado diligentemente en su proyecto.
 
-**Falsa concepción de que el examen demuestra conocimientos sobre la asignatura:**
-Existe una percepción errónea de que el examen final es un verdadero reflejo del conocimiento y las habilidades adquiridas en la asignatura. Sin embargo, la forma más eficiente de superar el examen y maximizar la nota es aprendiendo los ejercicios tipo y repitiendo las respuestas de memoria, sin una comprensión profunda de los conceptos. Esto no fomenta un aprendizaje significativo ni el desarrollo de competencias reales.
+**Concepción errónea de que el examen demuestra conocimientos sobre la asignatura:**
+Existe una percepción errónea de que el examen final demuestra el conocimiento y las habilidades adquiridas en la asignatura. Es cierto que muchos de los alumnos que aprueban el examen sí han adquirido las competencias, pero la forma más eficiente de superar el examen y maximizar la nota es aprendiendo los ejercicios tipo y repitiendo las respuestas de memoria, sin necesariamente tener una comprensión profunda de los conceptos. Esto no fomenta un aprendizaje significativo ni el desarrollo de competencias reales.
 
 **Problemática alargada en el tiempo:**
-Esta situación se ha dilatado en el tiempo y no se ha hecho nada para cambiarlo. La persistencia de estos problemas a lo largo de años sin una intervención adecuada ha perpetuado un entorno académico hostil y a menudo desalentador para los estudiantes.
+Esta es una situación que se dilata en el tiempo y que no muestra signos de cambio. La persistencia de estos problemas a lo largo de años sin la intervención adecuada está originando un entorno académico hostil y a menudo desalentador para los estudiantes.
 
 ### Solución Propuesta
-Con esta guía se pretende abordar los problemas mencionados, en particular la escasa colaboración de los profesores y la "corrección en caja negra", de modo que si algún alumno la sigue, el profesorado deba asegurarse de que se han comprendido bien los conceptos de la asignatura durante la sesión de presentación. Se espera una reacción constructiva por parte del profesorado de la asignatura en la siguiente dirección:
+Con esta guía se pretende abordar y paliar los problemas mencionados. De este modo, los alumnos que acudan a esta guía podrán tener una asistencia extra en el desarrollo de su práctica. Se espera una reacción constructiva por parte del equipo docente de la asignatura, y se proponen las siguientes medidas:
 
 - **Evaluación del diseño:**
 
-    1. **Realizar preguntas en la sesión de presentación a TODOS los miembros del grupo:**
+    1. **Realizar preguntas en la sesión de presentación a todos los miembros del grupo:**
         Durante la presentación del proyecto, se propone formular preguntas relativas al desarrollo de la práctica a todos los miembros del grupo para asegurar que todos han participado activamente y poseen un entendimiento del trabajo realizado.
 
     2. **Exposición de los módulos implementados:**
         Los estudiantes deben ser capaces de presentar y explicar los módulos que han implementado, detallando su funcionalidad y su integración en el proyecto global.
 
     3. **Inspección del código desarrollado:**
-        Se propone inspeccionar directamente el código y evaluar en función de si aplica correctamente los conceptos de la asignatura. Esto incluye la implementación de diferentes módulos utilizando la lógica correspondiente y siguiendo los algoritmos presentados en la asignatura.
+        Se propone inspeccionar directamente el código y evaluar en función de si aplica correctamente los conceptos impartidos. Esto incluye la implementación de diferentes módulos utilizando la lógica correspondiente y siguiendo los algoritmos que se enseñan en la asignatura.
 
-    4. **Comprobación de que el código utilizado en la exposición está realmente dsarrollado por los alumnos:**
+    4. **Comprobación de que el código utilizado en la exposición está realmente desarrollado por los alumnos:**
         Es fundamental verificar que el código presentado ha sido desarrollado por los alumnos y no ha sido plagiado, garantizando la integridad académica.
-
 
 - **Valoración del trabajo acorde a los créditos de la asignatura**
 La evaluación del trabajo debe ser proporcional a los créditos asignados a la asignatura (3 ECTS). Esto implica ajustar la carga de trabajo y la complejidad de los proyectos a un nivel razonable, que permita a los estudiantes alcanzar los objetivos de aprendizaje sin una carga excesiva de trabajo. Para valorar el trabajo de los alumnos se puede recurrir a las siguientes herramientas:
