@@ -437,28 +437,28 @@ Si necesitas más detalles, no dudes en preguntar.
 ### Problemática de la Asignatura
 
 **Ratio elevado de suspensos:**
-La asignatura de Procesadores de Lenguajes tiene un alto índice de suspensos, convirtiéndose en un verdadero cuello de botella para los estudiantes de Ingeniería Informática. Este elevado ratio de suspensos puede desmotivar a los alumnos, retrasar su progreso académico, e incluso alentar al abandono del grado. Esta situación se lleva arrastrando desde hace años y refleja una problemática estructural.
+La asignatura de Procesadores de Lenguajes tiene un alto índice de suspensos, convirtiéndose en un cuello de botella para los estudiantes de Ingeniería Informática. Este elevado ratio de suspensos tiene como consecuencia la desmotivación de los alumnos, el retrasar su progreso académico, e incluso alentar al abandono del grado. En la [página web de la asignatura](https://dlsiis.fi.upm.es/procesadores/FAQ.html) se revela que tan solo el 68% de los "estudiantes que se han esforzado" aprueban la práctica. Esto es una estadística reveladora, ya que implica que más del 30% de los alumnos que se esfuerzan suspenden, es decir, existe un problema si un tercio de los alumnos trabajadores no son capaces de superar la práctica. Esta situación se lleva arrastrando desde hace años y refleja una problemática estructural.
 
 **Cantidad de trabajo desproporcionada para 3 ECTS:**
 La carga de trabajo que se exige a los estudiantes para completar esta asignatura es considerablemente elevada en comparación con los 3 ECTS asignados. Esto genera una desproporción entre el esfuerzo requerido y los créditos obtenidos, profundizando en la sensación de desmotivación y agotamiento. La percepción general, y manifestada en las encuestas, es que el esfuerzo necesario para aprobar esta asignatura no se ve reflejado en los créditos otorgados.
 
-**Profesores que no colaboran:**
-La falta de colaboración y apoyo por parte de algunos profesores agrava la situación. En ocasiones, los estudiantes no reciben la orientación y el feedback necesarios para avanzar en sus proyectos, lo que aumenta la frustración y la dificultad para superar la asignatura. En sesiones de tutorías es común recibir un trato poco predispuesto a ayudar, con respuestas vagas a las dudas planteadas y, en algunos casos, incluso con actitud desagradable.
+**Colaboración deficiente del equipo docente:**
+Mientras que es evidente que el equipo docente pone extensas herramientas y recursos a disposición del alumno, como las clases presenciales, clases para las prácticas, o la página web de Draco, estos recursos no atajan la problemática real a la que se enfrentan los alumnos con esta práctica. Debido a las grandes dimensiones de ésta, el reto no solo recae en comprender los conceptos teóricos de la materia, sino también en la organización y el desarrollo de un software no trivial. Respecto a esto último, los alumnos se ven solos. La falta de colaboración y apoyo por parte de algunos profesores agrava la situación. En ocasiones, los estudiantes no reciben la orientación y el feedback necesarios para avanzar en sus proyectos, lo que aumenta la frustración y la dificultad para superar la asignatura. Es también de conocimiento general que en sesiones de tutorías es común recibir un trato poco predispuesto a ayudar, con respuestas vagas a las dudas planteadas y, en algunos casos, incluso se dan comportamientos desagradables.
 
-**Falso reparto de trabajo entre compañeros:**
-A menudo, los trabajos en grupo presentan un falso reparto de tareas, donde no todos los miembros del grupo contribuyen equitativamente. Esto puede derivar en situaciones no deseadas donde el esfuerzo de unos pocos se diluye en el grupo, afectando negativamente a la evaluación individual. Este problema es exacerbado por la falta de mecanismos efectivos para evaluar la contribución individual dentro de los grupos en esta asignatura.
+**Reparto desequilibrado de trabajo entre compañeros:**
+A menudo, los trabajos en grupo presentan un reparto desequilibrado de tareas, donde no todos los miembros del grupo contribuyen equitativamente. Esto puede derivar en situaciones no deseadas donde el esfuerzo de unos pocos se diluye en el grupo, afectando negativamente a la evaluación individual. Este problema es exacerbado por la falta de mecanismos efectivos para evaluar la contribución individual dentro de los grupos en esta asignatura. En el caso concreto de esta práctica, este problema se ve acentuado ya que, debido a las dimensiones del proyecto, si no se consigue un reparto equitativo de las tareas, la carga de trabajo pasa a ser desmesurada para el alumno. Este problema es muy común, ya que no es sencillo encontrar compañeros que tengan las habilidades y la predisposición necesarias para abordar la práctica, y es mera cuestión de suerte encontrarlos.
 
 **Corrección que no tiene en cuenta el trabajo realizado:**
 La corrección de los trabajos se realiza bajo un enfoque de caja negra, es decir, se evalúa únicamente el resultado de la ejecución de una serie de pruebas sin considerar el diseño, los conocimientos reales adquiridos por los estudiantes, ni el esfuerzo invertido en el desarrollo del proyecto. Este tipo de evaluación no refleja adecuadamente las competencias adquiridas en la asignatura y puede resultar negligente para los alumnos que han trabajado diligentemente en su proyecto.
 
-**Falsa concepción de que el examen demuestra conocimientos sobre la asignatura:**
-Existe una percepción errónea de que el examen final evidencia el conocimiento y las habilidades adquiridas en la asignatura. Sin embargo, la forma más eficiente de superar el examen y maximizar la nota es aprendiendo los ejercicios tipo y repitiendo las respuestas de memoria, sin una comprensión profunda de los conceptos. Esto no fomenta un aprendizaje significativo ni el desarrollo de competencias reales.
+**Concepción errónea de que el examen demuestra conocimientos sobre la asignatura:**
+Existe una percepción errónea de que el examen final demuestra el conocimiento y las habilidades adquiridas en la asignatura. Es cierto que muchos de los alumnos que aprueban el examen sí han adquirido las competencias, pero la forma más eficiente de superar el examen y maximizar la nota es aprendiendo los ejercicios tipo y repitiendo las respuestas de memoria, sin necesariamente tener una comprensión profunda de los conceptos. Esto no fomenta un aprendizaje significativo ni el desarrollo de competencias reales.
 
 **Problemática alargada en el tiempo:**
-Esta situación se ha dilatado en el tiempo y no se ha hecho nada para cambiarlo. La persistencia de estos problemas a lo largo de años sin una intervención adecuada ha perpetuado un entorno académico hostil y a menudo desalentador para los estudiantes.
+Esta es una situación que se dilata en el tiempo y que no muestra signos de cambio. La persistencia de estos problemas a lo largo de años sin la intervención adecuada está originando un entorno académico hostil y a menudo desalentador para los estudiantes.
 
 ### Solución Propuesta
-Con esta guía se pretende abordar los problemas mencionados, en particular la escasa colaboración de los profesores y la corrección inadecuada. De este modo, si algún alumno sigue esta la guía, el profesorado debería asegurarse de que se han comprendido bien los conceptos de la asignatura durante la sesión de presentación. Se espera una reacción constructiva por parte del profesorado de la asignatura en la siguiente dirección:
+Con esta guía se pretende abordar y paliar los problemas mencionados. De este modo, los alumnos que acudan a esta guía podrán tener una asistencia extra en el desarrollo de su práctica. Se espera una reacción constructiva por parte del equipo docente de la asignatura, y se proponen las siguientes medidas:
 
 - **Evaluación del diseño:**
 
@@ -473,7 +473,6 @@ Con esta guía se pretende abordar los problemas mencionados, en particular la e
 
     4. **Comprobación de que el código utilizado en la exposición está realmente desarrollado por los alumnos:**
         Es fundamental verificar que el código presentado ha sido desarrollado por los alumnos y no ha sido plagiado, garantizando la integridad académica.
-
 
 - **Valoración del trabajo acorde a los créditos de la asignatura**
 La evaluación del trabajo debe ser proporcional a los créditos asignados a la asignatura (3 ECTS). Esto implica ajustar la carga de trabajo y la complejidad de los proyectos a un nivel razonable, que permita a los estudiantes alcanzar los objetivos de aprendizaje sin una carga excesiva de trabajo. Para valorar el trabajo de los alumnos se puede recurrir a las siguientes herramientas:
