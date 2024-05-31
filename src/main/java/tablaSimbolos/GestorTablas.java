@@ -181,19 +181,6 @@ public class GestorTablas {
     }
 
     /**
-     * Verifica el primer símbolo sin tipo en la lista.
-     * 
-     * @return El primer símbolo sin tipo o null si no hay símbolos sin tipo.
-     */
-    public Simbolo verPrimerSimboloSinTipo() {
-        if (simbolosSinTipo.size() < 1) {
-            return null;
-        }
-
-        return simbolosSinTipo.get(0);
-    }
-
-    /**
      * Obtiene el estado de la zona de declaración.
      * 
      * @return true si está en zona de declaración, false en caso contrario.

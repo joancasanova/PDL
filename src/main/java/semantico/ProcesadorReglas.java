@@ -18,7 +18,7 @@ public class ProcesadorReglas {
     private Stack<Tipo> pilaTipos;
     private GestorParametros gestorParametros;
 
-    private Boolean zonaFuncion;
+    private Boolean returnEjecutado;
     private Tipo tipoReturnCondicional;
 
     /**
@@ -28,7 +28,7 @@ public class ProcesadorReglas {
         this.gestorTablas = GestorTablas.getInstance();
         this.pilaTipos = new Stack<>();
         this.gestorParametros = GestorParametros.getInstance();
-        this.zonaFuncion = false;
+        this.returnEjecutado = false;
     }
 
     /**
@@ -57,6 +57,7 @@ public class ProcesadorReglas {
             case 2: // P: B P
             case 3: // P: F P
             case 4: // P: lambda
+            case 9: // B: S
             case 16: // H: T
             case 19: // A: VOID
             case 21: // K: lambda
@@ -76,9 +77,6 @@ public class ProcesadorReglas {
                 break;
             case 8: // B: LET ID T = E ;
                 procesarAsignacion();
-                break;
-            case 9: // B: S
-                procesarRetorno();
                 break;
             case 10: // T: INT
                 pilaTipos.add(Tipo.INT);
@@ -103,10 +101,10 @@ public class ProcesadorReglas {
                 break;
             case 18: // A: T ID K
             case 20: // K: , T ID K
-                procesarParametros();
+                procesarParametro();
                 break;
             case 22: // C: B C
-                procesarSecuencia();
+                procesarSentencia();
                 break;
             case 23: // C: lambda
                 pilaTipos.add(Tipo.OK);
@@ -172,65 +170,68 @@ public class ProcesadorReglas {
 
     /**
      * Procesa las reglas de estructuras de control IF y WHILE.
+     * 
+     * case 5: // B: IF ( E ) S
+     * case 6: // B: WHILE ( E ) { C }
      */
     private void procesarIfWhile() {
-        Tipo tipoSimboloS = pilaTipos.pop();
-        Tipo tipoSimboloE = pilaTipos.pop();
-        if (!tipoSimboloE.equals(Tipo.BOOLEAN)) {
+        Tipo tipoS = pilaTipos.pop();
+        Tipo tipoE = pilaTipos.pop();
+
+        if (!tipoE.equals(Tipo.BOOLEAN)) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPO_BOOLEAN);
         }
 
-        tipoReturnCondicional = tipoSimboloS;
+        tipoReturnCondicional = tipoS;
         pilaTipos.add(Tipo.OK);
     }
 
     /**
      * Procesa la declaración de una variable.
+     * 
+     * case 7: // B: LET ID T ;
      */
     private void procesarDeclaracion() {
-        Tipo tipoSimbolo = pilaTipos.pop();
+        Tipo tipo = pilaTipos.pop();
         Simbolo simbolo = gestorTablas.consumirSimboloSinTipo();
-        asignarTipo(simbolo, tipoSimbolo, gestorTablas.obtenerTablaActual());
+        asignarTipoEnTablaSimbolos(simbolo, tipo, gestorTablas.obtenerTablaActual());
+
         pilaTipos.add(Tipo.OK);
     }
 
     /**
      * Procesa la asignación de una variable.
+     * 
+     * case 8: // B: LET ID T = E ;
      */
     private void procesarAsignacion() {
-        Tipo tipoSimboloE = pilaTipos.pop();
-        Tipo tipoSimboloT = pilaTipos.pop();
-        if (tipoSimboloE == tipoSimboloT) {
+        Tipo tipoE = pilaTipos.pop();
+        Tipo tipoT = pilaTipos.pop();
+
+        if (tipoE == tipoT) {
             Simbolo simbolo = gestorTablas.consumirSimboloSinTipo();
-            asignarTipo(simbolo, tipoSimboloT, gestorTablas.obtenerTablaActual());
+            asignarTipoEnTablaSimbolos(simbolo, tipoT, gestorTablas.obtenerTablaActual());
         } else {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPOS_NO_COINCIDEN);
         }
-        pilaTipos.add(Tipo.OK);
-    }
 
-    /**
-     * Procesa el retorno de una función.
-     */
-    private void procesarRetorno() {
-        Tipo tipoRetornoS = pilaTipos.pop();
-        if (tipoRetornoS != null) {
-            pilaTipos.add(tipoRetornoS);
-        }
+        pilaTipos.add(Tipo.OK);
     }
 
     /**
      * Procesa una función, verificando los tipos de retorno y destruyendo la tabla
      * de símbolos.
+     * 
+     * case 13: // F: F1 { C }
      */
     private void procesarFuncion() {
-        Tipo tipoRetornoC = pilaTipos.pop();
-        Tipo tipoRetornoF1 = pilaTipos.pop();
+        Tipo tipoC = pilaTipos.pop();
+        Tipo tipoF1 = pilaTipos.pop();
 
-        if (!(tipoRetornoF1.equals(tipoRetornoC))) {
-            if (!(tipoRetornoF1.equals(Tipo.VOID) && tipoRetornoC == Tipo.OK)) {
-                if (zonaFuncion
-                        && !(tipoRetornoF1.equals(tipoReturnCondicional))) {
+        if (!(tipoF1.equals(tipoC))) {
+            if (!(tipoF1.equals(Tipo.VOID) && tipoC == Tipo.OK)) {
+                if (returnEjecutado
+                        && !(tipoF1.equals(tipoReturnCondicional))) {
                     GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO,
                             GestorErrores.ERROR_TIPO_RETORNO_FUNCION);
                 }
@@ -242,64 +243,84 @@ public class ProcesadorReglas {
 
     /**
      * Procesa los parámetros de una función, asignando tipos y modos de paso.
+     * 
+     * case 14: // F1: F2 ( A )
      */
     private void procesarParametrosFuncion() {
-        gestorTablas.setZonaParametros(false);
+
+        // Asignar a la funcion el numero de parametros, y su tipo y su modo en la tabla
+        // de simbolos
         Simbolo simbolo = gestorTablas.getUltimoSimboloFuncion();
         simbolo.setNumeroParametros(gestorParametros.getNumeroParametrosFuncion());
         simbolo.setTipoParametros(new ArrayList<>(gestorParametros.getTipoParametrosFuncion()));
         simbolo.setModoPaso(new ArrayList<>(gestorParametros.getModoPasoParametros()));
+
+        // Se sale de la zona de parametros
+        gestorTablas.setZonaParametros(false);
         gestorParametros.reset();
     }
 
     /**
      * Procesa la declaración de una función, creando una nueva tabla de símbolos.
+     * 
+     * case 15: // F2: FUNCTION ID H
      */
     private void procesarFuncionID() {
-        zonaFuncion = false;
-        gestorTablas.setZonaParametros(true);
+
+        // Crear una tabla de simbolos nueva
         gestorTablas.nuevaTabla();
-        Tipo tipoSimbolo = pilaTipos.peek();
+        gestorTablas.setZonaParametros(true);
+        returnEjecutado = false;
+
+        // Asignar tipo de la funcion a la tabla de sinbolos
+        Tipo tipo = pilaTipos.peek();
         Simbolo simbolo = gestorTablas.consumirSimboloSinTipo();
         simbolo.setNumeroParametros(0);
-        simbolo.setTipoRetorno(tipoSimbolo);
-        asignarTipo(simbolo, tipoSimbolo, gestorTablas.obtenerTablaGlobal());
+        simbolo.setTipoRetorno(tipo);
+        asignarTipoEnTablaSimbolos(simbolo, tipo, gestorTablas.obtenerTablaGlobal());
     }
 
     /**
-     * Procesa los parámetros de una función.
+     * Procesa un parámetro de una función.
+     * 
+     * case 18: // A: T ID K
+     * case 20: // K: , T ID K
      */
-    private void procesarParametros() {
-        Tipo tipoSimbolo = pilaTipos.pop();
+    private void procesarParametro() {
+        Tipo tipo = pilaTipos.pop();
         Simbolo simbolo = gestorTablas.consumirSimboloSinTipo();
-        asignarTipo(simbolo, tipoSimbolo, gestorTablas.obtenerTablaActual());
-        gestorParametros.addParametroFuncion(tipoSimbolo, Modo.VALOR);
+        asignarTipoEnTablaSimbolos(simbolo, tipo, gestorTablas.obtenerTablaActual());
+        gestorParametros.addParametroFuncion(tipo, Modo.VALOR);
     }
 
     /**
      * Procesa una secuencia de instrucciones.
+     * 
+     * case 22: // C: B C
      */
-    private void procesarSecuencia() {
-        Tipo tipoRetornoC = pilaTipos.pop();
-        Tipo tipoRetornoB = pilaTipos.pop();
-        if (tipoRetornoB != Tipo.OK && tipoRetornoC != Tipo.OK) {
+    private void procesarSentencia() {
+        Tipo tipoC = pilaTipos.pop();
+        Tipo tipoB = pilaTipos.pop();
+        if (tipoB != Tipo.OK && tipoC != Tipo.OK) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPO_RETORNO_FUNCION);
         } else {
-            if (tipoRetornoB != Tipo.OK) {
-                pilaTipos.add(tipoRetornoB);
+            if (tipoB != Tipo.OK) {
+                pilaTipos.add(tipoB);
             } else {
-                pilaTipos.add(tipoRetornoC);
+                pilaTipos.add(tipoC);
             }
         }
     }
 
     /**
      * Procesa una comparación de igualdad.
+     * 
+     * case 24: // E: E1 == U
      */
     private void procesarComparacion() {
-        Tipo tipoSimboloE1 = pilaTipos.pop();
-        Tipo tipoSimboloU = pilaTipos.pop();
-        if (tipoSimboloE1 == tipoSimboloU && tipoSimboloE1.equals(Tipo.INT)) {
+        Tipo tipoE1 = pilaTipos.pop();
+        Tipo tipoU = pilaTipos.pop();
+        if (tipoE1 == tipoU && tipoE1.equals(Tipo.INT)) {
             pilaTipos.add(Tipo.BOOLEAN);
         } else {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPOS_NO_COINCIDEN);
@@ -308,14 +329,16 @@ public class ProcesadorReglas {
 
     /**
      * Procesa una operación de suma.
+     * 
+     * case 26: // U: U1 + V
      */
     private void procesarSuma() {
-        Tipo tipoSimboloU1 = pilaTipos.pop();
-        Tipo tipoSimboloV = pilaTipos.pop();
-        if (tipoSimboloU1 == null || tipoSimboloV == null) {
+        Tipo tipoU1 = pilaTipos.pop();
+        Tipo tipoV = pilaTipos.pop();
+        if (tipoU1 == null || tipoV == null) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_SIN_INICIALIZAR);
         }
-        if (tipoSimboloU1 == tipoSimboloV && tipoSimboloU1.equals(Tipo.INT)) {
+        if (tipoU1 == tipoV && tipoU1.equals(Tipo.INT)) {
             pilaTipos.add(Tipo.INT);
         } else {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPOS_NO_COINCIDEN);
@@ -324,10 +347,12 @@ public class ProcesadorReglas {
 
     /**
      * Procesa una negación lógica.
+     * 
+     * case 28: // V: !W
      */
     private void procesarNegacion() {
-        Tipo tipoSimbolo = pilaTipos.pop();
-        if (tipoSimbolo.equals(Tipo.BOOLEAN)) {
+        Tipo tipo = pilaTipos.pop();
+        if (tipo.equals(Tipo.BOOLEAN)) {
             pilaTipos.add(Tipo.BOOLEAN);
         } else {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPO_NO_COMPATIBLE);
@@ -336,6 +361,8 @@ public class ProcesadorReglas {
 
     /**
      * Procesa un identificador.
+     * 
+     * case 30: // W: ID
      */
     private void procesarIdentificador() {
         Simbolo simbolo = gestorTablas.getUltimoSimbolo();
@@ -347,26 +374,25 @@ public class ProcesadorReglas {
 
     /**
      * Procesa una expresión entre paréntesis.
+     * 
+     * case 31: // W: ( E )
      */
     private void procesarParentesis() {
-        Tipo tipoSimbolo = pilaTipos.pop();
-        if (tipoSimbolo.equals(Tipo.BOOLEAN)) {
-            pilaTipos.add(Tipo.BOOLEAN);
-        } else if (tipoSimbolo.equals(Tipo.INT)) {
-            pilaTipos.add(Tipo.INT);
-        } else if (tipoSimbolo.equals(Tipo.STRING)) {
-            pilaTipos.add(Tipo.STRING);
-        } else {
+        Tipo tipo = pilaTipos.peek();
+        if (!(tipo.equals(Tipo.BOOLEAN) || tipo.equals(Tipo.INT) || tipo.equals(Tipo.STRING))) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPO_NO_COMPATIBLE);
         }
     }
 
     /**
-     * Procesa una llamada a una función.
+     * Procesa una llamada a una función dentro de una expresión.
+     * 
+     * case 32: // W: ID ( L )
      */
     private void procesarLlamadaFuncion() {
         Simbolo simboloFuncion = gestorTablas.getUltimoSimboloFuncion();
         verificarLlamadaFuncion(simboloFuncion);
+
         if (simboloFuncion.getTipo() == null) {
             pilaTipos.add(pilaTipos.peek());
         } else {
@@ -375,7 +401,9 @@ public class ProcesadorReglas {
     }
 
     /**
-     * Procesa una llamada a una función con parámetros.
+     * Procesa una llamada a una función fuera de una expresión.
+     * 
+     * case 37: // S: ID ( L ) ;
      */
     private void procesarLlamadaFuncionConParametros() {
         Simbolo simboloFuncion = gestorTablas.getUltimoSimboloFuncion();
@@ -391,17 +419,18 @@ public class ProcesadorReglas {
 
     /**
      * Procesa una asignación con operación.
+     * 
+     * case 35: // S: ID = E ;
+     * case 36: // S: ID += E ;
      */
     private void procesarAsignacionConOperacion() {
-        Tipo tipoSimboloE = pilaTipos.pop();
-        Simbolo simbolo = gestorTablas.verPrimerSimboloSinTipo() == null
-                ? gestorTablas.getUltimoSimbolo()
-                : gestorTablas.verPrimerSimboloSinTipo();
+        Tipo tipoE = pilaTipos.pop();
+        Simbolo simbolo = gestorTablas.getUltimoSimbolo();
         if (simbolo.getTipo() == null) {
             simbolo = gestorTablas.consumirSimboloSinTipo();
-            asignarTipo(simbolo, Tipo.INT, gestorTablas.obtenerTablaActual());
+            asignarTipoEnTablaSimbolos(simbolo, Tipo.INT, gestorTablas.obtenerTablaActual());
         }
-        if (!tipoSimboloE.equals(simbolo.getTipo())) {
+        if (!tipoE.equals(simbolo.getTipo())) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPOS_NO_COINCIDEN);
         }
         pilaTipos.add(Tipo.OK);
@@ -409,10 +438,12 @@ public class ProcesadorReglas {
 
     /**
      * Procesa la instrucción PUT.
+     * 
+     * case 38: // S: PUT E ;
      */
     private void procesarPut() {
-        Tipo tipoSimboloE = pilaTipos.pop();
-        if (tipoSimboloE.equals(Tipo.INT) || tipoSimboloE.equals(Tipo.STRING)) {
+        Tipo tipoE = pilaTipos.pop();
+        if (tipoE.equals(Tipo.INT) || tipoE.equals(Tipo.STRING)) {
             pilaTipos.add(Tipo.OK);
         } else {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPO_NO_COMPATIBLE);
@@ -421,6 +452,8 @@ public class ProcesadorReglas {
 
     /**
      * Procesa la instrucción GET.
+     * 
+     * case 39: // S: GET ID ;
      */
     private void procesarGet() {
         Simbolo simbolo = gestorTablas.getUltimoSimbolo();
@@ -436,11 +469,13 @@ public class ProcesadorReglas {
 
     /**
      * Procesa la instrucción RETURN.
+     * 
+     * case 40: // S: RETURN Z ;
      */
     private void procesarReturn() {
-        Tipo tipoSimbolo = pilaTipos.peek();
-        zonaFuncion = true;
-        if (tipoSimbolo == null) {
+        Tipo tipo = pilaTipos.peek();
+        returnEjecutado = true;
+        if (tipo == null) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_SIN_INICIALIZAR);
         }
     }
@@ -495,17 +530,17 @@ public class ProcesadorReglas {
     /**
      * Asigna un tipo a un símbolo.
      *
-     * @param simbolo     El símbolo al que se le asignará el tipo.
-     * @param tipoSimbolo El tipo a asignar.
-     * @param tabla       La tabla de símbolos donde se realizará la asignación.
+     * @param simbolo El símbolo al que se le asignará el tipo.
+     * @param tipo    El tipo a asignar.
+     * @param tabla   La tabla de símbolos donde se realizará la asignación.
      */
-    private void asignarTipo(Simbolo simbolo, Tipo tipoSimbolo, TablaSimbolos tabla) {
+    private void asignarTipoEnTablaSimbolos(Simbolo simbolo, Tipo tipo, TablaSimbolos tabla) {
         if (simbolo.getTipo() != null) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_REDECLARADA);
         }
         simbolo.setDesplazamiento(tabla.getDesplazamiento());
-        simbolo.setTipo(tipoSimbolo);
-        simbolo.setAncho(calcularAncho(tipoSimbolo));
+        simbolo.setTipo(tipo);
+        simbolo.setAncho(calcularAncho(tipo));
         tabla.setDesplazamiento(tabla.getDesplazamiento() + simbolo.getAncho());
     }
 
@@ -538,7 +573,7 @@ public class ProcesadorReglas {
         this.gestorTablas = GestorTablas.getInstance();
         this.pilaTipos = new Stack<>();
         this.gestorParametros = GestorParametros.getInstance();
-        this.zonaFuncion = false;
+        this.returnEjecutado = false;
         this.tipoReturnCondicional = null;
     }
 }

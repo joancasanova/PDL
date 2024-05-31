@@ -88,67 +88,12 @@ public class GestorParametros {
     }
 
     /**
-     * Invierte el orden de los tipos de parámetros y modos de paso de los
-     * parámetros de la función.
-     */
-    public void reverseParametros() {
-        Collections.reverse(tipoParametrosFuncion);
-        Collections.reverse(modoPasoParametros);
-    }
-
-    /**
-     * Comprueba si la lista de tipos de parámetros de la función está vacía.
-     *
-     * @return true si la lista está vacía, false en caso contrario.
-     */
-    public boolean isTipoParametrosFuncionEmpty() {
-        return tipoParametrosFuncion.isEmpty();
-    }
-
-    /**
-     * Comprueba si la lista de modos de paso de parámetros de la función está
-     * vacía.
-     *
-     * @return true si la lista está vacía, false en caso contrario.
-     */
-    public boolean isModoPasoParametrosEmpty() {
-        return modoPasoParametros.isEmpty();
-    }
-
-    /**
-     * Comprueba si la lista de parámetros está vacía.
-     *
-     * @return true si la lista está vacía, false en caso contrario.
-     */
-    public boolean isListaDeParametrosEmpty() {
-        return listaDeParametros.isEmpty();
-    }
-
-    /**
      * Obtiene el número de parámetros de la función.
      *
      * @return El número de parámetros de la función.
      */
     public int getNumeroParametrosFuncion() {
         return tipoParametrosFuncion.size();
-    }
-
-    /**
-     * Obtiene una copia de la lista de tipos de parámetros de la función.
-     *
-     * @return Una copia de la lista de tipos de parámetros de la función.
-     */
-    public List<Tipo> getCopiaTipoParametrosFuncion() {
-        return new ArrayList<>(tipoParametrosFuncion);
-    }
-
-    /**
-     * Obtiene una copia de la lista de modos de paso de parámetros de la función.
-     *
-     * @return Una copia de la lista de modos de paso de parámetros de la función.
-     */
-    public List<Modo> getCopiaModoPasoParametros() {
-        return new ArrayList<>(modoPasoParametros);
     }
 
     /**
