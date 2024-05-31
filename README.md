@@ -9,9 +9,9 @@ Para cualquier duda, no dudes en contactar conmigo, estaré encantado de ayudart
 
 ## Contenidos
 
-1. [Descripción del Proyecto](#descripción-del-proyecto)
-2. [Funcionalidades Implementadas](#funcionalidades-implementadas)
-3. [Guía Completa para el Desarrollo de la Práctica - JS-PdL](#guía-completa-para-el-desarrollo-de-la-práctica---js-pdl)
+0. [Descripción del Proyecto](#descripción-del-proyecto)
+1. [Funcionalidades Implementadas](#funcionalidades-implementadas)
+2. [Guía Completa para el Desarrollo de la Práctica - JS-PdL](#guía-completa-para-el-desarrollo-de-la-práctica---js-pdl)
     - [0. Tabla de Símbolos](#0-tabla-de-símbolos)
     - [1. Definir Tokens](#1-definir-tokens)
     - [2. Analizador Léxico](#2-analizador-léxico)
@@ -20,16 +20,16 @@ Para cualquier duda, no dudes en contactar conmigo, estaré encantado de ayudart
     - [5. Pruebas](#5-pruebas)
     - [6. Presentación](#6-presentación)
     - [Visualización de Árboles Sintácticos con VASt](#visualización-de-árboles-sintácticos-con-vast)
-4. [Cómo Ejecutar el Proyecto](#cómo-ejecutar-el-proyecto)
-5. [Motivación para el Desarrollo de esta Guía](#motivación-para-el-desarrollo-de-esta-guía)
+3. [Cómo Ejecutar el Proyecto](#cómo-ejecutar-el-proyecto)
+4. [Motivación para el Desarrollo de esta Guía](#motivación-para-el-desarrollo-de-esta-guía)
     - [Problemática de la Asignatura](#problemática-de-la-asignatura)
     - [Solución Propuesta](#solución-propuesta)
 
-## 1. Descripción del Proyecto
+## 0. Descripción del Proyecto
 
 Este programa implementa un procesador de lenguaje para el lenguaje **JS-PdL**, una variante de JavaScript diseñada específicamente para la práctica de esta asignatura. Cabe destacar que las características de JS-PdL no coinciden al 100% con el estándar de JavaScript, ya que es una versión simplificada de éste.
 
-## 2. Funcionalidades Implementadas
+## 1. Funcionalidades Implementadas
 
 Para esta práctica, se requiere desarrollar una serie de funcionalidades obligatorias y opcionales. Las funcionalidades completas pueden consultarse en la siguiente página: [Funciones JS-PdL](https://dlsiis.fi.upm.es/procesadores/IntroJavaScript.html).
 
@@ -41,7 +41,7 @@ Las funcionalidades opcionales implementadas en este proyecto son:
 - **Comentarios**: Comentario de línea (`//`)
 - **Cadenas**: Con comillas dobles (`" "`)
 
-## 3. Guía Completa para el Desarrollo de la Práctica - JS-PdL
+## 2. Guía Completa para el Desarrollo de la Práctica - JS-PdL
 
 A continuación se presenta una guía detallada basada en el código de este repositorio para el desarrollo de la práctica.
 
@@ -404,7 +404,7 @@ Una consecuencia directa de este tipo de evaluación es que el código que se ej
 
 5. **Archivo > Generar Árbol**.
 
-## 4. Cómo Ejecutar el Proyecto
+## 3. Cómo Ejecutar el Proyecto
 
 Para ejecutar el proyecto usando Gradle, sigue estos pasos:
 
@@ -432,7 +432,7 @@ Asegúrate de que el archivo `input.txt` está en el directorio `input` antes de
 
 Si necesitas más detalles o alguna modificación, no dudes en decírmelo.
 
-## 5. Motivación para el Desarrollo de esta Guía
+## 4. Motivación para el Desarrollo de esta Guía
 
 ### Problemática de la Asignatura
 
