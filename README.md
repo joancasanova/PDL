@@ -7,11 +7,29 @@ Este proyecto ha sido desarrollado para la asignatura **Procesadores de Lenguaje
 
 Para cualquier duda, no dudes en contactar conmigo, estaré encantado de ayudarte.
 
-## Descripción del Proyecto
+## Table of Contents
+
+1. [Descripción del Proyecto](#descripción-del-proyecto)
+2. [Funcionalidades Implementadas](#funcionalidades-implementadas)
+3. [Guía Completa para el Desarrollo de la Práctica - JS-PdL](#guía-completa-para-el-desarrollo-de-la-práctica---js-pdl)
+    - [0. Tabla de Símbolos](#0-tabla-de-símbolos)
+    - [1. Definir Tokens](#1-definir-tokens)
+    - [2. Analizador Léxico](#2-analizador-léxico)
+    - [3. Analizador Sintáctico](#3-analizador-sintáctico)
+    - [4. Analizador Semántico](#4-analizador-semántico)
+    - [5. Pruebas](#5-pruebas)
+    - [6. Presentación](#6-presentación)
+    - [Visualización de Árboles Sintácticos con VASt](#visualización-de-árboles-sintácticos-con-vast)
+4. [Cómo Ejecutar el Proyecto](#cómo-ejecutar-el-proyecto)
+5. [Motivación para el Desarrollo de esta Guía](#motivación-para-el-desarrollo-de-esta-guía)
+    - [Problemática de la Asignatura](#problemática-de-la-asignatura)
+    - [Solución Propuesta](#solución-propuesta)
+
+## 1. Descripción del Proyecto
 
 Este programa implementa un procesador de lenguaje para el lenguaje **JS-PdL**, una variante de JavaScript diseñada específicamente para la práctica de esta asignatura. Cabe destacar que las características de JS-PdL no coinciden al 100% con el estándar de JavaScript, ya que es una versión simplificada de éste.
 
-## Funcionalidades Implementadas
+## 2. Funcionalidades Implementadas
 
 Para esta práctica, se requiere desarrollar una serie de funcionalidades obligatorias y opcionales. Las funcionalidades completas pueden consultarse en la siguiente página: [Funciones JS-PdL](https://dlsiis.fi.upm.es/procesadores/IntroJavaScript.html).
 
@@ -23,7 +41,7 @@ Las funcionalidades opcionales implementadas en este proyecto son:
 - **Comentarios**: Comentario de línea (`//`)
 - **Cadenas**: Con comillas dobles (`" "`)
 
-## Guía Completa para el Desarrollo de la Práctica - JS-PdL
+## 3. Guía Completa para el Desarrollo de la Práctica - JS-PdL
 
 A continuación se presenta una guía detallada basada en el código de este repositorio para el desarrollo de la práctica.
 
@@ -386,7 +404,30 @@ Una consecuencia directa de este tipo de evaluación es que el código que se ej
 
 5. **Archivo > Generar Árbol**.
 
-## Motivación para el Desarrollo de esta Guía
+## 4. Cómo Ejecutar el Proyecto
+
+Para ejecutar el proyecto desde la línea de comandos, sigue estos pasos:
+
+0. Navega al directorio raiz del proyecto:
+    ```sh
+    cd /ruta/al/directorio/del/proyecto
+    ```
+
+1. Compila los archivos Java:
+    ```sh
+    javac -d bin -sourcepath src src/main/java/main/Analizador.java
+    ```
+
+2. Ejecuta el programa con el archivo de entrada:
+    ```sh
+    java -cp bin main.Analizador input/input.txt
+    ```
+
+Asegúrate de que el archivo `input.txt` está en el directorio `input` antes de ejecutar el programa.
+
+Si necesitas más detalles o alguna modificación, no dudes en decírmelo.
+
+## 5. Motivación para el Desarrollo de esta Guía
 
 ### Problemática de la Asignatura
 
