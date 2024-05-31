@@ -7,7 +7,7 @@ Este proyecto ha sido desarrollado para la asignatura **Procesadores de Lenguaje
 
 Para cualquier duda, no dudes en contactar conmigo, estaré encantado de ayudarte.
 
-## Table of Contents
+## Contenidos
 
 1. [Descripción del Proyecto](#descripción-del-proyecto)
 2. [Funcionalidades Implementadas](#funcionalidades-implementadas)
