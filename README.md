@@ -61,7 +61,7 @@ El desarrollo de la práctica se divide en las siguientes fases:
 
 La tabla de símbolos es una estructura esencial que guarda los identificadores (variables y funciones) presentes en el código fuente de JS-PdL.
 
-- Implementación: `src/main/java/tablaSimbolos`
+- Implementación: `src/main/java/estructuras/tablaSimbolos`
 
 Pasos a seguir:
 - Este módulo y sus clases son generales y pueden ser una referencia directa para el desarrollo de la práctica.
@@ -70,7 +70,7 @@ Pasos a seguir:
 
 Un token es la unidad léxica más pequeña e indivisible con significado propio. Cada token pertenece a una categoría léxica diferente. Por ejemplo: PALABRARESERVADA, SUMA, o COMPARADOR.
 
-- Implementación: `src/main/java/token`
+- Implementación: `src/main/java/estructuras/token`
 
 Pasos a seguir:
 
@@ -99,13 +99,13 @@ Pasos a seguir:
 
 El analizador léxico recibe caracter a caracter hasta generar un token.
 
-- Implementación: `src/main/java/lexico`
+- Implementación: `src/main/java/analizadores/lexico`
 
 Pasos a seguir:
 
 0. **Crear el autómata finito determinista, las acciones semánticas y errores:** Puedes ver un ejemplo en la memoria adjunta en `docs/Memoria.pdf`.
 
-1. **Adaptar Enums** (`src/main/java/lexico/enums`):
+1. **Adaptar Enums** (`src/main/java/analizadores/lexico/enums`):
 
     - `PalabraReservada.java`: Escribir aquí las palabras reservadas.
     - `EstadoTransito.java`: Definir los estados de tránsito del autómata. Ejemplos:
@@ -140,7 +140,7 @@ Pasos a seguir:
 
 5. **Probar el Analizador Léxico:**
 
-    - En `GestorAnalisis.java` (`src/main/java/main/GestorAnalisis.java`), comentar todo lo relativo a `analizadorSintactico` y `analizadorSemantico`.
+    - En `GestorAnalisis.java` (`src/main/java/main/gestores/GestorAnalisis.java`), comentar todo lo relativo a `analizadorSintactico` y `analizadorSemantico`.
     - Comprobar que se generan los tokens adecuadamente:
         1. Crear un archivo `input.txt` y guardarlo en el directorio `input`.
         2. Comprobar que los tokens en `output/archivoTokens.txt` son correctos.
@@ -290,7 +290,7 @@ La tarea principal es crear la gramática sintáctica correspondiente a la prác
 
 5. **Probar el Analizador Sintáctico**:
 
-    - En `GestorAnalisis.java` (`src/main/java/main/GestorAnalisis.java`), comentar todo lo relativo a `analizadorSemantico`.
+    - En `GestorAnalisis.java` (`src/main/java/main/gestores/GestorAnalisis.java`), comentar todo lo relativo a `analizadorSemantico`.
     - Comprobar que se generan correctamente las reglas:
         1. Crear un archivo `input.txt` y guardarlo en el directorio `input`.
         2. Comprobar que las reglas en `output/reglasAplicadas.txt` son correctas.
@@ -314,7 +314,7 @@ Para implementar el analizador semántico, se debe seguir estos pasos:
 
 3. **Probar el Analizador Semántico**:
 
-    - En `GestorAnalisis.java` (`src/main/java/main/GestorAnalisis.java`), descomentar todo.
+    - En `GestorAnalisis.java` (`src/main/java/main/gestores/GestorAnalisis.java`), descomentar todo.
     - Comprobar que se genera correctamente la tabla de símbolos:
         1. Crear un archivo `input.txt` y guardarlo en el directorio `input`.
         2. Comprobar que las reglas en `output/archivoTablaSimbolos.txt` son correctas.
