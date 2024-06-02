@@ -72,15 +72,13 @@ public class GestorAnalisis {
                     finDeFichero = true;
                 }
 
-                analizadorSintactico.setTokenProcesado(false);
-                while (!analizadorSintactico.isTokenProcesado()) {
+                do {
                     Integer regla = analizadorSintactico.procesarToken(token);
-
                     if (regla != null) {
                         listaReglas.add(regla);
                         analizadorSemantico.procesarRegla(regla);
                     }
-                }
+                } while (!analizadorSintactico.isTokenProcesado());
             }
             if (caracter == '\n') {
                 GestorErrores.incrementarLinea();

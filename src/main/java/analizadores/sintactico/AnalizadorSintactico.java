@@ -3,6 +3,7 @@ package analizadores.sintactico;
 import java.util.Map;
 
 import analizadores.sintactico.accion.Accion;
+import analizadores.sintactico.accion.AccionDesplazar;
 import analizadores.sintactico.accion.AccionReducir;
 import estructuras.token.*;
 import util.GestorErrores;
@@ -48,12 +49,13 @@ public class AnalizadorSintactico {
      * @return Lista de reglas aplicadas durante el procesamiento.
      */
     public Integer procesarToken(Token token) {
+        tokenProcesado = false;
         String contenidoDeToken = obtenerContenidoToken(token);
-        Accion accion = obtenerAccion(contenidoDeToken, gestorPilas.getPilaEstados().peek());
+        Accion accion = obtenerAccion(contenidoDeToken);
 
-        // En caso de no ser una acción de reducción, ir a por el siguiente token
-        if (!(accion instanceof AccionReducir)) {
-            setTokenProcesado(true);
+        // En caso de ser una acción de desplazar, ir a por el siguiente token
+        if (accion instanceof AccionDesplazar) {
+            tokenProcesado = true;
         }
 
         return accion.ejecutar();
@@ -63,10 +65,10 @@ public class AnalizadorSintactico {
      * Obtiene la acción correspondiente a un token y un estado.
      * 
      * @param textoToken El texto del token.
-     * @param estadoCima El estado en la cima de la pila.
      * @return La acción correspondiente.
      */
-    private Accion obtenerAccion(String textoToken, Integer estadoCima) {
+    private Accion obtenerAccion(String textoToken) {
+        Integer estadoCima = gestorPilas.getPilaEstados().peek();
         Map<String, Accion> accionesEstado = ParserGramatica.getInstance().getTablaAccion().get(estadoCima);
         Accion accion = accionesEstado.getOrDefault(textoToken, accionesEstado.get("$DEFAULT"));
 
@@ -90,10 +92,6 @@ public class AnalizadorSintactico {
         // Se devuelve el tipo o el atributo dependiendo de si es palabra reservada
         return token.getTipo().equals(TipoToken.PALABRARESERVADA) ? String.valueOf(token.getAtributo()).toUpperCase()
                 : String.valueOf(token.getTipo()).toUpperCase();
-    }
-
-    public void setTokenProcesado(Boolean valor) {
-        this.tokenProcesado = valor;
     }
 
     public boolean isTokenProcesado() {
