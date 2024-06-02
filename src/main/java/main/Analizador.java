@@ -51,7 +51,7 @@ public class Analizador {
         } catch (IOException e) {
             GestorErrores.lanzarError(GestorErrores.TipoError.GENERICO, "Error de entrada/salida: " + e.getMessage());
         } catch (Exception e) {
-            GestorErrores.lanzarError(GestorErrores.TipoError.GENERICO, "Error inesperado: " + e.getMessage());
+            GestorErrores.lanzarError(GestorErrores.TipoError.GENERICO, e.getMessage());
         }
     }
 
@@ -87,9 +87,6 @@ public class Analizador {
                 GestorErrores.incrementarLinea();
             }
         } while (!finDeFichero);
-
-        listaReglas.add(1);
-        analizadorSemantico.procesarRegla(1);
 
         GestorSalida.escribirSalida(listaTokens, listaReglas, gestorTablas.getImpresionTablas());
 

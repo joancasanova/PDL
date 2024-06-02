@@ -141,7 +141,7 @@ Pasos a seguir:
 
 5. **Probar el Analizador Léxico:**
 
-    - En `Analizador.java` (`src/main/java/main/gestores/Analizador.java`), comentar todo lo relativo a `analizadorSintactico` y `analizadorSemantico`.
+    - En `Analizador.java` (`src/main/java/main/Analizador.java`), comentar todo lo relativo a `analizadorSintactico` y `analizadorSemantico`.
     - Comprobar que se generan los tokens adecuadamente:
         1. Crear un archivo `input.txt` y guardarlo en el directorio `input`.
         2. Comprobar que los tokens en `output/archivoTokens.txt` son correctos.

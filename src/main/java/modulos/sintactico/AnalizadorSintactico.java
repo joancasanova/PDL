@@ -3,6 +3,7 @@ package modulos.sintactico;
 import java.util.Map;
 
 import modulos.sintactico.accion.Accion;
+import modulos.sintactico.accion.AccionAceptar;
 import modulos.sintactico.accion.AccionDesplazar;
 import modulos.token.*;
 import util.GestorErrores;
@@ -49,24 +50,36 @@ public class AnalizadorSintactico {
      */
     public Integer procesarToken(Token token) {
         tokenProcesado = false;
-        String contenidoDeToken = obtenerContenidoToken(token);
-        Accion accion = obtenerAccion(contenidoDeToken);
+        Accion accion = obtenerAccion(token);
+
+        Integer reglaAplicada = accion.ejecutar();
+
+        // Si la acción es de aceptación, finalizar el procesamiento
+        if (accion instanceof AccionAceptar) {
+            tokenProcesado = true;
+        }
+
+        // Caso especial para el fin de fichero sin aceptación: continuar procesando
+        if (token.getTipo().equals(TipoToken.FINDEFICHERO)) {
+            return reglaAplicada;
+        }
 
         // En caso de ser una acción de desplazar, ir a por el siguiente token
         if (accion instanceof AccionDesplazar) {
             tokenProcesado = true;
         }
 
-        return accion.ejecutar();
+        return reglaAplicada;
     }
 
     /**
      * Obtiene la acción correspondiente a un token y un estado.
      * 
-     * @param textoToken El texto del token.
+     * @param token El token.
      * @return La acción correspondiente.
      */
-    private Accion obtenerAccion(String textoToken) {
+    private Accion obtenerAccion(Token token) {
+        String textoToken = obtenerContenidoToken(token);
         Integer estadoCima = gestorPilas.getPilaEstados().peek();
         Map<String, Accion> accionesEstado = ParserGramatica.getInstance().getTablaAccion().get(estadoCima);
         Accion accion = accionesEstado.getOrDefault(textoToken, accionesEstado.get("$DEFAULT"));
