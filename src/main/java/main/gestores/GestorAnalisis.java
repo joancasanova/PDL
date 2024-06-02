@@ -60,7 +60,6 @@ public class GestorAnalisis {
      * @throws IOException Si ocurre un error de lectura.
      */
     public void procesarFichero(FileReader fichero) throws IOException {
-        gestorTablas.nuevaTabla();
         GestorErrores.iniciarLinea();
         List<Token> listaTokens = new ArrayList<>();
         List<Integer> listaReglas = new ArrayList<>();
@@ -89,7 +88,7 @@ public class GestorAnalisis {
         } while (!finDeFichero);
 
         listaReglas.add(1);
-        GestorSalida.escribirSalida(listaTokens, listaReglas, gestorTablas.getImpresionTabla().toString());
+        GestorSalida.escribirSalida(listaTokens, listaReglas, gestorTablas.getImpresionTabla());
 
         gestorTablas.resetGestorTablas();
         analizadorLexico.resetAnalizadorLexico();

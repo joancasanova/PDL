@@ -1,12 +1,10 @@
 package estructuras.tablaSimbolos;
 
-import java.util.List;
 import java.util.Stack;
 
 import estructuras.tablaSimbolos.enums.Tipo;
 import util.GestorErrores;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -14,9 +12,9 @@ import java.util.LinkedList;
  */
 public class GestorTablas {
 
-    private List<TablaSimbolos> tablas;
-    private int indiceTabla;
-    private int numeroTabla;
+    private Stack<TablaSimbolos> tablas;
+    private Boolean tablaGlobal;
+    private int numeroDeTablas;
 
     // Variables booleanas que indican si estamos en zonas especiales
     private Boolean zonaParametros;
@@ -37,14 +35,15 @@ public class GestorTablas {
      * Constructor privado para evitar la creación de instancias.
      */
     private GestorTablas() {
-        tablas = new ArrayList<>();
-        indiceTabla = -1;
-        numeroTabla = -1;
+        tablas = new Stack<TablaSimbolos>();
+        tablas.add(new TablaSimbolos(numeroDeTablas));
         simbolosSinTipo = new LinkedList<>();
         ultimosSimbolos = new Stack<>();
         impresionTabla = new StringBuilder();
         zonaParametros = false;
         zonaDeclaracion = false;
+        tablaGlobal = true;
+        numeroDeTablas = 0;
     }
 
     /**
@@ -64,29 +63,27 @@ public class GestorTablas {
      * Crea una nueva tabla de símbolos y la añade a la lista de tablas.
      */
     public void nuevaTabla() {
-        tablas.add(new TablaSimbolos(numeroTabla));
-        indiceTabla++;
-        numeroTabla++;
+        tablas.push(new TablaSimbolos(numeroDeTablas));
+        tablaGlobal = false;
+        numeroDeTablas++;
     }
 
     /**
      * Destruye la tabla de símbolos actual y la elimina de la lista de tablas.
-     * 
-     * @throws IllegalStateException si no hay tablas para destruir.
      */
-    public void destruirTabla() throws IllegalStateException {
-        impresionTabla.append(tablas.get(indiceTabla).imprimirTabla());
-        tablas.remove(indiceTabla);
-        indiceTabla--;
+    public void destruirTabla() {
+        TablaSimbolos ts = tablas.pop();
+        impresionTabla.append(ts.imprimirTabla());
+        tablaGlobal = true;
     }
 
     /**
      * Obtiene la impresión de la tabla de símbolos.
      * 
-     * @return Un StringBuilder con la impresión de la tabla.
+     * @String Un String con la impresión de la tabla.
      */
-    public StringBuilder getImpresionTabla() {
-        return this.impresionTabla;
+    public String getImpresionTabla() {
+        return this.impresionTabla.toString();
     }
 
     /**
@@ -95,7 +92,7 @@ public class GestorTablas {
      * @return La tabla de símbolos actual.
      */
     public TablaSimbolos obtenerTablaActual() {
-        return tablas.get(indiceTabla);
+        return tablas.peek();
     }
 
     /**
@@ -181,12 +178,21 @@ public class GestorTablas {
     }
 
     /**
-     * Actualizar simbolo sin tipo para eliminarlo de la lista.
+     * Elimina un simbolo sin tipo de la lista.
      *
      * @param simbolo El simbolo que se desea eliminar de la lista.
      */
-    public void actualizarSimboloSinTipo(Simbolo simbolo) {
+    public void eliminarSimboloSinTipo(Simbolo simbolo) {
         simbolosSinTipo.remove(simbolo);
+    }
+
+    /**
+     * Obtiene si la tabla actual es global o local.
+     * 
+     * @return true si es la tabla global.
+     */
+    public Boolean isTablaGlobal() {
+        return tablaGlobal;
     }
 
     /**
@@ -232,9 +238,10 @@ public class GestorTablas {
      *
      * @param simbolo El símbolo al que se le asignará el tipo.
      * @param tipo    El tipo a asignar.
-     * @param tabla   La tabla de símbolos donde se realizará la asignación.
      */
-    public void asignarTipo(Simbolo simbolo, Tipo tipo, TablaSimbolos tabla) {
+    public void asignarTipo(Simbolo simbolo, Tipo tipo) {
+        TablaSimbolos tabla = obtenerTablaActual();
+
         if (simbolo.getTipo() != null) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_REDECLARADA);
         }
@@ -269,9 +276,10 @@ public class GestorTablas {
      * Reinicia el gestor de tablas a su estado inicial.
      */
     public void resetGestorTablas() {
-        tablas = new ArrayList<>();
-        indiceTabla = -1;
-        numeroTabla = -1;
+        tablas = new Stack<TablaSimbolos>();
+        tablas.add(new TablaSimbolos(numeroDeTablas));
+        tablaGlobal = true;
+        numeroDeTablas = 0;
         simbolosSinTipo = new LinkedList<>();
         ultimosSimbolos = new Stack<>();
         impresionTabla = new StringBuilder();

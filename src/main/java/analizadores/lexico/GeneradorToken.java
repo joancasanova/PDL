@@ -158,13 +158,11 @@ public class GeneradorToken {
      * @return El token del identificador.
      */
     private Token procesarIdentificador(String lexema) {
-        TablaSimbolos tablaActual = gestorTablas.obtenerTablaActual();
-        TablaSimbolos tablaGlobal = gestorTablas.obtenerTablaGlobal();
         String nombre = lexema;
         Simbolo simbolo;
         Integer posicionTS;
 
-        simbolo = obtenerSimbolo(nombre, tablaActual, tablaGlobal);
+        simbolo = obtenerSimbolo(nombre);
 
         // Establecer símbolo como pendiente de gestionar
         if (!ultimoTokenPuntoComa) {
@@ -173,7 +171,7 @@ public class GeneradorToken {
             simbolosPorEnviar.add(simbolo);
         }
 
-        posicionTS = tablaActual.obtenerPosicionSimbolo(simbolo);
+        posicionTS = gestorTablas.obtenerTablaActual().obtenerPosicionSimbolo(simbolo);
 
         return new Token(TipoToken.ID, posicionTS);
     }
@@ -182,13 +180,13 @@ public class GeneradorToken {
      * Obtiene el símbolo correspondiente al nombre del identificador, ya sea desde
      * la tabla actual o la tabla global.
      * 
-     * @param nombre      El nombre del identificador.
-     * @param tablaActual La tabla de símbolos actual.
-     * @param tablaGlobal La tabla de símbolos global.
+     * @param nombre El nombre del identificador.
      * @return El símbolo correspondiente al identificador.
      */
-    private Simbolo obtenerSimbolo(String nombre, TablaSimbolos tablaActual, TablaSimbolos tablaGlobal) {
+    private Simbolo obtenerSimbolo(String nombre) {
         Simbolo simbolo;
+        TablaSimbolos tablaActual = gestorTablas.obtenerTablaActual();
+        TablaSimbolos tablaGlobal = gestorTablas.obtenerTablaGlobal();
 
         // Buscar simbolo en tabla actual
         if (tablaActual.simboloExiste(nombre)) {
@@ -206,7 +204,7 @@ public class GeneradorToken {
         // Sino, crear un nuevo simbolo
         else {
             simbolo = new Simbolo(null, nombre, null, null);
-            tablaActual.agregarSimbolo(tablaActual.numeroEntradas(), simbolo);
+            tablaActual.agregarSimbolo(simbolo);
         }
 
         return simbolo;

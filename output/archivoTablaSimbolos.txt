@@ -3,7 +3,7 @@ CONTENIDOS DE LA TABLA #1:
 *	LEXEMA	:	'n'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 0
++ despl: 2
 
 CONTENIDOS DE LA TABLA #2:
 
@@ -13,37 +13,37 @@ CONTENIDOS DE LA TABLA #3:
 *	LEXEMA	:	'n'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 0
++ despl: 2
 *	LEXEMA	:	'factorial'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 2
++ despl: 4
 
 CONTENIDOS DE LA TABLA #4:
 
 *	LEXEMA	:	'factorial'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 0
++ despl: 2
 *	LEXEMA	:	'i'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 2
++ despl: 4
 
 CONTENIDOS DE LA TABLA #5:
 
 *	LEXEMA	:	'n'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 0
++ despl: 2
 *	LEXEMA	:	'i'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 2
++ despl: 4
 *	LEXEMA	:	'factorial'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 4
++ despl: 6
 
 CONTENIDOS DE LA TABLA #6:
 
@@ -65,40 +65,40 @@ CONTENIDOS DE LA TABLA #7:
 *	LEXEMA	:	'log'
 Atributos: 
 + tipo: 'BOOLEAN'	
-+ despl: 0
++ despl: 128
 
 CONTENIDOS DE LA TABLA #8:
 
 *	LEXEMA	:	'a'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 0
++ despl: 2
 
 CONTENIDOS DE LA TABLA #9:
 
 *	LEXEMA	:	'm'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 2
++ despl: 4
 *	LEXEMA	:	'a'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 0
++ despl: 2
 
 CONTENIDOS DE LA TABLA #10:
 
 *	LEXEMA	:	'd'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 4
++ despl: 6
 *	LEXEMA	:	'm'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 2
++ despl: 4
 *	LEXEMA	:	'a'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 0
++ despl: 2
 
 CONTENIDOS DE LA TABLA #11:
 

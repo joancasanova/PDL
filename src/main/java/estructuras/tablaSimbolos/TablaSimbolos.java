@@ -35,13 +35,12 @@ public class TablaSimbolos {
     }
 
     /**
-     * Agrega un símbolo a la tabla en una posición específica.
+     * Agrega un símbolo a la tabla.
      * 
-     * @param posicion La posición en la que se agregará el símbolo.
-     * @param simbolo  El símbolo a agregar.
+     * @param simbolo El símbolo a agregar.
      */
-    public void agregarSimbolo(Integer posicion, Simbolo simbolo) {
-        tabla.put(posicion, simbolo);
+    public void agregarSimbolo(Simbolo simbolo) {
+        tabla.put(tabla.size(), simbolo);
     }
 
     /**
@@ -105,24 +104,6 @@ public class TablaSimbolos {
             }
         }
         return null;
-    }
-
-    /**
-     * Obtiene el número de entradas en la tabla de símbolos.
-     * 
-     * @return El número de entradas en la tabla.
-     */
-    public Integer numeroEntradas() {
-        return tabla.size();
-    }
-
-    /**
-     * Obtiene el número identificador de la tabla de símbolos.
-     * 
-     * @return El número identificador de la tabla.
-     */
-    public Integer getNumeroTabla() {
-        return this.numeroTabla;
     }
 
     /**

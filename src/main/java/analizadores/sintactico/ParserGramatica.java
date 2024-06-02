@@ -21,7 +21,7 @@ public class ParserGramatica {
     private static final String TERMINALS_SECTION = "Terminals";
     private static final String NONTERMINALS_SECTION = "Nonterminals";
     private static final String STATE_SECTION = "State";
-    private static final String FILE_PATH = "resources/gramatica.output";
+    private static final String FILE_PATH = "src/main/resources/gramatica.output";
 
     private Map<Integer, Map<String, Accion>> tablaAccion;
     private Map<Integer, Map<String, Integer>> tablaGoTo;

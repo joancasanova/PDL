@@ -286,7 +286,7 @@ La tarea principal es crear la gramática sintáctica correspondiente a la prác
         ```
     - Si se ha generado correctamente, no aparecerán mensajes de error y se creará `gramatica.output`.
 
-4. **Mover `gramatica.output` al directorio `resources`**.
+4. **Mover `gramatica.output` al directorio `src/main/resources`**.
 
 5. **Probar el Analizador Sintáctico**:
 
@@ -300,11 +300,11 @@ La tarea principal es crear la gramática sintáctica correspondiente a la prác
 
 El analizador semántico procesa las reglas una a una generadas por el analizador sintáctico y comprueba que son correctas.
 
-La lógica del analizador semántico se encuentra encapsulada en la clase `ProcesadorReglas.java`.
+La lógica del analizador semántico se encuentra encapsulada en la clase `AnalizadorSemantico.java`.
 
 Para implementar el analizador semántico, se debe seguir estos pasos:
 
-0. **Adaptar `ProcesadorReglas.java`:**
+0. **Adaptar `AnalizadorSemantico.java`:**
 
     - Función `procesarRegla(Integer numeroRegla)`: Crear un caso por cada regla correspondiente a la gramática del analizador sintáctico hecha en el paso anterior.
 
