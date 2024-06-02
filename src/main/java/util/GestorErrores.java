@@ -6,7 +6,7 @@ package util;
  */
 public final class GestorErrores {
 
-    private static Integer linea;
+    private static Integer linea = 1;
 
     // Enum para los tipos de errores
     public enum TipoError {
@@ -53,10 +53,6 @@ public final class GestorErrores {
     public static void lanzarError(TipoError tipoError, String mensaje) {
         String tipo = tipoError.name().toLowerCase();
         throw new IllegalStateException("Error " + tipo + ": " + mensaje + " en linea " + linea);
-    }
-
-    public static void iniciarLinea() {
-        linea = 1;
     }
 
     public static void incrementarLinea() {

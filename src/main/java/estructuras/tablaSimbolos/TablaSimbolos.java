@@ -115,9 +115,7 @@ public class TablaSimbolos {
 
         StringBuilder sb = new StringBuilder();
 
-        Integer numeroTablaAlterado = numeroTabla + 1;
-
-        sb.append("CONTENIDOS DE LA TABLA #" + numeroTablaAlterado + ":\n");
+        sb.append("CONTENIDOS DE LA TABLA #" + numeroTabla + ":\n");
 
         for (Map.Entry<Integer, Simbolo> entrada : tabla.entrySet()) {
 

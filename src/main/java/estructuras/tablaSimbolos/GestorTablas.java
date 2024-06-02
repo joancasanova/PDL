@@ -35,6 +35,7 @@ public class GestorTablas {
      * Constructor privado para evitar la creación de instancias.
      */
     private GestorTablas() {
+        numeroDeTablas = 0;
         tablas = new Stack<TablaSimbolos>();
         tablas.add(new TablaSimbolos(numeroDeTablas));
         simbolosSinTipo = new LinkedList<>();
@@ -43,7 +44,6 @@ public class GestorTablas {
         zonaParametros = false;
         zonaDeclaracion = false;
         tablaGlobal = true;
-        numeroDeTablas = 0;
     }
 
     /**
@@ -63,18 +63,18 @@ public class GestorTablas {
      * Crea una nueva tabla de símbolos y la añade a la lista de tablas.
      */
     public void nuevaTabla() {
-        tablas.push(new TablaSimbolos(numeroDeTablas));
         tablaGlobal = false;
-        numeroDeTablas++;
+        numeroDeTablas += 1;
+        tablas.push(new TablaSimbolos(numeroDeTablas));
     }
 
     /**
      * Destruye la tabla de símbolos actual y la elimina de la lista de tablas.
      */
     public void destruirTabla() {
+        tablaGlobal = true;
         TablaSimbolos ts = tablas.pop();
         impresionTabla.append(ts.imprimirTabla());
-        tablaGlobal = true;
     }
 
     /**
@@ -82,7 +82,7 @@ public class GestorTablas {
      * 
      * @String Un String con la impresión de la tabla.
      */
-    public String getImpresionTabla() {
+    public String getImpresionTablas() {
         return this.impresionTabla.toString();
     }
 
@@ -276,14 +276,14 @@ public class GestorTablas {
      * Reinicia el gestor de tablas a su estado inicial.
      */
     public void resetGestorTablas() {
+        numeroDeTablas = 0;
         tablas = new Stack<TablaSimbolos>();
         tablas.add(new TablaSimbolos(numeroDeTablas));
-        tablaGlobal = true;
-        numeroDeTablas = 0;
         simbolosSinTipo = new LinkedList<>();
         ultimosSimbolos = new Stack<>();
         impresionTabla = new StringBuilder();
         zonaParametros = false;
         zonaDeclaracion = false;
+        tablaGlobal = true;
     }
 }

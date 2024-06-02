@@ -60,7 +60,6 @@ public class GestorAnalisis {
      * @throws IOException Si ocurre un error de lectura.
      */
     public void procesarFichero(FileReader fichero) throws IOException {
-        GestorErrores.iniciarLinea();
         List<Token> listaTokens = new ArrayList<>();
         List<Integer> listaReglas = new ArrayList<>();
 
@@ -76,6 +75,7 @@ public class GestorAnalisis {
                 analizadorSintactico.setTokenProcesado(false);
                 while (!analizadorSintactico.isTokenProcesado()) {
                     Integer regla = analizadorSintactico.procesarToken(token);
+
                     if (regla != null) {
                         listaReglas.add(regla);
                         analizadorSemantico.procesarRegla(regla);
@@ -88,7 +88,9 @@ public class GestorAnalisis {
         } while (!finDeFichero);
 
         listaReglas.add(1);
-        GestorSalida.escribirSalida(listaTokens, listaReglas, gestorTablas.getImpresionTabla());
+        analizadorSemantico.procesarRegla(1);
+
+        GestorSalida.escribirSalida(listaTokens, listaReglas, gestorTablas.getImpresionTablas());
 
         gestorTablas.resetGestorTablas();
         analizadorLexico.resetAnalizadorLexico();
