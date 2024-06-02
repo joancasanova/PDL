@@ -18,7 +18,8 @@ Para cualquier duda, no dudes en contactar conmigo, estaré encantado de ayudart
     - [3. Analizador Sintáctico](#3-analizador-sintáctico)
     - [4. Analizador Semántico](#4-analizador-semántico)
     - [5. Pruebas](#5-pruebas)
-    - [6. Presentación](#6-presentación)
+    - [6. Memoria](#6-memoria)
+    - [7. Presentación](#7-presentación)
     - [Visualización de Árboles Sintácticos con VASt](#visualización-de-árboles-sintácticos-con-vast)
 3. [Cómo Ejecutar el Proyecto](#cómo-ejecutar-el-proyecto)
 4. [Motivación para el Desarrollo de esta Guía](#motivación-para-el-desarrollo-de-esta-guía)
@@ -61,7 +62,7 @@ El desarrollo de la práctica se divide en las siguientes fases:
 
 La tabla de símbolos es una estructura esencial que guarda los identificadores (variables y funciones) presentes en el código fuente de JS-PdL.
 
-- Implementación: `src/main/java/estructuras/tablaSimbolos`
+- Implementación: `src/main/java/modulos/tablaSimbolos`
 
 Pasos a seguir:
 - Este módulo y sus clases son generales y pueden ser una referencia directa para el desarrollo de la práctica.
@@ -70,7 +71,7 @@ Pasos a seguir:
 
 Un token es la unidad léxica más pequeña e indivisible con significado propio. Cada token pertenece a una categoría léxica diferente. Por ejemplo: PALABRARESERVADA, SUMA, o COMPARADOR.
 
-- Implementación: `src/main/java/estructuras/token`
+- Implementación: `src/main/java/modulos/token`
 
 Pasos a seguir:
 
@@ -99,13 +100,13 @@ Pasos a seguir:
 
 El analizador léxico recibe caracter a caracter hasta generar un token.
 
-- Implementación: `src/main/java/analizadores/lexico`
+- Implementación: `src/main/java/modulos/lexico`
 
 Pasos a seguir:
 
 0. **Crear el autómata finito determinista, las acciones semánticas y errores:** Puedes ver un ejemplo en la memoria adjunta en `docs/Memoria.pdf`.
 
-1. **Adaptar Enums** (`src/main/java/analizadores/lexico/enums`):
+1. **Adaptar Enums** (`src/main/java/modulos/lexico/enums`):
 
     - `PalabraReservada.java`: Escribir aquí las palabras reservadas.
     - `EstadoTransito.java`: Definir los estados de tránsito del autómata. Ejemplos:
@@ -140,7 +141,7 @@ Pasos a seguir:
 
 5. **Probar el Analizador Léxico:**
 
-    - En `GestorAnalisis.java` (`src/main/java/main/gestores/GestorAnalisis.java`), comentar todo lo relativo a `analizadorSintactico` y `analizadorSemantico`.
+    - En `Analizador.java` (`src/main/java/main/gestores/Analizador.java`), comentar todo lo relativo a `analizadorSintactico` y `analizadorSemantico`.
     - Comprobar que se generan los tokens adecuadamente:
         1. Crear un archivo `input.txt` y guardarlo en el directorio `input`.
         2. Comprobar que los tokens en `output/archivoTokens.txt` son correctos.
@@ -290,7 +291,7 @@ La tarea principal es crear la gramática sintáctica correspondiente a la prác
 
 5. **Probar el Analizador Sintáctico**:
 
-    - En `GestorAnalisis.java` (`src/main/java/main/gestores/GestorAnalisis.java`), comentar todo lo relativo a `analizadorSemantico`.
+    - En `Analizador.java` (`src/main/java/main/Analizador.java`), comentar todo lo relativo a `analizadorSemantico`.
     - Comprobar que se generan correctamente las reglas:
         1. Crear un archivo `input.txt` y guardarlo en el directorio `input`.
         2. Comprobar que las reglas en `output/reglasAplicadas.txt` son correctas.
@@ -314,7 +315,7 @@ Para implementar el analizador semántico, se debe seguir estos pasos:
 
 3. **Probar el Analizador Semántico**:
 
-    - En `GestorAnalisis.java` (`src/main/java/main/gestores/GestorAnalisis.java`), descomentar todo.
+    - En `Analizador.java` (`src/main/java/main/Analizador.java`), descomentar todo.
     - Comprobar que se genera correctamente la tabla de símbolos:
         1. Crear un archivo `input.txt` y guardarlo en el directorio `input`.
         2. Comprobar que las reglas en `output/archivoTablaSimbolos.txt` son correctas.
@@ -323,7 +324,21 @@ Para implementar el analizador semántico, se debe seguir estos pasos:
 
 En el directorio `src/test/archivosTest` se han creado una serie de pruebas. Se deben adaptar estas pruebas a las opciones correspondientes a cada práctica. Al ejecutar las pruebas de `AnalizadorTest.java`, se deberán superar todas.
 
-### 6. Presentación
+### 6. Memoria
+La [página web de la asignatura](https://dlsiis.fi.upm.es/procesadores/Practica.html) especifica las siguientes condiciones para la memoria en la convocatoria 2023 - 24:
+ 
+- extensión máxima de 30 páginas sin contar el anexo
+- Una descripción del diseño final del Procesador, según las opciones correspondientes al grupo de prácticas, así como cualquier otro aspecto o característica que se desee hacer notar por su interés, sin incluir listados fuente del procesador ni detalles de la implementación. Esta memoria deberá incluir al menos:
+    - Diseño del Analizador Léxico actualizado: tokens, gramática, autómata, acciones semánticas y errores.
+    - Diseño del Analizador Sintáctico actualizado: gramática, demostración de que la gramática es adecuada para el método de Análisis Sintáctico asignado, y las tablas, autómata o procedimientos de dicho Analizador.
+    - Diseño del Analizador Semántico: Traducción Dirigida por la Sintaxis con las acciones semánticas.
+    - Diseño de la Tabla de Símbolos completa: descripción de su estructura final y organización.
+    - Diseño del Gestor de Errores: manejo de los mensajes de error, gestión del número de línea...
+- Anexo con 10 casos de prueba. Deberá incluirse en la memoria un anexo con los 10 casos listados. La mitad de ellos serán correctos y la otra mitad erróneos, de tal manera que permitan observar el comportamiento del Procesador. Para los ejemplos correctos se incluirá el listado de tokens, el árbol de análisis sintáctico (que se generará obligatoriamente utilizando la herramienta VASt) y el volcado de la Tabla de Símbolos. Para los 5 ejemplos erróneos se incluirá el mensaje o mensajes de error obtenidos. Los resultados de los casos de prueba deben ser generados por el procesador implementado, sin ningún tipo de edición manual.
+
+En el directorio `docs` se puede encontrar la memoria desarrollada para este proyecto y tenerla como referencia.
+
+### 7. Presentación
 
 La presentación consiste en procesar un fichero de input. Durante la presentación no se realizan preguntas acerca del proceso de desarrollo, ni se pide que se explique el diseño del procesador, ni se pregunta sobre conceptos relativos a la asignatura. Esta presentación se reduce exclusivamente a comprobar que los archivos de output son correctos, se genera el árbol sintáctico con VASt, y se han identificado los errores en el input.
 

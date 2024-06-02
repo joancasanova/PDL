@@ -3,8 +3,15 @@ package main;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
-import main.gestores.GestorAnalisis;
+import modulos.lexico.AnalizadorLexico;
+import modulos.semantico.AnalizadorSemantico;
+import modulos.sintactico.AnalizadorSintactico;
+import modulos.tablaSimbolos.GestorTablas;
+import modulos.token.TipoToken;
+import modulos.token.Token;
 import util.GestorErrores;
 
 /**
@@ -20,6 +27,11 @@ public class Analizador {
     private final static String DIRECTORIO_ENTRADA = "input";
     private final static String ARCHIVO_INPUT = Paths.get(DIRECTORIO_ENTRADA, "input.txt").toString();
 
+    private final static GestorTablas gestorTablas = GestorTablas.getInstance();
+    private final static AnalizadorLexico analizadorLexico = AnalizadorLexico.getInstance();
+    private final static AnalizadorSintactico analizadorSintactico = AnalizadorSintactico.getInstance();
+    private final static AnalizadorSemantico analizadorSemantico = AnalizadorSemantico.getInstance();
+
     public static void main(String[] args) {
         String rutaArchivo;
         if (args.length > 0) {
@@ -30,7 +42,7 @@ public class Analizador {
 
         try {
             FileReader fichero = new FileReader(rutaArchivo);
-            GestorAnalisis.getInstance().procesarFichero(fichero);
+            procesarFichero(fichero);
             System.out.println(
                     "Análisis completo. Se han generado los archivos de tokens, reglas, y tabla de símbolos.");
             fichero.close();
@@ -41,5 +53,49 @@ public class Analizador {
         } catch (Exception e) {
             GestorErrores.lanzarError(GestorErrores.TipoError.GENERICO, "Error inesperado: " + e.getMessage());
         }
+    }
+
+    /**
+     * Procesa el archivo fuente utilizando los analizadores léxico, sintáctico y
+     * semántico.
+     *
+     * @param fichero El FileReader del archivo fuente.
+     * @throws IOException Si ocurre un error de lectura.
+     */
+    private static void procesarFichero(FileReader fichero) throws IOException {
+        List<Token> listaTokens = new ArrayList<>();
+        List<Integer> listaReglas = new ArrayList<>();
+
+        Boolean finDeFichero = false;
+        do {
+            char caracter = (char) fichero.read();
+            for (Token token : analizadorLexico.procesarCaracter(caracter)) {
+                listaTokens.add(token);
+                if (token.getTipo().equals(TipoToken.FINDEFICHERO)) {
+                    finDeFichero = true;
+                }
+
+                do {
+                    Integer regla = analizadorSintactico.procesarToken(token);
+                    if (regla != null) {
+                        listaReglas.add(regla);
+                        analizadorSemantico.procesarRegla(regla);
+                    }
+                } while (!analizadorSintactico.isTokenProcesado());
+            }
+            if (caracter == '\n') {
+                GestorErrores.incrementarLinea();
+            }
+        } while (!finDeFichero);
+
+        listaReglas.add(1);
+        analizadorSemantico.procesarRegla(1);
+
+        GestorSalida.escribirSalida(listaTokens, listaReglas, gestorTablas.getImpresionTablas());
+
+        gestorTablas.resetGestorTablas();
+        analizadorLexico.resetAnalizadorLexico();
+        analizadorSintactico.resetAnalizadorSintactico();
+        analizadorSemantico.resetAnalizadorSemantico();
     }
 }

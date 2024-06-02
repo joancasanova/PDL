@@ -9,10 +9,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import analizadores.lexico.AnalizadorLexico;
-import analizadores.semantico.AnalizadorSemantico;
-import analizadores.sintactico.AnalizadorSintactico;
-import estructuras.tablaSimbolos.GestorTablas;
+import modulos.lexico.AnalizadorLexico;
+import modulos.semantico.AnalizadorSemantico;
+import modulos.sintactico.AnalizadorSintactico;
+import modulos.tablaSimbolos.GestorTablas;
 
 import org.junit.jupiter.params.provider.Arguments;
 

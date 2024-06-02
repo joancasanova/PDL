@@ -1,11 +1,40 @@
+CONTENIDOS DE LA TABLA #1:
+
+
 CONTENIDOS DE LA TABLA #0:
 
-*	LEXEMA	:	'x'
+*	LEXEMA	:	'fin'
 Atributos: 
-+ tipo: 'INT'	
-+ despl: 2
++ tipo: 'BOOLEAN'	
++ despl: 0
 *	LEXEMA	:	'a'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 0
++ despl: 2
+*	LEXEMA	:	'b'
+Atributos: 
++ tipo: 'INT'	
++ despl: 4
+*	LEXEMA	:	'f'
+Atributos: 
++ tipo: 'INT'	
++ numParam: '0'	
++ TipoRetorno: 'INT'	
++ EtiqFuncion: 'f'	
+*	LEXEMA	:	'c'
+Atributos: 
++ tipo: 'INT'	
++ despl: 6
+*	LEXEMA	:	'x'
+Atributos: 
++ tipo: 'INT'	
++ despl: 8
+*	LEXEMA	:	'z'
+Atributos: 
++ tipo: 'INT'	
++ despl: 10
+*	LEXEMA	:	'h'
+Atributos: 
++ tipo: 'INT'	
++ despl: 12
 
