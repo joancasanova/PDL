@@ -10,26 +10,14 @@ jobs:
   count-lines:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
     - name: Install cloc
       run: sudo apt-get install -y cloc
     - name: Count lines of code
-      id: cloc
       run: |
         cloc . > cloc_output.txt
         cat cloc_output.txt
-    - name: Create comment with cloc result
-      uses: actions/github-script@v3
-      with:
-        script: |
-          const fs = require('fs');
-          const clocOutput = fs.readFileSync('cloc_output.txt', 'utf8');
-          github.rest.issues.createComment({
-            ...context.repo,
-            issue_number: context.issue.number,
-            body: `Lines of Code Report:\n\`\`\`\n${clocOutput}\n\`\`\``
-          });
-
+        
   build:
 
     runs-on: ubuntu-latest
