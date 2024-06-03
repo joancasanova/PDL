@@ -94,7 +94,7 @@ Pasos a seguir:
 
 La tabla de símbolos es una estructura esencial que guarda los identificadores (variables y funciones) presentes en el código fuente de JS-PdL.
 
-- Implementación: `src/main/java/modulos/tablaSimbolos`: Este módulo y sus clases son generales y pueden ser una referencia directa para el desarrollo de la práctica.
+- Implementación: `src/main/java/modulos/tablaSimbolos`
 
 Pasos a seguir:
 
