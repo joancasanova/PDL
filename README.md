@@ -7,13 +7,16 @@ Este proyecto ha sido desarrollado para la asignatura **Procesadores de Lenguaje
 
 Para cualquier duda, no dudes en contactar conmigo, estaré encantado de ayudarte.
 
+En el desarrollo de este proyecto también ha colaborado **Manuel Pérez Redondo**:
+- **Email**: redondoperezmanuel@gmail.com
+
 ## Contenidos
 
 0. [Descripción del Proyecto](#descripción-del-proyecto)
 1. [Funcionalidades Implementadas](#funcionalidades-implementadas)
 2. [Guía Completa para el Desarrollo de la Práctica - JS-PdL](#guía-completa-para-el-desarrollo-de-la-práctica---js-pdl)
-    - [0. Tabla de Símbolos](#0-tabla-de-símbolos)
-    - [1. Definir Tokens](#1-definir-tokens)
+    - [0. Definir Tokens](0-definir-tokens)
+    - [1. Tabla de Símbolos](#1-tabla-de-símbolos)
     - [2. Analizador Léxico](#2-analizador-léxico)
     - [3. Analizador Sintáctico](#3-analizador-sintáctico)
     - [4. Analizador Semántico](#4-analizador-semántico)
@@ -58,16 +61,7 @@ El desarrollo de la práctica se divide en las siguientes fases:
 5. **Pruebas**
 6. **Presentación**
 
-### 0. Tabla de Símbolos
-
-La tabla de símbolos es una estructura esencial que guarda los identificadores (variables y funciones) presentes en el código fuente de JS-PdL.
-
-- Implementación: `src/main/java/modulos/tablaSimbolos`
-
-Pasos a seguir:
-- Este módulo y sus clases son generales y pueden ser una referencia directa para el desarrollo de la práctica.
-
-### 1. Definir Tokens
+### 0. Definir Tokens
 
 Un token es la unidad léxica más pequeña e indivisible con significado propio. Cada token pertenece a una categoría léxica diferente. Por ejemplo: PALABRARESERVADA, SUMA, o COMPARADOR.
 
@@ -95,6 +89,15 @@ Pasos a seguir:
         PALABRARESERVADA("")
         ```
     - **NOTA**: Los nombres especificados entre paréntesis se utilizarán posteriormente para generar el archivo `gramatica.y` empleado en el analizador sintáctico y deben coincidir con éste.
+
+### 1. Tabla de Símbolos
+
+La tabla de símbolos es una estructura esencial que guarda los identificadores (variables y funciones) presentes en el código fuente de JS-PdL.
+
+- Implementación: `src/main/java/modulos/tablaSimbolos`
+
+Pasos a seguir:
+- Este módulo y sus clases son generales y pueden ser una referencia directa para el desarrollo de la práctica.
 
 ### 2. Analizador Léxico
 
