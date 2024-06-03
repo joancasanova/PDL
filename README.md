@@ -503,18 +503,16 @@ La evaluación del trabajo debe ser proporcional a los créditos asignados a la 
 Esta guía busca no solo facilitar la superación de la asignatura, sino también promover una evaluación más justa y representativa de los conocimientos y habilidades adquiridos por los estudiantes.
 
 ---
- -------------------------------------------------------------------------------
-Language                     files          blank        comment           code
--------------------------------------------------------------------------------
-Java                            28            406           1008           1832
-Markdown                         2            337              0           1278
-HTML                             5              5              0           1242
-yacc                             1             24              1             80
-Gradle                           2             13              7             60
-YAML                             1             12              0             49
--------------------------------------------------------------------------------
-SUM:                            39            797           1016           4541
--------------------------------------------------------------------------------
+| Language   | files | blank | comment | code |
+|------------|-------|-------|---------|------|
+| Java       | 28    | 406   | 1008    | 1832 |
+| Markdown   | 2     | 337   | 0       | 1278 |
+| HTML       | 5     | 5     | 0       | 1242 |
+| yacc       | 1     | 24    | 1       | 80   |
+| Gradle     | 2     | 13    | 7       | 60   |
+| YAML       | 1     | 12    | 0       | 49   |
+| **SUM**    | **39**| **797**| **1016** | **4541** |
+
 ---
 ¡Gracias por tu atención y buena suerte con el desarrollo de tu práctica!
 
