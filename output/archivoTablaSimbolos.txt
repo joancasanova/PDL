@@ -1,40 +1,282 @@
 CONTENIDOS DE LA TABLA #1:
 
+*	LEXEMA	:	'n'
+Atributos: 
++ tipo: 'INT'	
++ despl: 2
 
-CONTENIDOS DE LA TABLA #0:
+CONTENIDOS DE LA TABLA #2:
 
-*	LEXEMA	:	'fin'
+
+CONTENIDOS DE LA TABLA #3:
+
+*	LEXEMA	:	'n'
+Atributos: 
++ tipo: 'INT'	
++ despl: 2
+*	LEXEMA	:	'factorial'
+Atributos: 
++ tipo: 'INT'	
++ despl: 4
+
+CONTENIDOS DE LA TABLA #4:
+
+*	LEXEMA	:	'factorial'
+Atributos: 
++ tipo: 'INT'	
++ despl: 2
+*	LEXEMA	:	'i'
+Atributos: 
++ tipo: 'INT'	
++ despl: 4
+
+CONTENIDOS DE LA TABLA #5:
+
+*	LEXEMA	:	'n'
+Atributos: 
++ tipo: 'INT'	
++ despl: 2
+*	LEXEMA	:	'i'
+Atributos: 
++ tipo: 'INT'	
++ despl: 4
+*	LEXEMA	:	'factorial'
+Atributos: 
++ tipo: 'INT'	
++ despl: 6
+
+CONTENIDOS DE LA TABLA #6:
+
+*	LEXEMA	:	's'
+Atributos: 
++ tipo: 'STRING'	
++ despl: 130
+*	LEXEMA	:	'msg'
+Atributos: 
++ tipo: 'STRING'	
++ despl: 2
+*	LEXEMA	:	'f'
+Atributos: 
++ tipo: 'INT'	
++ despl: 0
+
+CONTENIDOS DE LA TABLA #7:
+
+*	LEXEMA	:	'log'
 Atributos: 
 + tipo: 'BOOLEAN'	
-+ despl: 0
++ despl: 128
+
+CONTENIDOS DE LA TABLA #8:
+
 *	LEXEMA	:	'a'
 Atributos: 
 + tipo: 'INT'	
 + despl: 2
-*	LEXEMA	:	'b'
+
+CONTENIDOS DE LA TABLA #9:
+
+*	LEXEMA	:	'm'
 Atributos: 
 + tipo: 'INT'	
 + despl: 4
-*	LEXEMA	:	'f'
+*	LEXEMA	:	'a'
+Atributos: 
++ tipo: 'INT'	
++ despl: 2
+
+CONTENIDOS DE LA TABLA #10:
+
+*	LEXEMA	:	'd'
+Atributos: 
++ tipo: 'INT'	
++ despl: 6
+*	LEXEMA	:	'm'
+Atributos: 
++ tipo: 'INT'	
++ despl: 4
+*	LEXEMA	:	'a'
+Atributos: 
++ tipo: 'INT'	
++ despl: 2
+
+CONTENIDOS DE LA TABLA #11:
+
+*	LEXEMA	:	'v'
+Atributos: 
++ tipo: 'INT'	
++ despl: 2
+*	LEXEMA	:	'w'
+Atributos: 
++ tipo: 'INT'	
++ despl: 0
+
+CONTENIDOS DE LA TABLA #12:
+
+*	LEXEMA	:	'z'
+Atributos: 
++ tipo: 'INT'	
++ despl: 2
+*	LEXEMA	:	'dim'
+Atributos: 
++ tipo: 'INT'	
++ despl: 0
+*	LEXEMA	:	's'
+Atributos: 
++ tipo: 'INT'	
++ despl: 4
+
+CONTENIDOS DE LA TABLA #13:
+
+*	LEXEMA	:	'v1'
+Atributos: 
++ tipo: 'INT'	
++ despl: 0
+*	LEXEMA	:	'v2'
+Atributos: 
++ tipo: 'INT'	
++ despl: 2
+*	LEXEMA	:	'v3'
+Atributos: 
++ tipo: 'INT'	
++ despl: 4
+*	LEXEMA	:	'zv'
+Atributos: 
++ tipo: 'INT'	
++ despl: 6
+*	LEXEMA	:	'i'
+Atributos: 
++ tipo: 'INT'	
++ despl: 8
+
+CONTENIDOS DE LA TABLA #0:
+
+*	LEXEMA	:	's'
+Atributos: 
++ tipo: 'STRING'	
++ despl: 0
+*	LEXEMA	:	'FactorialRecursivo'
+Atributos: 
++ tipo: 'INT'	
++ numParam: '1'	
++ TipoParam0: 'INT'	
++ ModoParam0: 'VALOR'	
++ TipoRetorno: 'INT'	
++ EtiqFuncion: 'FactorialRecursivo'	
+*	LEXEMA	:	'uno'
+Atributos: 
++ tipo: 'INT'	
++ despl: 128
+*	LEXEMA	:	'UNO'
+Atributos: 
++ tipo: 'INT'	
++ despl: 130
+*	LEXEMA	:	'salto'
+Atributos: 
++ tipo: 'STRING'	
++ numParam: '0'	
++ TipoRetorno: 'STRING'	
++ EtiqFuncion: 'salto'	
+*	LEXEMA	:	'FactorialDo'
+Atributos: 
++ tipo: 'INT'	
++ numParam: '1'	
++ TipoParam0: 'INT'	
++ ModoParam0: 'VALOR'	
++ TipoRetorno: 'INT'	
++ EtiqFuncion: 'FactorialDo'	
+*	LEXEMA	:	'FactorialWhile'
 Atributos: 
 + tipo: 'INT'	
 + numParam: '0'	
 + TipoRetorno: 'INT'	
-+ EtiqFuncion: 'f'	
-*	LEXEMA	:	'c'
++ EtiqFuncion: 'FactorialWhile'	
+*	LEXEMA	:	'FactorialFor'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 6
-*	LEXEMA	:	'x'
++ numParam: '1'	
++ TipoParam0: 'INT'	
++ ModoParam0: 'VALOR'	
++ TipoRetorno: 'INT'	
++ EtiqFuncion: 'FactorialFor'	
+*	LEXEMA	:	'Whil'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 8
-*	LEXEMA	:	'z'
++ despl: 132
+*	LEXEMA	:	'imprime'
+Atributos: 
++ tipo: 'VOID'	
++ numParam: '3'	
++ TipoParam0: 'INT'	
++ ModoParam0: 'VALOR'	
++ TipoParam1: 'STRING'	
++ ModoParam1: 'VALOR'	
++ TipoParam2: 'STRING'	
++ ModoParam2: 'VALOR'	
++ TipoRetorno: 'VOID'	
++ EtiqFuncion: 'imprime'	
+*	LEXEMA	:	'cadena'
+Atributos: 
++ tipo: 'STRING'	
++ numParam: '1'	
++ TipoParam0: 'BOOLEAN'	
++ ModoParam0: 'VALOR'	
++ TipoRetorno: 'STRING'	
++ EtiqFuncion: 'cadena'	
+*	LEXEMA	:	'bisiesto'
+Atributos: 
++ tipo: 'BOOLEAN'	
++ numParam: '1'	
++ TipoParam0: 'INT'	
++ ModoParam0: 'VALOR'	
++ TipoRetorno: 'BOOLEAN'	
++ EtiqFuncion: 'bisiesto'	
+*	LEXEMA	:	'dias'
 Atributos: 
 + tipo: 'INT'	
-+ despl: 10
-*	LEXEMA	:	'h'
++ numParam: '2'	
++ TipoParam0: 'INT'	
++ ModoParam0: 'VALOR'	
++ TipoParam1: 'INT'	
++ ModoParam1: 'VALOR'	
++ TipoRetorno: 'INT'	
++ EtiqFuncion: 'dias'	
+*	LEXEMA	:	'esFechaCorrecta'
 Atributos: 
-+ tipo: 'INT'	
-+ despl: 12
++ tipo: 'BOOLEAN'	
++ numParam: '3'	
++ TipoParam0: 'INT'	
++ ModoParam0: 'VALOR'	
++ TipoParam1: 'INT'	
++ ModoParam1: 'VALOR'	
++ TipoParam2: 'INT'	
++ ModoParam2: 'VALOR'	
++ TipoRetorno: 'BOOLEAN'	
++ EtiqFuncion: 'esFechaCorrecta'	
+*	LEXEMA	:	'imprimeSuma'
+Atributos: 
++ tipo: 'VOID'	
++ numParam: '2'	
++ TipoParam0: 'INT'	
++ ModoParam0: 'VALOR'	
++ TipoParam1: 'INT'	
++ ModoParam1: 'VALOR'	
++ TipoRetorno: 'VOID'	
++ EtiqFuncion: 'imprimeSuma'	
+*	LEXEMA	:	'potencia'
+Atributos: 
++ tipo: 'VOID'	
++ numParam: '2'	
++ TipoParam0: 'INT'	
++ ModoParam0: 'VALOR'	
++ TipoParam1: 'INT'	
++ ModoParam1: 'VALOR'	
++ TipoRetorno: 'VOID'	
++ EtiqFuncion: 'potencia'	
+*	LEXEMA	:	'demo'
+Atributos: 
++ tipo: 'VOID'	
++ numParam: '0'	
++ TipoRetorno: 'VOID'	
++ EtiqFuncion: 'demo'	
 
