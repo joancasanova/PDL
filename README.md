@@ -7,13 +7,16 @@ Este proyecto ha sido desarrollado para la asignatura **Procesadores de Lenguaje
 
 Para cualquier duda, no dudes en contactar conmigo, estaré encantado de ayudarte.
 
+En el desarrollo de este proyecto también ha colaborado **Manuel Pérez Redondo**:
+- **Email**: redondoperezmanuel@gmail.com
+
 ## Contenidos
 
 0. [Descripción del Proyecto](#descripción-del-proyecto)
 1. [Funcionalidades Implementadas](#funcionalidades-implementadas)
 2. [Guía Completa para el Desarrollo de la Práctica - JS-PdL](#guía-completa-para-el-desarrollo-de-la-práctica---js-pdl)
-    - [0. Tabla de Símbolos](#0-tabla-de-símbolos)
-    - [1. Definir Tokens](#1-definir-tokens)
+    - [0. Definir Tokens](0-definir-tokens)
+    - [1. Tabla de Símbolos](#1-tabla-de-símbolos)
     - [2. Analizador Léxico](#2-analizador-léxico)
     - [3. Analizador Sintáctico](#3-analizador-sintáctico)
     - [4. Analizador Semántico](#4-analizador-semántico)
@@ -58,16 +61,7 @@ El desarrollo de la práctica se divide en las siguientes fases:
 5. **Pruebas**
 6. **Presentación**
 
-### 0. Tabla de Símbolos
-
-La tabla de símbolos es una estructura esencial que guarda los identificadores (variables y funciones) presentes en el código fuente de JS-PdL.
-
-- Implementación: `src/main/java/modulos/tablaSimbolos`
-
-Pasos a seguir:
-- Este módulo y sus clases son generales y pueden ser una referencia directa para el desarrollo de la práctica.
-
-### 1. Definir Tokens
+### 0. Definir Tokens
 
 Un token es la unidad léxica más pequeña e indivisible con significado propio. Cada token pertenece a una categoría léxica diferente. Por ejemplo: PALABRARESERVADA, SUMA, o COMPARADOR.
 
@@ -95,6 +89,16 @@ Pasos a seguir:
         PALABRARESERVADA("")
         ```
     - **NOTA**: Los nombres especificados entre paréntesis se utilizarán posteriormente para generar el archivo `gramatica.y` empleado en el analizador sintáctico y deben coincidir con éste.
+
+### 1. Tabla de Símbolos
+
+La tabla de símbolos es una estructura esencial que guarda los identificadores (variables y funciones) presentes en el código fuente de JS-PdL.
+
+- Implementación: `src/main/java/modulos/tablaSimbolos`
+
+Pasos a seguir:
+
+0. **Adaptar `GestorTablas.java`:** Se debe adaptar las constantes `BYTES_STRING`, `BYTES_BOOLEAN`, `BYTES_INT`, y `BYTES_VOID`
 
 ### 2. Analizador Léxico
 
@@ -311,9 +315,7 @@ Para implementar el analizador semántico, se debe seguir estos pasos:
 
 1. **Adaptar la funcionalidad de cada función** a las reglas correspondientes a las opciones de vuestra práctica.
 
-2. **Adaptar `calcularAncho(Tipo tipo)`** según las especificaciones del enunciado.
-
-3. **Probar el Analizador Semántico**:
+2. **Probar el Analizador Semántico**:
 
     - En `Analizador.java` (`src/main/java/main/Analizador.java`), descomentar todo.
     - Comprobar que se genera correctamente la tabla de símbolos:
@@ -504,6 +506,19 @@ Esta guía busca no solo facilitar la superación de la asignatura, sino tambié
 
 ---
 
+### Datos sobre el proyecto: líneas de código, lenguajes, y archivos
+
+| Language   | files | blank | comment | code |
+|------------|-------|-------|---------|------|
+| Java       | 28    | 406   | 1008    | 1832 |
+| Markdown   | 2     | 337   | 0       | 1278 |
+| HTML       | 5     | 5     | 0       | 1242 |
+| yacc       | 1     | 24    | 1       | 80   |
+| Gradle     | 2     | 13    | 7       | 60   |
+| YAML       | 1     | 12    | 0       | 49   |
+| **SUM**    | **39**| **797**| **1016** | **4541** |
+
+---
 ¡Gracias por tu atención y buena suerte con el desarrollo de tu práctica!
 
 Si necesitas más detalles o quieres sugerir alguna modificación o mejora, no dudes en enviar un correo electrónico a juancasanovaferrer@gmail.com
