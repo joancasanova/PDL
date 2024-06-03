@@ -10,6 +10,11 @@ import java.util.Stack;
  */
 public class GestorTablas {
 
+    private static final int BYTES_STRING = 128;
+    private static final int BYTES_INT = 2;
+    private static final int BYTES_BOOLEAN = 2;
+    private static final int BYTES_VOID = 0;
+
     private Stack<TablaSimbolos> tablas;
     private Boolean tablaGlobal;
     private int numeroDeTablas;
@@ -112,28 +117,29 @@ public class GestorTablas {
         }
         simbolo.setDesplazamiento(tabla.getDesplazamiento());
         simbolo.setTipo(tipo);
-        simbolo.setAncho(calcularAncho(tipo));
-        tabla.setDesplazamiento(tabla.getDesplazamiento() + simbolo.getAncho());
+        simbolo.setBytes(calcularBytes(tipo));
+        tabla.setDesplazamiento(tabla.getDesplazamiento() + simbolo.getBytes());
     }
 
     /**
-     * Calcula el ancho de un tipo.
+     * Calcula el numero de bytes de un tipo.
      *
      * @param tipo El tipo cuyo ancho se va a calcular.
-     * @return El ancho del tipo.
+     * @return El numero de bytes que ocupa un tipo en memoria.
      */
-    private int calcularAncho(Tipo tipo) {
+    private int calcularBytes(Tipo tipo) {
         switch (tipo) {
             case STRING:
-                return 128;
+                return BYTES_STRING;
             case BOOLEAN:
+                return BYTES_BOOLEAN;
             case INT:
-                return 2;
+                return BYTES_INT;
             case VOID:
-                return 0;
+                return BYTES_VOID;
             default:
                 GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPO_NO_COMPATIBLE);
-                return -1; // no se alcanza
+                return -1;
         }
     }
 

@@ -5,8 +5,10 @@ package modulos.tablaSimbolos;
  */
 public class GestorZonasEspeciales {
 
-    // Variables booleanas que indican si estamos en zonas especiales
+    // Indica si el programa se encuentra en la zona de parametros de una funcion
     private Boolean zonaParametros;
+
+    // Indica si el programa se encuentra en una sentencia de declaracion
     private Boolean zonaDeclaracion;
 
     // Instancia única de la clase

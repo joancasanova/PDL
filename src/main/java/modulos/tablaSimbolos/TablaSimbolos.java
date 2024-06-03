@@ -123,13 +123,7 @@ public class TablaSimbolos {
             Simbolo simbolo = entrada.getValue();
             String nombre = simbolo.getNombre().toString();
             Tipo tipo = simbolo.getTipo();
-            if (tipo == null) {
-                tipo = Tipo.INT;
-            }
             Integer desplazamientoSimbolo = simbolo.getDesplazamiento();
-            if (desplazamientoSimbolo == null) {
-                desplazamientoSimbolo = 2;
-            }
             Tipo tipoRetorno = simbolo.getTipoRetorno();
 
             // Imprimimos la entrada

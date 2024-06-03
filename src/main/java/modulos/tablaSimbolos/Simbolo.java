@@ -18,7 +18,7 @@ public class Simbolo {
 
     // Parámetros para los símbolos normales
     private Integer desplazamiento;
-    private Integer ancho;
+    private Integer bytes;
 
     // Parámetros para los símbolos de las funciones
     private Integer numeroParametros;
@@ -31,13 +31,13 @@ public class Simbolo {
      * @param tipo           El tipo del símbolo.
      * @param nombre         El nombre del símbolo.
      * @param desplazamiento El desplazamiento del símbolo en la memoria.
-     * @param ancho          El ancho del símbolo en la memoria.
+     * @param bytes          El ancho del símbolo en la memoria.
      */
-    public Simbolo(Tipo tipo, String nombre, Integer desplazamiento, Integer ancho) {
+    public Simbolo(Tipo tipo, String nombre, Integer desplazamiento, Integer bytes) {
         this.tipo = tipo;
         this.nombre = nombre;
         this.desplazamiento = desplazamiento;
-        this.ancho = ancho;
+        this.bytes = bytes;
         this.tipoRetorno = null;
     }
 
@@ -73,8 +73,8 @@ public class Simbolo {
      * 
      * @return El ancho del símbolo.
      */
-    public Integer getAncho() {
-        return this.ancho;
+    public Integer getBytes() {
+        return this.bytes;
     }
 
     /**
@@ -82,8 +82,8 @@ public class Simbolo {
      * 
      * @param ancho El ancho del símbolo.
      */
-    public void setAncho(Integer ancho) {
-        this.ancho = ancho;
+    public void setBytes(Integer ancho) {
+        this.bytes = ancho;
     }
 
     /**
