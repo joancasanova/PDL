@@ -98,7 +98,7 @@ La tabla de símbolos es una estructura esencial que guarda los identificadores 
 
 Pasos a seguir:
 
-0. **Clase` GestorTablas.java`:** Se debe adaptar las constantes `BYTES_STRING`, `BYTES_BOOLEAN`, `BYTES_INT`, y `BYTES_VOID`
+0. **Adaptar `GestorTablas.java`:** Se debe adaptar las constantes `BYTES_STRING`, `BYTES_BOOLEAN`, `BYTES_INT`, y `BYTES_VOID`
 
 ### 2. Analizador Léxico
 
