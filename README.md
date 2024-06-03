@@ -94,10 +94,11 @@ Pasos a seguir:
 
 La tabla de símbolos es una estructura esencial que guarda los identificadores (variables y funciones) presentes en el código fuente de JS-PdL.
 
-- Implementación: `src/main/java/modulos/tablaSimbolos`
+- Implementación: `src/main/java/modulos/tablaSimbolos`: Este módulo y sus clases son generales y pueden ser una referencia directa para el desarrollo de la práctica.
 
 Pasos a seguir:
-- Este módulo y sus clases son generales y pueden ser una referencia directa para el desarrollo de la práctica.
+
+0. Clase GestorTablas.java: Se debe adaptar las constantes `BYTES_STRING`, `BYTES_BOOLEAN`, `BYTES_INT`, y `BYTES_VOID`
 
 ### 2. Analizador Léxico
 
@@ -314,9 +315,7 @@ Para implementar el analizador semántico, se debe seguir estos pasos:
 
 1. **Adaptar la funcionalidad de cada función** a las reglas correspondientes a las opciones de vuestra práctica.
 
-2. **Adaptar `calcularAncho(Tipo tipo)`** según las especificaciones del enunciado.
-
-3. **Probar el Analizador Semántico**:
+2. **Probar el Analizador Semántico**:
 
     - En `Analizador.java` (`src/main/java/main/Analizador.java`), descomentar todo.
     - Comprobar que se genera correctamente la tabla de símbolos:
