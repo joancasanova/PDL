@@ -503,6 +503,9 @@ La evaluación del trabajo debe ser proporcional a los créditos asignados a la 
 Esta guía busca no solo facilitar la superación de la asignatura, sino también promover una evaluación más justa y representativa de los conocimientos y habilidades adquiridos por los estudiantes.
 
 ---
+
+### Datos sobre el proyecto: líneas de código, lenguajes, y archivos
+
 | Language   | files | blank | comment | code |
 |------------|-------|-------|---------|------|
 | Java       | 28    | 406   | 1008    | 1832 |
