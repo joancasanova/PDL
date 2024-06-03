@@ -69,20 +69,23 @@ public class Analizador {
         Boolean finDeFichero = false;
         do {
             char caracter = (char) fichero.read();
-            for (Token token : analizadorLexico.procesarCaracter(caracter)) {
-                listaTokens.add(token);
-                if (token.getTipo().equals(TipoToken.FINDEFICHERO)) {
-                    finDeFichero = true;
-                }
-
-                do {
-                    Integer regla = analizadorSintactico.procesarToken(token);
-                    if (regla != null) {
-                        listaReglas.add(regla);
-                        analizadorSemantico.procesarRegla(regla);
+            do {
+                Token token = analizadorLexico.procesarCaracter(caracter);
+                if (token != null) {
+                    listaTokens.add(token);
+                    if (token.getTipo().equals(TipoToken.FINDEFICHERO)) {
+                        finDeFichero = true;
                     }
-                } while (!analizadorSintactico.isTokenProcesado());
-            }
+
+                    do {
+                        Integer regla = analizadorSintactico.procesarToken(token);
+                        if (regla != null) {
+                            listaReglas.add(regla);
+                            analizadorSemantico.procesarRegla(regla);
+                        }
+                    } while (!analizadorSintactico.isTokenProcesado());
+                }
+            } while (!analizadorLexico.isCaracterProcesado());
             if (caracter == '\n') {
                 GestorErrores.incrementarLinea();
             }

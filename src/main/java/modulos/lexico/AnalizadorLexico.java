@@ -1,7 +1,5 @@
 package modulos.lexico;
 
-import java.util.*;
-
 import modulos.lexico.enums.EstadoFinal;
 import modulos.lexico.enums.EstadoTransito;
 import modulos.token.*;
@@ -16,6 +14,9 @@ public class AnalizadorLexico {
 
     // Almacena los caracteres leídos para la formación de tokens
     private StringBuilder bufferCaracteres;
+
+    // Controla si el caracter se ha terminado de procesar
+    private Boolean caracterProcesado;
 
     // Gestor de estados para el análisis léxico
     private GestorEstados gestorEstados;
@@ -32,6 +33,7 @@ public class AnalizadorLexico {
      * de GestorEstados y GeneradorToken.
      */
     private AnalizadorLexico() {
+        this.caracterProcesado = false;
         this.bufferCaracteres = new StringBuilder();
         this.gestorEstados = GestorEstados.getInstance();
         this.generadorDeTokens = GeneradorToken.getInstance();
@@ -58,41 +60,40 @@ public class AnalizadorLexico {
      * Procesa un caracter y actualiza el estado del analizador léxico.
      * 
      * @param caracterPorProcesar Caracter a procesar.
-     * @return Lista de tokens identificados tras procesar el caracter.
+     * @return Token identificado tras procesar el caracter.
      */
-    public List<Token> procesarCaracter(Character caracterPorProcesar) {
+    public Token procesarCaracter(Character caracterPorProcesar) {
+        caracterProcesado = false;
 
-        List<Token> listaToken = new ArrayList<>();
+        String lexema = bufferCaracteres.toString();
 
-        while (caracterPorProcesar != null) {
-            String lexema = bufferCaracteres.toString();
+        // Actualiza el estado según el caracter actual entrante
+        gestorEstados.actualizarEstado(caracterPorProcesar, lexema);
 
-            // Actualiza el estado según el caracter actual entrante
-            gestorEstados.actualizarEstado(caracterPorProcesar, lexema);
+        // Generar token y almacenarlo si no es nulo
+        Token token = generadorDeTokens.generarToken(
+                gestorEstados.getEstadoFinal(),
+                caracterPorProcesar,
+                lexema);
 
-            // Generar token y almacenarlo si no es nulo
-            Token token = generadorDeTokens.generarToken(
-                    gestorEstados.getEstadoFinal(),
-                    caracterPorProcesar,
-                    lexema);
-            if (token != null) {
-                listaToken.add(token);
-            }
-
-            // Actualizar buffer de caracteres dependiendo de si es estado inicial o no
-            if (gestorEstados.getEstadoTransito() == EstadoTransito.INICIO) {
-                bufferCaracteres.setLength(0);
-            } else {
-                bufferCaracteres.append(caracterPorProcesar);
-            }
-
-            // Consumir el caracter si el analizador no se encuentra en ciertos estados
-            if (debeConsumirCaracter(gestorEstados.getEstadoFinal())) {
-                caracterPorProcesar = null;
-            }
+        // Actualizar buffer de caracteres dependiendo de si es estado inicial o no
+        if (gestorEstados.getEstadoTransito() == EstadoTransito.INICIO) {
+            bufferCaracteres.setLength(0);
+        } else {
+            bufferCaracteres.append(caracterPorProcesar);
         }
 
-        return listaToken;
+        // Consumir el caracter si el analizador no se encuentra en ciertos estados
+        if (debeConsumirCaracter(gestorEstados.getEstadoFinal())) {
+            caracterProcesado = true;
+            caracterPorProcesar = null;
+        }
+
+        return token;
+    }
+
+    public Boolean isCaracterProcesado() {
+        return caracterProcesado;
     }
 
     /**
@@ -111,6 +112,7 @@ public class AnalizadorLexico {
      * Reinicia el AnalizadorLexico a su estado inicial.
      */
     public void resetAnalizadorLexico() {
+        this.caracterProcesado = false;
         this.bufferCaracteres = new StringBuilder();
         gestorEstados.resetGestorEstados();
         generadorDeTokens.resetGeneradorToken();
