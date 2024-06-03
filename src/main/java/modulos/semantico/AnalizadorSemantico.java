@@ -16,6 +16,9 @@ public class AnalizadorSemantico {
     private static AnalizadorSemantico instancia;
 
     private GestorTablas gestorTablas;
+    private GestorSimbolos gestorSimbolos;
+    private GestorZonasEspeciales gestorZonas;
+
     private Stack<Tipo> pilaTipos;
     private GestorParametros gestorParametros;
 
@@ -27,6 +30,8 @@ public class AnalizadorSemantico {
      */
     private AnalizadorSemantico() {
         this.gestorTablas = GestorTablas.getInstance();
+        this.gestorSimbolos = GestorSimbolos.getInstance();
+        this.gestorZonas = GestorZonasEspeciales.getInstance();
         this.pilaTipos = new Stack<>();
         this.gestorParametros = GestorParametros.getInstance();
         this.returnEjecutado = false;
@@ -194,7 +199,7 @@ public class AnalizadorSemantico {
      */
     private void procesarDeclaracion() {
         Tipo tipo = pilaTipos.pop();
-        Simbolo simbolo = gestorTablas.consumirSimboloSinTipo();
+        Simbolo simbolo = gestorSimbolos.consumirSimboloSinTipo();
         gestorTablas.asignarTipo(simbolo, tipo);
 
         pilaTipos.add(Tipo.OK);
@@ -210,7 +215,7 @@ public class AnalizadorSemantico {
         Tipo tipoT = pilaTipos.pop();
 
         if (tipoE == tipoT) {
-            Simbolo simbolo = gestorTablas.consumirSimboloSinTipo();
+            Simbolo simbolo = gestorSimbolos.consumirSimboloSinTipo();
             gestorTablas.asignarTipo(simbolo, tipoT);
         } else {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_TIPOS_NO_COINCIDEN);
@@ -251,13 +256,13 @@ public class AnalizadorSemantico {
 
         // Asignar a la funcion el numero de parametros, y su tipo y su modo en la tabla
         // de simbolos
-        Simbolo simbolo = gestorTablas.getUltimoSimboloFuncion();
+        Simbolo simbolo = gestorSimbolos.getUltimoSimboloFuncion();
         simbolo.setNumeroParametros(gestorParametros.getNumeroParametrosFuncion());
         simbolo.setTipoParametros(new ArrayList<>(gestorParametros.getTipoParametrosFuncion()));
         simbolo.setModoPaso(new ArrayList<>(gestorParametros.getModoPasoParametros()));
 
         // Se sale de la zona de parametros
-        gestorTablas.setZonaParametros(false);
+        gestorZonas.setZonaParametros(false);
         gestorParametros.reset();
     }
 
@@ -270,12 +275,12 @@ public class AnalizadorSemantico {
 
         // Crear una tabla de simbolos nueva
         gestorTablas.nuevaTabla();
-        gestorTablas.setZonaParametros(true);
+        gestorZonas.setZonaParametros(true);
         returnEjecutado = false;
 
         // Asignar tipo de la funcion a la tabla de sinbolos
         Tipo tipo = pilaTipos.peek();
-        Simbolo simbolo = gestorTablas.consumirSimboloSinTipo();
+        Simbolo simbolo = gestorSimbolos.consumirSimboloSinTipo();
         simbolo.setNumeroParametros(0);
         simbolo.setTipoRetorno(tipo);
         gestorTablas.asignarTipo(simbolo, tipo);
@@ -289,7 +294,7 @@ public class AnalizadorSemantico {
      */
     private void procesarParametro() {
         Tipo tipo = pilaTipos.pop();
-        Simbolo simbolo = gestorTablas.consumirSimboloSinTipo();
+        Simbolo simbolo = gestorSimbolos.consumirSimboloSinTipo();
         gestorTablas.asignarTipo(simbolo, tipo);
         gestorParametros.addParametroFuncion(tipo, Modo.VALOR);
     }
@@ -363,9 +368,9 @@ public class AnalizadorSemantico {
      * case 30: // W: ID
      */
     private void procesarIdentificador() {
-        Simbolo simbolo = gestorTablas.getUltimoSimbolo();
+        Simbolo simbolo = gestorSimbolos.getUltimoSimbolo();
         if (simbolo.getTipo() == null) {
-            gestorTablas.eliminarSimboloSinTipo(simbolo);
+            gestorSimbolos.eliminarSimboloSinTipo(simbolo);
             simbolo.setTipo(Tipo.INT);
         }
         pilaTipos.add(simbolo.getTipo());
@@ -389,7 +394,7 @@ public class AnalizadorSemantico {
      * case 32: // W: ID ( L )
      */
     private void procesarLlamadaFuncion() {
-        Simbolo simboloFuncion = gestorTablas.getUltimoSimboloFuncion();
+        Simbolo simboloFuncion = gestorSimbolos.getUltimoSimboloFuncion();
         verificarLlamadaFuncion(simboloFuncion);
 
         if (simboloFuncion.getTipo() == null) {
@@ -405,7 +410,7 @@ public class AnalizadorSemantico {
      * case 37: // S: ID ( L ) ;
      */
     private void procesarLlamadaFuncionConParametros() {
-        Simbolo simboloFuncion = gestorTablas.getUltimoSimboloFuncion();
+        Simbolo simboloFuncion = gestorSimbolos.getUltimoSimboloFuncion();
         verificarLlamadaFuncion(simboloFuncion);
         if (simboloFuncion.getTipo() == null) {
             pilaTipos.add(pilaTipos.peek());
@@ -424,9 +429,9 @@ public class AnalizadorSemantico {
      */
     private void procesarAsignacionConOperacion() {
         Tipo tipoE = pilaTipos.pop();
-        Simbolo simbolo = gestorTablas.getUltimoSimbolo();
+        Simbolo simbolo = gestorSimbolos.getUltimoSimbolo();
         if (simbolo.getTipo() == null) {
-            gestorTablas.eliminarSimboloSinTipo(simbolo);
+            gestorSimbolos.eliminarSimboloSinTipo(simbolo);
             gestorTablas.asignarTipo(simbolo, Tipo.INT);
         }
         if (!tipoE.equals(simbolo.getTipo())) {
@@ -455,9 +460,9 @@ public class AnalizadorSemantico {
      * case 39: // S: GET ID ;
      */
     private void procesarGet() {
-        Simbolo simbolo = gestorTablas.getUltimoSimbolo();
+        Simbolo simbolo = gestorSimbolos.getUltimoSimbolo();
         if (simbolo.getTipo() == null) {
-            gestorTablas.eliminarSimboloSinTipo(simbolo);
+            gestorSimbolos.eliminarSimboloSinTipo(simbolo);
             simbolo.setTipo(Tipo.INT);
         }
         if (simbolo.getTipo().equals(Tipo.INT) || simbolo.getTipo().equals(Tipo.STRING)) {
@@ -528,7 +533,11 @@ public class AnalizadorSemantico {
      */
     public void resetAnalizadorSemantico() {
         gestorParametros.reset();
+        gestorSimbolos.resetGestorSimbolos();
+        gestorZonas.resetGestorZonas();
         this.gestorTablas = GestorTablas.getInstance();
+        this.gestorSimbolos = GestorSimbolos.getInstance();
+        this.gestorZonas = GestorZonasEspeciales.getInstance();
         this.pilaTipos = new Stack<>();
         this.gestorParametros = GestorParametros.getInstance();
         this.returnEjecutado = false;

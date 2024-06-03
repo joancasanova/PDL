@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modulos.lexico.enums.EstadoFinal;
+import modulos.tablaSimbolos.GestorSimbolos;
 import modulos.tablaSimbolos.GestorTablas;
+import modulos.tablaSimbolos.GestorZonasEspeciales;
 import modulos.tablaSimbolos.Simbolo;
 import modulos.tablaSimbolos.TablaSimbolos;
 import modulos.token.*;
@@ -21,6 +23,8 @@ public class GeneradorToken {
 
     // Gestor de tablas de simbolos
     private GestorTablas gestorTablas;
+    private GestorSimbolos gestorSimbolos;
+    private GestorZonasEspeciales gestorZonas;
 
     // Simbolos a la espera de ser enviados a Tabla de Simbolos
     private List<Simbolo> simbolosPorEnviar;
@@ -42,6 +46,8 @@ public class GeneradorToken {
      */
     private GeneradorToken() {
         this.gestorTablas = GestorTablas.getInstance();
+        this.gestorSimbolos = GestorSimbolos.getInstance();
+        this.gestorZonas = GestorZonasEspeciales.getInstance();
         this.ultimoTokenPuntoComa = false;
         this.simbolosPorEnviar = new ArrayList<>();
     }
@@ -166,7 +172,7 @@ public class GeneradorToken {
 
         // Establecer símbolo como pendiente de gestionar
         if (!ultimoTokenPuntoComa) {
-            gestorTablas.setUltimoSimbolo(simbolo);
+            gestorSimbolos.setUltimoSimbolo(simbolo);
         } else {
             simbolosPorEnviar.add(simbolo);
         }
@@ -196,8 +202,8 @@ public class GeneradorToken {
         // Sino, buscar simbolo en tabla global
         // (siempre que no se esté en una zona especial)
         else if (tablaGlobal.simboloExiste(nombre)
-                && !gestorTablas.getZonaDeclaracion()
-                && !gestorTablas.getZonaParametros()) {
+                && !gestorZonas.getZonaDeclaracion()
+                && !gestorZonas.getZonaParametros()) {
             simbolo = tablaGlobal.obtenerSimboloPorNombre(nombre);
         }
 
@@ -252,7 +258,7 @@ public class GeneradorToken {
      */
     private void gestionarSimbolosPorEnviar() {
         if (!ultimoTokenPuntoComa) {
-            simbolosPorEnviar.forEach(gestorTablas::setUltimoSimbolo);
+            simbolosPorEnviar.forEach(gestorSimbolos::setUltimoSimbolo);
             simbolosPorEnviar.clear();
         }
     }
@@ -265,11 +271,11 @@ public class GeneradorToken {
     private void actualizarZonaDeclaracion(Token token) {
         if (token != null) {
             if (TipoToken.PALABRARESERVADA.equals(token.getTipo()) && "let".equals(token.getAtributo())) {
-                gestorTablas.setZonaDeclaracion(true);
+                gestorZonas.setZonaDeclaracion(true);
             }
             if (TipoToken.PUNTOCOMA.equals(token.getTipo()) || TipoToken.ID.equals(token.getTipo())) {
                 ultimoTokenPuntoComa = true;
-                gestorTablas.setZonaDeclaracion(false);
+                gestorZonas.setZonaDeclaracion(false);
             } else {
                 ultimoTokenPuntoComa = false;
             }
@@ -281,6 +287,8 @@ public class GeneradorToken {
      */
     public void resetGeneradorToken() {
         this.gestorTablas = GestorTablas.getInstance();
+        this.gestorSimbolos = GestorSimbolos.getInstance();
+        this.gestorZonas = GestorZonasEspeciales.getInstance();
         this.ultimoTokenPuntoComa = false;
         this.simbolosPorEnviar = new ArrayList<>();
     }

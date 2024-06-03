@@ -1,11 +1,9 @@
 package modulos.tablaSimbolos;
 
-import java.util.Stack;
-
 import modulos.tablaSimbolos.enums.Tipo;
 import util.GestorErrores;
 
-import java.util.LinkedList;
+import java.util.Stack;
 
 /**
  * Clase GestorTablas que gestiona las tablas de símbolos en un compilador.
@@ -16,16 +14,7 @@ public class GestorTablas {
     private Boolean tablaGlobal;
     private int numeroDeTablas;
 
-    // Variables booleanas que indican si estamos en zonas especiales
-    private Boolean zonaParametros;
-    private Boolean zonaDeclaracion;
-
-    // Simbolos que aún no tienen un tipo asignado (FIFO)
-    private LinkedList<Simbolo> simbolosSinTipo;
-
-    // Ultimos simbolos insertados en la tabla (LIFO)
-    private Stack<Simbolo> ultimosSimbolos;
-
+    // Almacena el texto de impresión de las tablas que se van creando
     private StringBuilder impresionTabla;
 
     // Instancia única de la clase
@@ -38,11 +27,7 @@ public class GestorTablas {
         numeroDeTablas = 0;
         tablas = new Stack<TablaSimbolos>();
         tablas.add(new TablaSimbolos(numeroDeTablas));
-        simbolosSinTipo = new LinkedList<>();
-        ultimosSimbolos = new Stack<>();
         impresionTabla = new StringBuilder();
-        zonaParametros = false;
-        zonaDeclaracion = false;
         tablaGlobal = true;
     }
 
@@ -105,132 +90,12 @@ public class GestorTablas {
     }
 
     /**
-     * Añade a la lista de últimos símbolos añadidos un símbolo.
-     * Si el simbolo no tiene tipo, se añade a la lista de simbolos sin tipo.
-     * 
-     * @param simbolo El símbolo a añadir.
-     */
-    public void setUltimoSimbolo(Simbolo simbolo) {
-        ultimosSimbolos.push(simbolo);
-
-        if (simbolo.getTipo() == null) {
-            simbolosSinTipo.add(simbolo);
-        }
-    }
-
-    /**
-     * Obtiene el último símbolo insertado en la tabla.
-     * 
-     * @return El último símbolo insertado.
-     */
-    public Simbolo getUltimoSimbolo() {
-        return ultimosSimbolos.pop();
-    }
-
-    /**
-     * Obtiene el último símbolo de función insertado en la tabla.
-     * 
-     * @return El último símbolo de función.
-     */
-    public Simbolo getUltimoSimboloFuncion() {
-        Stack<Simbolo> tempStack = new Stack<>();
-        Simbolo simbolo = null;
-
-        // Buscar el elemento mientras la pila original no esté vacía
-        while (!ultimosSimbolos.isEmpty()) {
-            Simbolo elemento = ultimosSimbolos.pop();
-            tempStack.push(elemento);
-
-            if (elemento.getNumeroParametros() != null) {
-                simbolo = elemento;
-                tempStack.pop();
-                break;
-            }
-        }
-
-        // Restaurar el stack original
-        while (!tempStack.isEmpty()) {
-            ultimosSimbolos.push(tempStack.pop());
-        }
-
-        return simbolo;
-    }
-
-    /**
-     * Consume y devuelve un símbolo sin tipo de la lista.
-     * 
-     * @return El símbolo sin tipo.
-     */
-    public Simbolo consumirSimboloSinTipo() {
-        if (simbolosSinTipo.size() < 1) {
-            GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_REDECLARADA);
-        }
-
-        Simbolo simboloSinTipo = null;
-
-        if (zonaParametros) {
-            simboloSinTipo = simbolosSinTipo.removeLast();
-        } else {
-            simboloSinTipo = simbolosSinTipo.removeFirst();
-        }
-
-        return simboloSinTipo;
-    }
-
-    /**
-     * Elimina un simbolo sin tipo de la lista.
-     *
-     * @param simbolo El simbolo que se desea eliminar de la lista.
-     */
-    public void eliminarSimboloSinTipo(Simbolo simbolo) {
-        simbolosSinTipo.remove(simbolo);
-    }
-
-    /**
      * Obtiene si la tabla actual es global o local.
      * 
      * @return true si es la tabla global.
      */
     public Boolean isTablaGlobal() {
         return tablaGlobal;
-    }
-
-    /**
-     * Obtiene el estado de la zona de declaración.
-     * 
-     * @return true si está en zona de declaración, false en caso contrario.
-     */
-    public Boolean getZonaDeclaracion() {
-        return zonaDeclaracion;
-    }
-
-    /**
-     * Establece el estado de la zona de declaración.
-     * 
-     * @param value true para activar la zona de declaración, false para
-     *              desactivarla.
-     */
-    public void setZonaDeclaracion(Boolean value) {
-        zonaDeclaracion = value;
-    }
-
-    /**
-     * Obtiene el estado de la zona de parámetros.
-     * 
-     * @return true si está en zona de parámetros, false en caso contrario.
-     */
-    public Boolean getZonaParametros() {
-        return zonaParametros;
-    }
-
-    /**
-     * Establece el estado de la zona de parámetros.
-     * 
-     * @param value true para activar la zona de parámetros, false para
-     *              desactivarla.
-     */
-    public void setZonaParametros(Boolean value) {
-        zonaParametros = value;
     }
 
     /**
@@ -279,11 +144,7 @@ public class GestorTablas {
         numeroDeTablas = 0;
         tablas = new Stack<TablaSimbolos>();
         tablas.add(new TablaSimbolos(numeroDeTablas));
-        simbolosSinTipo = new LinkedList<>();
-        ultimosSimbolos = new Stack<>();
         impresionTabla = new StringBuilder();
-        zonaParametros = false;
-        zonaDeclaracion = false;
         tablaGlobal = true;
     }
 }
