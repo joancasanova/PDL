@@ -7,6 +7,8 @@ Este proyecto ha sido desarrollado para la asignatura **Procesadores de Lenguaje
 
 Para cualquier duda, no dudes en contactar conmigo, estaré encantado de ayudarte.
 
+**Son bienvenidas las sugerencias de mejora del proyecto y su ampliación.**
+
 En el desarrollo de este proyecto también ha colaborado **Manuel Pérez Redondo**:
 - **Email**: redondoperezmanuel@gmail.com
 
