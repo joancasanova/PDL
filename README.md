@@ -47,7 +47,7 @@ Además de las funcionalidades comunes para todos los grupos, las funcionalidade
 - **Comentarios**: Comentario de línea (`//`)
 - **Cadenas**: Con comillas dobles (`" "`)
 
-## Guía Completa para el Desarrollo de la Práctica - JS-PdL
+## Guia Completa para el Desarrollo de la Practica - JS-PdL
 
 A continuación se presenta una guía detallada basada en el código de este repositorio para el desarrollo de la práctica.
 
@@ -424,7 +424,7 @@ Una consecuencia directa de este tipo de evaluación es que el código que se ej
 
 5. **Archivo > Generar Árbol**.
 
-## 3. Cómo Ejecutar el Proyecto
+## 3. Como Ejecutar el Proyecto
 
 Para ejecutar el proyecto usando Gradle, sigue estos pasos:
 
