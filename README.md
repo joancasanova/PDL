@@ -14,7 +14,7 @@ En el desarrollo de este proyecto también ha colaborado **Manuel Pérez Redondo
 
 ## Contenidos
 
-0. [Descripción del Proyecto](#descripción-del-proyecto)
+0. [Descripción del Proyecto](#descripcion-del-proyecto)
 1. [Funcionalidades Implementadas](#funcionalidades-implementadas)
 2. [Guía Completa para el Desarrollo de la Práctica - JS-PdL](#guía-completa-para-el-desarrollo-de-la-práctica---js-pdl)
     - [0. Definir Tokens](0-definir-tokens)
