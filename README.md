@@ -424,7 +424,7 @@ Una consecuencia directa de este tipo de evaluación es que el código que se ej
 
 5. **Archivo > Generar Árbol**.
 
-## 3. Como Ejecutar el Proyecto
+## Como Ejecutar el Proyecto
 
 Para ejecutar el proyecto usando Gradle, sigue estos pasos:
 
