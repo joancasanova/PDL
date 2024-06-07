@@ -61,7 +61,8 @@ El desarrollo de la práctica se divide en las siguientes fases:
 3. **Analizador Sintáctico**
 4. **Analizador Semántico**
 5. **Pruebas**
-6. **Presentación**
+6. **Memoria**
+7. **Presentación**
 
 ### 0. Definir Tokens
 
