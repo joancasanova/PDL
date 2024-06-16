@@ -33,11 +33,17 @@ Este proyecto ha sido desarrollado para la asignatura **Procesadores de Lenguaje
 
 El programa implementa un procesador de lenguaje para el lenguaje **JS-PdL**, una variante de JavaScript diseñada específicamente para la práctica de esta asignatura. Cabe destacar que las características de JS-PdL no coinciden al 100% con el estándar de JavaScript, ya que es una versión simplificada de éste.
 
-### Autor
+### Autores
 
 - **Nombre**: Juan Francisco Casanova Ferrer
 - **Matrícula**: b190340
 - **Email**: jf.casanova@alumnos.upm.es
+
+--
+
+- **Nombre**: Mario Aparicio Magdalena
+- **Matrícula**: b190339
+- **Email**: mario.aparicio.magdalena@alumnos.upm.es
 
 ### Opciones de la Práctica
 
