@@ -1,4 +1,4 @@
-# Procesador de Lenguaje JS-PdL
+g# Procesador de Lenguaje JS-PdL
 
 Este proyecto ha sido desarrollado para la asignatura **Procesadores de Lenguajes** en la **Universidad Politécnica de Madrid** durante el curso 2023-24.
 
@@ -7,29 +7,31 @@ Este proyecto ha sido desarrollado para la asignatura **Procesadores de Lenguaje
 
 Para cualquier duda, no dudes en contactar conmigo, estaré encantado de ayudarte.
 
+**Son bienvenidas las sugerencias de mejora del proyecto y su ampliación.**
+
 En el desarrollo de este proyecto también ha colaborado **Manuel Pérez Redondo**:
 - **Email**: redondoperezmanuel@gmail.com
 
 ## Contenidos
 
-0. [Descripción del Proyecto](#descripción-del-proyecto)
+0. [Descripción del Proyecto](#descripcion-del-proyecto)
 1. [Funcionalidades Implementadas](#funcionalidades-implementadas)
-2. [Guía Completa para el Desarrollo de la Práctica - JS-PdL](#guía-completa-para-el-desarrollo-de-la-práctica---js-pdl)
-    - [0. Definir Tokens](0-definir-tokens)
-    - [1. Tabla de Símbolos](#1-tabla-de-símbolos)
-    - [2. Analizador Léxico](#2-analizador-léxico)
-    - [3. Analizador Sintáctico](#3-analizador-sintáctico)
-    - [4. Analizador Semántico](#4-analizador-semántico)
+2. [Guía Completa para el Desarrollo de la Práctica - JS-PdL](#guia-completa-para-el-desarrollo-de-la-practica---js-pdl)
+    - [0. Definir Tokens](#0-definir-tokens)
+    - [1. Tabla de Símbolos](#1-tabla-de-simbolos)
+    - [2. Analizador Léxico](#2-analizador-lexico)
+    - [3. Analizador Sintáctico](#3-analizador-sintactico)
+    - [4. Analizador Semántico](#4-analizador-semantico)
     - [5. Pruebas](#5-pruebas)
     - [6. Memoria](#6-memoria)
-    - [7. Presentación](#7-presentación)
-    - [Visualización de Árboles Sintácticos con VASt](#visualización-de-árboles-sintácticos-con-vast)
-3. [Cómo Ejecutar el Proyecto](#cómo-ejecutar-el-proyecto)
-4. [Motivación para el Desarrollo de esta Guía](#motivación-para-el-desarrollo-de-esta-guía)
-    - [Problemática de la Asignatura](#problemática-de-la-asignatura)
-    - [Solución Propuesta](#solución-propuesta)
+    - [7. Presentación](#7-presentacion)
+    - [Visualización de Árboles Sintácticos con VASt](#visualizacion-de-arboles-sintacticos-con-vast)
+3. [Cómo Ejecutar el Proyecto](#como-ejecutar-el-proyecto)
+4. [Motivación para el Desarrollo de esta Guía](#motivacion-para-el-desarrollo-de-esta-guia)
+    - [Problemática de la Asignatura](#problematica-de-la-asignatura)
+    - [Solución Propuesta](#solucion-propuesta)
 
-## Descripción del Proyecto
+## Descripcion del Proyecto
 
 Este programa implementa un procesador de lenguaje para el lenguaje **JS-PdL**, una variante de JavaScript diseñada específicamente para la práctica de esta asignatura. Cabe destacar que las características de JS-PdL no coinciden al 100% con el estándar de JavaScript, ya que es una versión simplificada de éste.
 
@@ -45,7 +47,7 @@ Además de las funcionalidades comunes para todos los grupos, las funcionalidade
 - **Comentarios**: Comentario de línea (`//`)
 - **Cadenas**: Con comillas dobles (`" "`)
 
-## Guía Completa para el Desarrollo de la Práctica - JS-PdL
+## Guia Completa para el Desarrollo de la Practica - JS-PdL
 
 A continuación se presenta una guía detallada basada en el código de este repositorio para el desarrollo de la práctica.
 
@@ -59,7 +61,8 @@ El desarrollo de la práctica se divide en las siguientes fases:
 3. **Analizador Sintáctico**
 4. **Analizador Semántico**
 5. **Pruebas**
-6. **Presentación**
+6. **Memoria**
+7. **Presentación**
 
 ### 0. Definir Tokens
 
@@ -90,7 +93,7 @@ Pasos a seguir:
         ```
     - **NOTA**: Los nombres especificados entre paréntesis se utilizarán posteriormente para generar el archivo `gramatica.y` empleado en el analizador sintáctico y deben coincidir con éste.
 
-### 1. Tabla de Símbolos
+### 1. Tabla de Simbolos
 
 La tabla de símbolos es una estructura esencial que guarda los identificadores (variables y funciones) presentes en el código fuente de JS-PdL.
 
@@ -100,7 +103,7 @@ Pasos a seguir:
 
 0. **Adaptar `GestorTablas.java`:** Se debe adaptar las constantes `BYTES_STRING`, `BYTES_BOOLEAN`, `BYTES_INT`, y `BYTES_VOID`
 
-### 2. Analizador Léxico
+### 2. Analizador Lexico
 
 El analizador léxico recibe caracter a caracter hasta generar un token.
 
@@ -150,7 +153,7 @@ Pasos a seguir:
         1. Crear un archivo `input.txt` y guardarlo en el directorio `input`.
         2. Comprobar que los tokens en `output/archivoTokens.txt` son correctos.
 
-### 3. Analizador Sintáctico
+### 3. Analizador Sintactico
 
 El analizador sintáctico recibe token a token y genera como output las reglas una a una.
 
@@ -301,7 +304,7 @@ La tarea principal es crear la gramática sintáctica correspondiente a la prác
         2. Comprobar que las reglas en `output/reglasAplicadas.txt` son correctas.
         3. Usar el programa **VASt** para representar el árbol sintáctico (se explica más adelante cómo usar VASt).
 
-### 4. Analizador Semántico
+### 4. Analizador Semantico
 
 El analizador semántico procesa las reglas una a una generadas por el analizador sintáctico y comprueba que son correctas.
 
@@ -340,7 +343,7 @@ La [página web de la asignatura](https://dlsiis.fi.upm.es/procesadores/Practica
 
 En el directorio `docs` se puede encontrar la memoria desarrollada para este proyecto y tenerla como referencia.
 
-### 7. Presentación
+### 7. Presentacion
 
 La presentación consiste en procesar un fichero de input. Durante la presentación no se realizan preguntas acerca del proceso de desarrollo, ni se pide que se explique el diseño del procesador, ni se pregunta sobre conceptos relativos a la asignatura. Esta presentación se reduce exclusivamente a comprobar que los archivos de output son correctos, se genera el árbol sintáctico con VASt, y se han identificado los errores en el input.
 
@@ -348,7 +351,7 @@ En otras palabras, se trata de superar una prueba, el método para superarla es 
 
 Una consecuencia directa de este tipo de evaluación es que el código que se ejecute durante esta presentación puede ser el desarrollado por el alumno, o no, ya que no se realiza ningún tipo de comprobación. Y, aunque el código sea realmente desarrollado por el alumno, este puede no seguir ninguno de los principios impartidos en la asignatura y tener un diseño completamente alternativo o deficiente.
 
-### Visualización de Árboles Sintácticos con VASt
+### Visualizacion de Arboles Sintacticos con VASt
 
 0. **Descargar VASt** de la sección de herramientas de la página web de la asignatura: [Herramientas Procesadores](https://dlsiis.fi.upm.es/procesadores/Herramientas.html)
 
@@ -421,7 +424,7 @@ Una consecuencia directa de este tipo de evaluación es que el código que se ej
 
 5. **Archivo > Generar Árbol**.
 
-## 3. Cómo Ejecutar el Proyecto
+## Como Ejecutar el Proyecto
 
 Para ejecutar el proyecto usando Gradle, sigue estos pasos:
 
@@ -449,9 +452,9 @@ Asegúrate de que el archivo `input.txt` está en el directorio `input` antes de
 
 Si necesitas más detalles, no dudes en preguntar.
 
-## Motivación para el Desarrollo de esta Guía
+## Motivacion para el Desarrollo de esta Guia
 
-### Problemática de la Asignatura
+### Problematica de la Asignatura
 
 **Ratio elevado de suspensos:**
 La asignatura de Procesadores de Lenguajes tiene un alto índice de suspensos, convirtiéndose en un cuello de botella para los estudiantes de Ingeniería Informática. Este elevado ratio de suspensos tiene como consecuencia la desmotivación de los alumnos, el retrasar su progreso académico, e incluso alentar al abandono del grado. En la [página web de la asignatura](https://dlsiis.fi.upm.es/procesadores/FAQ.html) se revela que tan solo el 68% de los "estudiantes que se han esforzado" aprueban la práctica. Esto es una estadística reveladora, ya que implica que más del 30% de los alumnos que se esfuerzan suspenden, es decir, existe un problema si un tercio de los alumnos trabajadores no son capaces de superar la práctica. Esta situación se lleva arrastrando desde hace años y refleja una problemática estructural.
@@ -474,7 +477,7 @@ Existe una percepción errónea de que el examen final demuestra el conocimiento
 **Problemática alargada en el tiempo:**
 Esta es una situación que se dilata en el tiempo y que no muestra signos de cambio. La persistencia de estos problemas a lo largo de años sin la intervención adecuada está originando un entorno académico hostil y a menudo desalentador para los estudiantes.
 
-### Solución Propuesta
+### Solucion Propuesta
 Con esta guía se pretende abordar y paliar los problemas mencionados. De este modo, los alumnos que acudan a esta guía podrán tener una asistencia extra en el desarrollo de su práctica. Se espera una reacción constructiva por parte del equipo docente de la asignatura, y se proponen las siguientes medidas:
 
 - **Evaluación del diseño:**
