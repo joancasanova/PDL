@@ -1,4 +1,4 @@
-g# Procesador de Lenguaje JS-PdL
+# Procesador de Lenguaje JS-PdL
 
 Este proyecto ha sido desarrollado para la asignatura **Procesadores de Lenguajes** en la **Universidad Politécnica de Madrid** durante el curso 2023-24.
 
