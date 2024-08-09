@@ -115,10 +115,13 @@ public class GestorTablas {
         if (simbolo.getTipo() != null) {
             GestorErrores.lanzarError(GestorErrores.TipoError.SEMANTICO, GestorErrores.ERROR_VARIABLE_REDECLARADA);
         }
-        simbolo.setDesplazamiento(tabla.getDesplazamiento());
         simbolo.setTipo(tipo);
         simbolo.setBytes(calcularBytes(tipo));
-        tabla.setDesplazamiento(tabla.getDesplazamiento() + simbolo.getBytes());
+
+        if (simbolo.getDesplazamiento() == null) {
+            simbolo.setDesplazamiento(tabla.getDesplazamiento());
+            tabla.setDesplazamiento(tabla.getDesplazamiento() + simbolo.getBytes());
+        }
     }
 
     /**
